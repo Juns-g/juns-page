@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description" content="Juns — a small corner of the internet.">
+    <title>Juns</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --canvas: #f6f6f3;
+        --ink: #171716;
+        --muted: #6e6e68;
+        --rule: #d9d9d2;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --canvas: #11110f;
+          --ink: #f3f2ec;
+          --muted: #aaa9a2;
+          --rule: #34342f;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        padding: 2rem;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: ui-rounded, "Avenir Next", Avenir, "SF Pro Rounded", system-ui, sans-serif;
+      }
+      main { width: min(100%, 38rem); }
+      .wordmark {
+        margin: 0 0 1.25rem;
+        font-size: clamp(3rem, 11vw, 5.6rem);
+        font-weight: 650;
+        letter-spacing: -0.075em;
+        line-height: 0.9;
+      }
+      .line {
+        width: 2.75rem;
+        border: 0;
+        border-top: 1px solid var(--rule);
+        margin: 0 0 1.25rem;
+      }
+      p {
+        max-width: 27rem;
+        margin: 0;
+        font-size: clamp(1rem, 2.4vw, 1.2rem);
+        line-height: 1.55;
+      }
+      .domain {
+        display: block;
+        margin-top: 2.5rem;
+        color: var(--muted);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.82rem;
+        letter-spacing: 0.035em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1 class="wordmark">Juns</h1>
+      <hr class="line">
+      <p>A small corner of the internet.<br>More soon.</p>
+      <span class="domain">juns.page</span>
+    </main>
+  </body>
+</html>
