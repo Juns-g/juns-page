@@ -1,0 +1,48 @@
+.tilFeed { margin: 48px 0 0; padding: 0; list-style: none; }
+.tilEntry {
+  display: grid;
+  grid-template-columns: 140px 24px 532px;
+  grid-template-rows: auto 1fr;
+  margin-bottom: 60px;
+}
+.tilTag { grid-column: 1; grid-row: 1; padding-top: 1px; color: rgba(255, 255, 255, .5); font-size: 16px; line-height: 25.6px; text-align: right; }
+.metric { grid-column: 1; grid-row: 2; align-self: start; justify-self: end; min-width: 44px; margin-top: 12px; padding: 4px 12px; border-radius: 999px; background: #1b1b1b; color: rgba(255, 255, 255, .5); font-size: 14px; font-weight: 500; line-height: 20px; text-align: center; }
+.tilEntry article { grid-column: 3; grid-row: 1 / span 2; min-width: 0; }
+.tilEntry h2 { margin: 0 0 12px; color: rgba(255, 255, 255, .9); font-size: 20px; font-weight: 500; letter-spacing: -.025em; line-height: 28px; }
+.tilEntry p { margin: 0; color: rgba(255, 255, 255, .9); font-size: 16px; line-height: 25.6px; }
+.source { display: inline-flex; min-height: 44px; align-items: center; margin-top: 4px; color: rgba(255, 255, 255, .9); font-size: 16px; line-height: 25.6px; text-decoration: underline; text-underline-offset: 3px; }
+
+.computerIndex { display: flex; margin: 56px 0 0; padding: 0; flex-direction: column; list-style: none; }
+.technique summary {
+  position: relative;
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  cursor: pointer;
+  list-style: none;
+}
+.technique summary::-webkit-details-marker { display: none; }
+.technique summary > span { width: 24px; color: rgba(255, 255, 255, .32); font-size: 12px; font-weight: 500; line-height: 20px; }
+.technique summary strong { font-size: 20px; font-weight: 600; letter-spacing: -.025em; line-height: 28px; }
+.techniqueDetail { margin: -1px 0 14px 32px; padding: 0 0 12px; border-bottom: 1px solid #1d1d1d; }
+.techniqueDetail p { margin: 0; color: rgba(255, 255, 255, .5); font-size: 14px; line-height: 21px; }
+.techniqueDetail a { display: inline-flex; min-height: 44px; align-items: center; color: rgba(255, 255, 255, .5); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+
+@media (hover: hover) {
+  .source:hover, .technique summary:hover strong, .techniqueDetail a:hover { color: #fff; }
+}
+
+@media (max-width: 760px) {
+  .tilFeed { margin-top: 47px; }
+  .tilEntry { grid-template-columns: 1fr; grid-template-rows: auto auto auto; margin-bottom: 56px; }
+  .tilTag { grid-column: 1; grid-row: 1; padding: 0; text-align: left; }
+  .tilEntry article { grid-column: 1; grid-row: 2; margin-top: 7px; }
+  .tilEntry h2 { margin-bottom: 12px; }
+  .metric { grid-column: 1; grid-row: 3; justify-self: start; margin-top: 28px; }
+  .computerIndex { margin-top: 56px; }
+  .technique summary { min-height: 48px; }
+  .technique summary > span { width: 20px; }
+  .techniqueDetail { margin-left: 28px; }
+}

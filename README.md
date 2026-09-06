@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Juns Page V2
 
-## Getting Started
+Juns Page V2 is a local visual and product experiment for a future `juns.page`. It is a content-first personal homepage built entirely from local Markdown and YAML, with no runtime backend, analytics, authentication, remote fonts, or connected accounts.
 
-First, run the development server:
+This repository does not configure deployment. The prototype is not a published version of `juns.page`.
+
+## Stack
+
+- React 19 and TypeScript
+- React Router 8 Framework Mode
+- Static prerendering with no runtime server
+- Vite+ `0.3.0`, installed project-locally and invoked through its exact `vp` binary
+- CSS Modules plus small global token and reset files
+- Bun for dependency and script management
+
+## Routes
+
+Public, statically prerendered routes:
+
+- `/` — identity, recent notes, and direct project/collection links
+- `/stack` — public tools and services catalog
+- `/sites` — public resource collection
+- `/til` — five sourced notes
+- `/computer` — six practical workflow tips
+- `/listening` — manual collection state and three labeled sample rows
+
+Build-time experimental route:
+
+- `/workflows` — keyboard-capable Evidence Ledger workflow sample
+
+The workflow route is omitted from the route table, navigation, and prerender list in the default build. Enable it for one command by setting the non-public build variable:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+ENABLE_EXPERIMENTS=true bun run dev
+ENABLE_EXPERIMENTS=true bun run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`.env.example` documents the switch without enabling it.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Local development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+bun install
+bun run dev
+```
 
-## Learn More
+The scripts resolve the project-local `node_modules/.bin/vp`; no global Vite+ install or ambiguous default package binary is required.
 
-To learn more about Next.js, take a look at the following resources:
+## Verification and static output
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+bun run typecheck
+bun run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+A successful production build writes the static site to `build/client/`, including an HTML file for every registered route. Markdown and YAML in `content/` are parsed during the build and bundled into the generated pages.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deployment, hosting, and domain binding are intentionally not configured.

@@ -1,0 +1,49 @@
+recentNotes:
+  - title: Build the useful version before the clever version
+    label: Computer
+    href: /computer
+  - title: Static prerendering produces route-level HTML
+    label: TIL
+    href: /til
+  - title: Keep public context separate from private agent state
+    label: Computer
+    href: /computer
+
+collections:
+  - name: Evidence Ledger
+    description: A public project for keeping claims and supporting evidence reviewable.
+    href: https://github.com/Juns-g/evidence-ledger
+    marker: EL
+    kind: project
+    external: true
+  - name: Delta
+    description: A focused companion for the Delta Force map rotation.
+    href: https://game.juns.page/delta/
+    marker: D
+    kind: project
+    external: true
+  - name: Stack
+    description: A compact catalog of tools and services for making things.
+    href: /stack
+    marker: ST
+    kind: collection
+  - name: Sites
+    description: Public references worth keeping within easy reach.
+    href: /sites
+    marker: SI
+    kind: collection
+  - name: TIL
+    description: Short, sourced notes about building for the web.
+    href: /til
+    marker: TL
+    kind: collection
+  - name: Computer
+    description: Practical notes for calmer computer and agent workflows.
+    href: /computer
+    marker: CO
+    kind: collection
+  - name: Listening
+    description: A manual shelf for records, with no connected music account.
+    href: /listening
+    marker: LI
+    kind: collection

@@ -1,0 +1,36 @@
+- id: capture
+  label: Capture claim
+  short: Define what needs support before collecting links.
+  status: Scope the record
+  evidence: 0 sources
+  purpose: Write one specific, reviewable statement so evidence is gathered against a stable target.
+  input: A public project claim or documentation statement.
+  output: A concise claim with an owner-neutral identifier.
+  check: The wording can be shown without additional private context.
+- id: attach
+  label: Attach evidence
+  short: Connect the claim to a durable public source.
+  status: Attach a source
+  evidence: 1 public source minimum
+  purpose: Record the source and what it supports instead of saving an unexplained URL.
+  input: The claim plus a public document, release, or repository artifact.
+  output: A source reference and a scoped support note.
+  check: The source is accessible and directly relevant to the claim.
+- id: review
+  label: Review fit
+  short: Check strength, scope, and freshness.
+  status: Check support
+  evidence: 1 source · 3 checks
+  purpose: Separate direct support from inference and flag evidence that is outdated, partial, or ambiguous.
+  input: The claim and its attached evidence.
+  output: A review state with concise reasoning.
+  check: A reviewer can reproduce the judgment from public material.
+- id: publish
+  label: Publish ledger
+  short: Share the safe, reviewable record.
+  status: Ready to share
+  evidence: 1 reviewed source
+  purpose: Expose only the claim, public evidence, and conclusion while keeping private working context out.
+  input: A reviewed claim-evidence pair.
+  output: A public Evidence Ledger entry.
+  check: The entry contains no credentials, private notes, or internal identifiers.

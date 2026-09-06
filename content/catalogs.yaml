@@ -1,0 +1,92 @@
+stack:
+  - name: Hermes Agent
+    marker: HA
+    category: Agent
+    description: An open-source agent with command-line and messaging interfaces.
+    href: https://github.com/NousResearch/hermes-agent
+    meta: Workflow
+  - name: Codex CLI
+    marker: CX
+    category: Agent
+    description: A local coding agent for inspecting, editing, and validating software projects.
+    href: https://github.com/openai/codex
+    meta: Development
+  - name: GitHub
+    marker: GH
+    category: Service
+    description: Source hosting, code review, issue tracking, and automation for Git repositories.
+    href: https://github.com/
+    meta: Source
+  - name: Cloudflare Pages
+    marker: CP
+    category: Service
+    description: Static-site hosting with build integration and edge delivery.
+    href: https://pages.cloudflare.com/
+    meta: Hosting
+  - name: React Router
+    marker: RR
+    category: Framework
+    description: A React routing framework with static prerendering and typed route modules.
+    href: https://reactrouter.com/
+    meta: Web
+  - name: Vite+
+    marker: VP
+    category: Toolchain
+    description: A unified project toolchain built around Vite and related web tooling.
+    href: https://viteplus.dev/
+    meta: Build
+
+sites:
+  - name: MDN Web Docs
+    marker: MD
+    category: Reference
+    description: Documentation for web platform APIs, HTML, CSS, and JavaScript.
+    href: https://developer.mozilla.org/
+    meta: Web platform
+  - name: GitHub
+    marker: GH
+    category: Source
+    description: Public code, project histories, issue discussions, and releases.
+    href: https://github.com/
+    meta: Projects
+  - name: React Router Docs
+    marker: RR
+    category: Docs
+    description: Framework guidance for routing, rendering, prerendering, and navigation.
+    href: https://reactrouter.com/start/framework/installation
+    meta: Framework
+  - name: Vite+ Docs
+    marker: VP
+    category: Docs
+    description: Setup and command references for the project-local Vite+ toolchain.
+    href: https://viteplus.dev/guide/
+    meta: Toolchain
+  - name: Cloudflare Docs
+    marker: CF
+    category: Docs
+    description: Product documentation for Pages, Workers, DNS, and the Cloudflare platform.
+    href: https://developers.cloudflare.com/
+    meta: Infrastructure
+  - name: React Docs
+    marker: RE
+    category: Docs
+    description: Core concepts and API references for building interfaces with React.
+    href: https://react.dev/
+    meta: Interface
+
+listening:
+  - record: Sample record 01
+    artist: Sample artist
+    format: Album
+    status: Sample
+    marker: "01"
+  - record: Sample record 02
+    artist: Sample artist
+    format: EP
+    status: Sample
+    marker: "02"
+  - record: Sample record 03
+    artist: Sample artist
+    format: Single
+    status: Sample
+    marker: "03"

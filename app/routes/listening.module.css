@@ -1,0 +1,40 @@
+.disclosure {
+  position: fixed;
+  z-index: 120;
+  top: 17px;
+  right: 16px;
+  margin: 0;
+  color: rgba(255, 255, 255, .32);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.table { width: 100%; border-collapse: collapse; text-align: left; }
+.table thead, .table tbody { display: block; }
+.table thead { height: 37px; border-bottom: 1px solid rgba(255, 255, 255, .09); background: #0a0a0a; }
+.table tr { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) 120px; align-items: center; column-gap: 16px; padding-inline: 16px; }
+.table thead tr { height: 36px; }
+.table tbody tr { height: 56px; border-bottom: 1px solid rgba(255, 255, 255, .09); transition: background-color 150ms ease; }
+.table th { min-width: 0; padding: 0; border: 0; color: #fff; font-size: 14px; font-weight: 500; line-height: 20px; }
+.table td { min-width: 0; padding: 0; border: 0; color: rgba(255, 255, 255, .5); font-size: 16px; line-height: 24px; }
+.record { display: flex; min-width: 0; align-items: center; gap: 12px; }
+.record strong { min-width: 0; overflow: hidden; color: rgba(255, 255, 255, .9); font-size: 16px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.marker { display: grid; width: 32px; height: 32px; flex: 0 0 auto; place-items: center; border: 1px solid #242424; border-radius: 7px; background: #111; color: rgba(255, 255, 255, .62); font-size: 10px; font-weight: 650; }
+.status { color: rgba(255, 255, 255, .32) !important; }
+
+@media (hover: hover) {
+  .table tbody tr:hover { background: rgba(255, 255, 255, .05); }
+}
+
+@media (max-width: 760px) {
+  .disclosure { position: static; height: 32px; overflow: hidden; padding: 6px 16px; text-overflow: ellipsis; white-space: nowrap; }
+  .table thead { display: none; }
+  .table tbody tr { height: 72px; min-height: 72px; grid-template-columns: 1fr; align-content: center; column-gap: 0; padding: 0; }
+  .table td { height: auto; padding: 0; border: 0; }
+  .table td:first-child { grid-area: 1 / 1; padding-inline: 16px; }
+  .record { min-height: 71px; }
+  .record strong { align-self: center; padding-bottom: 20px; }
+  .marker { width: 48px; height: 48px; border-radius: 8px; font-size: 11px; }
+  .artist { z-index: 1; grid-area: 1 / 1; align-self: center; margin: 24px 16px 0 76px; overflow: hidden; font-size: 16px !important; line-height: 24px !important; text-overflow: ellipsis; white-space: nowrap; }
+  .format, .status { display: none; }
+}

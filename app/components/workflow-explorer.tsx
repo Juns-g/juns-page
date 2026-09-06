@@ -1,0 +1,12 @@
+import { useRef, useState, type KeyboardEvent } from "react";
+import type { WorkflowStep } from "~/lib/workflow-content";
+import styles from "~/routes/workflows.module.css";
+
+export function WorkflowExplorer({ steps }: { steps: WorkflowStep[] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const active = steps[activeIndex];
+  function selectAndFocus(index: number) { const nextIndex = (index + steps.length) % steps.length; setActiveIndex(nextIndex); tabRefs.current[nextIndex]?.focus(); }
+  function onKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) { const offsets: Record<string, number> = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }; if (event.key in offsets) { event.preventDefault(); selectAndFocus(index + offsets[event.key]); } else if (event.key === "Home") { event.preventDefault(); selectAndFocus(0); } else if (event.key === "End") { event.preventDefault(); selectAndFocus(steps.length - 1); } }
+  return <div className={styles.explorer}><div className={styles.master} role="tablist" aria-label="Evidence review steps" aria-orientation="vertical">{steps.map((step, index) => <button aria-controls="workflow-detail" aria-selected={index === activeIndex} className={styles.tab} id={`workflow-tab-${step.id}`} key={step.id} onClick={() => setActiveIndex(index)} onKeyDown={(event) => onKeyDown(event, index)} ref={(node) => { tabRefs.current[index] = node; }} role="tab" tabIndex={index === activeIndex ? 0 : -1} type="button"><span className={styles.number}>{String(index + 1).padStart(2, "0")}</span><span><strong>{step.label}</strong><small>{step.short}</small><span className={styles.taskMeta}><span>{step.status}</span><span>{step.evidence}</span></span></span><span className={styles.arrow} aria-hidden="true">→</span></button>)}</div><section aria-labelledby={`workflow-tab-${active.id}`} className={styles.detail} id="workflow-detail" role="tabpanel" tabIndex={0}><div className={styles.detailContent} key={active.id}><p className={styles.eyebrow}>Step {String(activeIndex + 1).padStart(2, "0")} · Detail</p><h2>{active.label}</h2><p className={styles.purpose}>{active.purpose}</p><dl className={styles.fields}><div><dt>Input</dt><dd>{active.input}</dd></div><div><dt>Output</dt><dd>{active.output}</dd></div><div><dt>Review check</dt><dd>{active.check}</dd></div></dl></div></section></div>;
+}
