@@ -410,21 +410,21 @@
       text-decoration: underline;
     }
 
-    /* 全屏大图灯箱 Lightbox */
+    /* 全屏大图灯箱 Lightbox：纯黑底色 + 严格防穿透 */
     .lightbox-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.96);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: #000000;
       z-index: 9999;
       display: none;
       align-items: center;
       justify-content: center;
       cursor: zoom-out;
+      touch-action: pan-x;
+      overscroll-behavior: contain;
     }
     .lightboxSwiper {
       width: 100%;
@@ -832,11 +832,23 @@
           }
         });
 
+        let savedScrollY = 0;
+
         function updateLightboxBadge(idx) {
           lightboxBadge.textContent = `${idx + 1} / ${images.length}`;
         }
 
         function openLightbox(idx) {
+          // 锁定页面滚动与背景，杜绝任何滚动穿透与透光
+          savedScrollY = window.scrollY || window.pageYOffset;
+          document.documentElement.style.overflow = 'hidden';
+          document.body.style.overflow = 'hidden';
+          document.body.style.position = 'fixed';
+          document.body.style.top = `-${savedScrollY}px`;
+          document.body.style.width = '100%';
+
+          if (cornerOpenBtn) cornerOpenBtn.style.display = 'none';
+
           lightboxOverlay.style.display = 'flex';
           updateLightboxBadge(idx);
 
@@ -869,6 +881,14 @@
 
         function closeLightbox() {
           lightboxOverlay.style.display = 'none';
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          window.scrollTo(0, savedScrollY);
+
+          if (cornerOpenBtn) cornerOpenBtn.style.display = '';
         }
 
         lightboxClose.addEventListener('click', (e) => {
