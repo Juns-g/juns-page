@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>正在打开京东...</title>
+  <title>正在打开酷安...</title>
   <style>
     :root {
       --bg: #f8f8f8;
       --card-bg: #ffffff;
       --text: #1a1a1a;
       --subtext: #888888;
-      --red: #e1251b;
-      --red-hover: #c8160d;
+      --green: #11b066;
+      --green-hover: #0ea05c;
       --border: #eeeeee;
     }
     @media (prefers-color-scheme: dark) {
@@ -20,8 +20,8 @@
         --card-bg: #1e1e1e;
         --text: #f0f0f0;
         --subtext: #aaaaaa;
-        --red: #e1251b;
-        --red-hover: #f03a31;
+        --green: #11b066;
+        --green-hover: #16c674;
         --border: #2a2a2a;
       }
     }
@@ -49,7 +49,7 @@
     .icon {
       width: 60px;
       height: 60px;
-      background: var(--red);
+      background: var(--green);
       border-radius: 16px;
       display: inline-flex;
       align-items: center;
@@ -73,11 +73,11 @@
       border: none;
     }
     .btn-primary {
-      background: var(--red);
+      background: var(--green);
       color: #ffffff;
       margin-bottom: 12px;
     }
-    .btn-primary:active { background: var(--red-hover); transform: scale(0.98); }
+    .btn-primary:active { background: var(--green-hover); transform: scale(0.98); }
     .btn-secondary {
       background: transparent;
       color: var(--subtext);
@@ -90,59 +90,68 @@
 </head>
 <body>
   <div class="card">
-    <div class="icon">🐶</div>
-    <h2 id="title">正在跳转京东...</h2>
-    <p id="desc">系统即将自动唤起京东 App 查看商品</p>
+    <div class="icon">🌿</div>
+    <h2 id="title">正在跳转酷安...</h2>
+    <p id="desc">系统即将自动唤起酷安 App 打开动态</p>
     
-    <a id="appBtn" class="btn btn-primary" href="#">👉 点此打开京东 App</a>
+    <a id="appBtn" class="btn btn-primary" href="#">👉 点此打开酷安 App</a>
     <a id="webBtn" class="btn btn-secondary" href="#" target="_blank">在浏览器查看网页版</a>
   </div>
 
   <script>
     (function() {
       const params = new URLSearchParams(window.location.search);
-      const skuId = params.get('sku') || params.get('id');
+      const feedId = params.get('id');
 
       const titleEl = document.getElementById('title');
       const descEl = document.getElementById('desc');
       const appBtn = document.getElementById('appBtn');
       const webBtn = document.getElementById('webBtn');
 
-      if (!skuId) {
-        titleEl.textContent = '缺少商品 SKU ID';
-        descEl.textContent = '链接中未包含有效的 sku 或 id 参数，无法完成跳转。';
+      if (!feedId) {
+        titleEl.textContent = '缺少动态 ID';
+        descEl.textContent = '链接中未包含有效的 id 参数，无法完成跳转。';
         appBtn.style.display = 'none';
         webBtn.style.display = 'none';
         return;
       }
 
-      const paramsJson = JSON.stringify({
-        category: "jump",
-        des: "productDetail",
-        skuId: String(skuId)
-      });
-      const schemeUrl = 'openapp.jdiPhone://virtual?params=' + encodeURIComponent(paramsJson);
-      const webUrl = 'https://item.jd.com/' + encodeURIComponent(skuId) + '.html';
+      const isAndroid = /Android/i.test(navigator.userAgent);
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const isMobile = isAndroid || isIOS;
 
-      appBtn.href = schemeUrl;
+      // 酷安的官方唤端规则：
+      // Android 必须带 host：coolmarket://www.coolapk.com/feed/<id>
+      // iOS 使用 universalLink：https://www.coolapk.com/feed/<id>?openAppLink=... 或 coolmarket://feed/<id>
+      const androidScheme = 'coolmarket://www.coolapk.com/feed/' + encodeURIComponent(feedId);
+      const iosScheme = 'coolmarket://feed/' + encodeURIComponent(feedId);
+      const targetScheme = isAndroid ? androidScheme : iosScheme;
+      const webUrl = 'https://www.coolapk.com/feed/' + encodeURIComponent(feedId);
+      const uLink = webUrl + '?openAppLink=' + Date.now();
+
+      appBtn.href = targetScheme;
       webBtn.href = webUrl;
-
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
       if (isMobile) {
         setTimeout(() => {
-          window.location.href = schemeUrl;
+          if (isIOS) {
+            // iOS 尝试唤端
+            window.location.href = targetScheme;
+          } else {
+            // Android 唤端
+            window.location.href = targetScheme;
+          }
         }, 50);
 
         setTimeout(() => {
           if (!document.hidden) {
             titleEl.textContent = '未自动打开？';
-            descEl.textContent = '请点击下方红色按钮手动唤起 App，或选择在网页查看。';
+            descEl.textContent = '请点击下方绿色按钮手动唤起 App，或选择在网页查看。';
           }
         }, 1500);
       } else {
         titleEl.textContent = '正在前往网页版...';
-        descEl.textContent = '检测到当前为电脑端，即将进入京东网页版。';
+        descEl.textContent = '检测到当前为电脑端，即将进入酷安网页版。';
         setTimeout(() => {
           window.location.href = webUrl;
         }, 300);
