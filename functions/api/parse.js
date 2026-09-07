@@ -273,7 +273,7 @@ function extractTitleFromText(text) {
     let sub = quoteMatch[1].trim();
     sub = sub.replace(/^(?:快来捡漏|更新必看[❗️!]*|好物推荐|推荐)/g, '');
     sub = sub.replace(/[-_—|]哔哩哔哩.*$/g, '');
-    sub = sub.replace(/^[【「“\s]+|[】」”\s]+$/g, '');
+    sub = sub.replace(/[【「“】」”]/g, '').trim();
     if (sub.length > 1) return sub.trim();
   }
 
