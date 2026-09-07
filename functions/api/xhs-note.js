@@ -48,7 +48,7 @@ export async function onRequestGet(context) {
     const desc = noteData.desc || '';
     const user = noteData.user || {};
     const author = user.nickname || '小红书用户';
-    const avatar = user.avatar || '';
+    const avatar = (user.avatar || '').replace(/^http:/, 'https:');
     const ipLocation = noteData.ipLocation || '';
     
     // 互动数据
@@ -67,8 +67,10 @@ export async function onRequestGet(context) {
     }
 
     const images = (noteData.imageList || []).map(img => {
+      let rawUrl = img.urlDefault || img.url || '';
+      if (rawUrl) rawUrl = rawUrl.replace(/^http:/, 'https:');
       return {
-        url: img.urlDefault || img.url || '',
+        url: rawUrl,
         width: img.width || 0,
         height: img.height || 0
       };

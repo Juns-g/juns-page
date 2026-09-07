@@ -3,33 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="referrer" content="no-referrer">
   <title>小红书精选笔记</title>
+  <link rel="stylesheet" href="/go/swiper-bundle.min.css">
+  <script src="/go/swiper-bundle.min.js"></script>
   <script src="/go/qrcode.min.js"></script>
   <style>
     :root {
-      --bg: #0f1015;
-      --card-bg: #181a24;
-      --card-border: #282c3c;
-      --text: #f0f2f5;
-      --subtext: #8d94a5;
+      --bg: #090a0f;
+      --card-bg: #14161f;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --subtext: #8e95a5;
       --red: #ff2442;
       --red-hover: #e01d38;
       --tag-blue: #4a88e8;
-      --input-bg: #12131b;
-      --header-blur: rgba(24, 26, 36, 0.88);
+      --input-bg: #0e1017;
+      --header-blur: rgba(15, 17, 24, 0.85);
+      --img-bg: #111218;
     }
     @media (prefers-color-scheme: light) {
       :root {
-        --bg: #f5f6f9;
+        --bg: #f6f7f9;
         --card-bg: #ffffff;
-        --card-border: #e8ecf2;
+        --card-border: rgba(0, 0, 0, 0.06);
         --text: #1a1c22;
-        --subtext: #6e7687;
+        --subtext: #717786;
         --red: #ff2442;
         --red-hover: #e01d38;
-        --tag-blue: #13386c;
-        --input-bg: #f8fafc;
+        --tag-blue: #235ec8;
+        --input-bg: #f1f3f6;
         --header-blur: rgba(255, 255, 255, 0.88);
+        --img-bg: #f0f1f4;
       }
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,17 +46,29 @@
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    /* 彻底隐藏页面及子容器右侧所有原生滚动条 */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      -webkit-appearance: none;
     }
 
-    /* 移动端顶部常驻吸顶唤端栏 */
+    /* 移动端顶部常驻吸顶栏 */
     .mobile-header {
       position: sticky;
       top: 0;
       z-index: 100;
       background: var(--header-blur);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--card-border);
-      padding: 12px 16px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 0.5px solid var(--card-border);
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -67,29 +84,70 @@
       border-radius: 50%;
       object-fit: cover;
       background: var(--input-bg);
+      box-shadow: 0 0 0 1px var(--card-border);
     }
     .m-name {
       font-size: 14px;
       font-weight: 600;
       color: var(--text);
+      letter-spacing: -0.2px;
     }
     .m-open-btn {
-      background: var(--red);
+      background: linear-gradient(135deg, #ff2442, #ff405d);
       color: white;
       text-decoration: none;
-      padding: 7px 16px;
-      border-radius: 20px;
+      padding: 6px 14px;
+      border-radius: 18px;
       font-size: 13px;
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 4px 12px rgba(255, 36, 66, 0.25);
+      box-shadow: 0 3px 10px rgba(255, 36, 66, 0.3);
+      transition: transform 0.15s ease;
+    }
+    .m-open-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* 移动端专属右下角悬浮唤端胶囊 */
+    .corner-open-btn {
+      display: none;
+    }
+    @media (max-width: 860px) {
+      .corner-open-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        position: fixed;
+        right: 16px;
+        bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+        z-index: 120;
+        background: linear-gradient(135deg, #ff2442, #ff405d);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 9px 15px;
+        border-radius: 24px;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: -0.2px;
+        box-shadow: 0 6px 20px rgba(255, 36, 66, 0.42), 0 2px 6px rgba(0, 0, 0, 0.25);
+        transition: transform 0.15s ease;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .corner-open-btn svg {
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+      }
+      .corner-open-btn:active {
+        transform: scale(0.93);
+      }
     }
 
     /* 主容器 */
     .main-wrap {
-      max-width: 1060px;
+      max-width: 1080px;
       margin: 0 auto;
       padding-bottom: 60px;
     }
@@ -97,67 +155,108 @@
     /* 双栏大卡片（电脑端生效） */
     .xhs-modal {
       background: var(--card-bg);
-      border-radius: 24px;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.18);
       border: 1px solid var(--card-border);
       min-height: 600px;
       height: 750px;
     }
 
-    /* 画廊展示区 */
+    /* 画廊展示区：基于顶级开源 Swiper 架构 */
     .gallery-col {
       flex: 1.25;
-      background: #000000;
+      background: var(--img-bg);
       position: relative;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .mySwiper {
+      width: 100%;
+      height: 100%;
+    }
+    .swiper-wrapper {
+      align-items: center;
+    }
+    .swiper-slide {
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
       overflow: hidden;
-      user-select: none;
+      height: 100%;
     }
-    .gallery-img {
+    .swiper-slide img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
       display: block;
       cursor: zoom-in;
     }
+
+    /* 左右翻页大按钮：46px 大触控区 + 毛玻璃质感 + 清晰 SVG 箭头 */
     .gallery-arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(10px);
-      border: none;
+      background: rgba(0, 0, 0, 0.52);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 0.5px solid rgba(255, 255, 255, 0.22);
       color: white;
-      font-size: 18px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+      z-index: 25;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      outline: none;
+      padding: 0;
+    }
+    .gallery-arrow svg {
+      width: 26px;
+      height: 26px;
+      fill: #ffffff;
+      transition: transform 0.15s ease;
     }
     .gallery-arrow:hover {
-      background: rgba(255,255,255,0.35);
+      background: rgba(0, 0, 0, 0.72);
       transform: translateY(-50%) scale(1.08);
     }
-    .arrow-left { left: 16px; }
-    .arrow-right { right: 16px; }
+    .gallery-arrow:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+    .gallery-arrow.swiper-button-disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .arrow-left { left: 14px; }
+    .arrow-right { right: 14px; }
+
+    /* 小红书同款页码指示胶囊 */
     .gallery-badge {
       position: absolute;
-      bottom: 20px;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(8px);
+      bottom: 16px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 0.5px solid rgba(255, 255, 255, 0.18);
       color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 13px;
+      padding: 3px 11px;
+      border-radius: 12px;
+      font-size: 12px;
       font-weight: 500;
+      letter-spacing: 0.5px;
+      z-index: 25;
+      pointer-events: none;
     }
 
     /* 内容侧边栏 */
@@ -173,7 +272,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 24px;
+      padding: 18px 24px;
       border-bottom: 1px solid var(--card-border);
     }
     .d-author-left {
@@ -187,6 +286,7 @@
       border-radius: 50%;
       object-fit: cover;
       background: var(--input-bg);
+      box-shadow: 0 0 0 1px var(--card-border);
     }
     .d-name {
       font-size: 15px;
@@ -230,7 +330,7 @@
       color: var(--text);
       white-space: pre-wrap;
       word-break: break-word;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .tag-link {
       color: var(--tag-blue);
@@ -248,8 +348,8 @@
     .qr-relay-card {
       background: var(--input-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 20px;
+      border-radius: 16px;
+      padding: 18px;
       text-align: center;
       margin: 20px 0 10px 0;
     }
@@ -267,15 +367,15 @@
     .qr-center-box {
       background: white;
       padding: 10px;
-      border-radius: 14px;
+      border-radius: 12px;
       display: inline-block;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       margin: 0 auto;
     }
 
     /* 底部互动栏 */
     .interaction-bar {
-      padding: 16px 24px;
+      padding: 14px 24px;
       border-top: 1px solid var(--card-border);
       display: flex;
       align-items: center;
@@ -291,13 +391,13 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       color: var(--subtext);
     }
     .interact-item svg {
-      width: 20px;
-      height: 20px;
+      width: 19px;
+      height: 19px;
       fill: currentColor;
     }
     .btn-web-link {
@@ -317,8 +417,9 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.94);
-      backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       z-index: 9999;
       display: none;
       align-items: center;
@@ -328,25 +429,25 @@
       padding: 20px;
     }
     .lightbox-img {
-      max-width: 90vw;
-      max-height: 95vh;
+      max-width: 94vw;
+      max-height: 94vh;
       object-fit: contain;
       border-radius: 8px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.8);
       transition: transform 0.2s ease;
-      cursor: default;
+      cursor: zoom-out;
     }
     .lightbox-close {
       position: fixed;
-      top: 24px;
-      right: 24px;
-      width: 44px;
-      height: 44px;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: rgba(255,255,255,0.2);
       color: white;
       border: none;
-      font-size: 24px;
+      font-size: 22px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -355,14 +456,15 @@
       z-index: 10000;
     }
 
-    /* 响应式排版：电脑端大卡片 vs 移动端上下瀑布流原生质感 */
+    /* 响应式排版：电脑端大卡片 vs 移动端原生流式排版 */
     @media (min-width: 861px) {
       .mobile-header { display: none; }
       .main-wrap { margin-top: 40px; padding: 0 20px 60px 20px; }
     }
 
     @media (max-width: 860px) {
-      .main-wrap { padding: 0 0 40px 0; }
+      .main-wrap { padding: 0; }
+      .m-open-btn { display: none; }
       .xhs-modal {
         flex-direction: column;
         height: auto;
@@ -377,7 +479,23 @@
         height: 72vh;
         max-height: 560px;
         flex: none;
-        border-radius: 0;
+        background: var(--card-bg);
+        border-bottom: 0.5px solid var(--card-border);
+      }
+      .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      /* 移动端左右翻页大按钮同样保持 44px 舒适热区 */
+      .gallery-arrow {
+        width: 44px;
+        height: 44px;
+        opacity: 0.82;
+      }
+      .gallery-arrow svg {
+        width: 24px;
+        height: 24px;
       }
       .content-col {
         border-left: none;
@@ -387,17 +505,30 @@
       .qr-relay-card { display: none; }
       .note-scroll-area {
         overflow-y: visible;
-        padding: 20px 16px;
+        padding: 20px 18px 12px 18px;
       }
-      .note-title { font-size: 18px; margin-bottom: 12px; }
-      .note-desc { font-size: 14px; line-height: 1.65; margin-bottom: 20px; }
+      .note-title {
+        font-size: 18px;
+        line-height: 1.45;
+        margin-bottom: 12px;
+      }
+      .note-desc {
+        font-size: 15px;
+        line-height: 1.68;
+        margin-bottom: 18px;
+      }
+      .note-meta {
+        margin-bottom: 16px;
+      }
       .interaction-bar {
-        padding: 14px 16px;
+        padding: 12px 18px;
+        border-top: 0.5px solid var(--card-border);
+        background: var(--header-blur);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         position: sticky;
         bottom: 0;
         z-index: 90;
-        background: var(--header-blur);
-        backdrop-filter: blur(12px);
       }
     }
   </style>
@@ -406,7 +537,7 @@
   <!-- 移动端专属吸顶导航条 -->
   <header class="mobile-header">
     <div class="m-author-left">
-      <img id="mAvatar" class="m-avatar" src="" alt="">
+      <img id="mAvatar" class="m-avatar" referrerpolicy="no-referrer" src="" alt="">
       <span id="mName" class="m-name">小红书用户</span>
     </div>
     <a id="mOpenBtn" class="m-open-btn" href="#">打开 App ↗</a>
@@ -415,12 +546,19 @@
   <!-- 主内容包裹 -->
   <div class="main-wrap">
     <div class="xhs-modal">
-      <!-- 画廊多图展示区（电脑端左侧，手机端顶部） -->
-      <div class="gallery-col">
-        <img id="mainImage" class="gallery-img" src="" alt="" title="点击放大查看全图">
-        <button id="prevBtn" class="gallery-arrow arrow-left" style="display:none">‹</button>
-        <button id="nextBtn" class="gallery-arrow arrow-right" style="display:none">›</button>
-        <div id="galleryBadge" class="gallery-badge" style="display:none">1 / 1</div>
+      <!-- 画廊展示区：采用成熟工业级 Swiper 架构 -->
+      <div class="gallery-col" id="galleryCol">
+        <div class="swiper mySwiper">
+          <div class="swiper-wrapper" id="swiperWrapper"></div>
+          <!-- 升级后的 46px/44px 大热区翻页按钮 -->
+          <button id="prevBtn" class="gallery-arrow arrow-left" aria-label="上一张">
+            <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+          </button>
+          <button id="nextBtn" class="gallery-arrow arrow-right" aria-label="下一张">
+            <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+          </button>
+          <div id="galleryBadge" class="gallery-badge" style="display:none">1 / 1</div>
+        </div>
       </div>
 
       <!-- 正文信息区（电脑端右侧，手机端下部） -->
@@ -428,7 +566,7 @@
         <!-- 电脑端专属作者栏 -->
         <div class="d-author-header">
           <div class="d-author-left">
-            <img id="dAvatar" class="d-avatar" src="" alt="">
+            <img id="dAvatar" class="d-avatar" referrerpolicy="no-referrer" src="" alt="">
             <span id="dName" class="d-name">小红书用户</span>
           </div>
           <button class="d-follow-btn">关注</button>
@@ -471,10 +609,16 @@
     </div>
   </div>
 
+  <!-- 移动端专属右下角悬浮唤端胶囊 -->
+  <a id="cornerOpenBtn" class="corner-open-btn" href="#">
+    <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+    <span>打开 App</span>
+  </a>
+
   <!-- 全屏沉浸式大图灯箱 -->
   <div id="lightboxOverlay" class="lightbox-overlay">
     <button id="lightboxClose" class="lightbox-close">✕</button>
-    <img id="lightboxImg" class="lightbox-img" src="" alt="">
+    <img id="lightboxImg" class="lightbox-img" referrerpolicy="no-referrer" src="" alt="">
   </div>
 
   <script>
@@ -484,10 +628,11 @@
       const xsecToken = params.get('xsec_token') || '';
 
       const mOpenBtn = document.getElementById('mOpenBtn');
+      const cornerOpenBtn = document.getElementById('cornerOpenBtn');
       const officialWebLink = document.getElementById('officialWebLink');
 
       if (!noteId) {
-        document.body.innerHTML = '<div style="padding:40px;text-align:center;color:#888;">缺少笔记 ID，无法打开内容</div>';
+        document.body.innerHTML = '<div style="padding:40px;text-align:center;color:var(--subtext);">缺少笔记 ID，无法打开内容</div>';
         return;
       }
 
@@ -497,8 +642,9 @@
         webUrl += '?xsec_token=' + encodeURIComponent(xsecToken) + '&xsec_source=pc_search';
       }
 
-      mOpenBtn.href = schemeUrl;
-      officialWebLink.href = webUrl;
+      if (mOpenBtn) mOpenBtn.href = schemeUrl;
+      if (cornerOpenBtn) cornerOpenBtn.href = schemeUrl;
+      if (officialWebLink) officialWebLink.href = webUrl;
 
       // iPad 物理触控特征检测
       const isIPad = (navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1) 
@@ -524,13 +670,21 @@
         }
       }
 
-      // 无论移动端还是电脑端，全部拉取并渲染完整正文图文！
+      // 无论移动端还是电脑端，拉取并渲染完整正文图文
       fetch(`/api/xhs-note?id=${encodeURIComponent(noteId)}&xsec_token=${encodeURIComponent(xsecToken)}`)
         .then(res => res.json())
         .then(data => {
           if (data.error) {
-            document.getElementById('noteTitle').textContent = '未获取到笔记内容';
-            document.getElementById('noteDesc').textContent = '可能已被小红书反爬拦截，建议点击右上角在 App 内查看。';
+            document.getElementById('galleryCol').style.display = 'none';
+            document.getElementById('noteTitle').textContent = '未能免登录获取笔记正文';
+            document.getElementById('noteDesc').innerHTML = `
+              <div style="background:var(--input-bg); border-radius:12px; padding:16px; margin:10px 0; border:0.5px solid var(--card-border);">
+                <p style="color:var(--subtext); font-size:14px; line-height:1.6;">
+                  该笔记链接可能缺少了有效的签名凭证（xsec_token），被小红书网页版反爬拦截。<br><br>
+                  👉 请点击右上角的 <strong style="color:var(--red);">「打开 App」</strong> 直接在客户端查看，或使用从小红书 App 复制的完整分享短链。
+                </p>
+              </div>
+            `;
             return;
           }
 
@@ -541,8 +695,9 @@
           document.getElementById('dName').textContent = authorName;
           document.getElementById('mName').textContent = authorName;
           if (data.avatar) {
-            document.getElementById('dAvatar').src = data.avatar;
-            document.getElementById('mAvatar').src = data.avatar;
+            const avatarUrl = data.avatar.replace(/^http:/, 'https:');
+            document.getElementById('dAvatar').src = avatarUrl;
+            document.getElementById('mAvatar').src = avatarUrl;
           }
 
           document.getElementById('noteTitle').textContent = data.title || '';
@@ -561,7 +716,7 @@
           initGallery(data.images || []);
         })
         .catch(() => {
-          document.getElementById('noteTitle').textContent = '加载异常';
+          document.getElementById('noteTitle').textContent = '加载网络异常';
         });
 
       function formatXhsDesc(text) {
@@ -571,8 +726,7 @@
 
       function initGallery(images) {
         if (!images || images.length === 0) return;
-        let currentIndex = 0;
-        const mainImage = document.getElementById('mainImage');
+        const wrapper = document.getElementById('swiperWrapper');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const badge = document.getElementById('galleryBadge');
@@ -580,49 +734,68 @@
         const lightboxImg = document.getElementById('lightboxImg');
         const lightboxClose = document.getElementById('lightboxClose');
 
-        function updateImage() {
-          mainImage.src = images[currentIndex].url;
-          badge.textContent = `${currentIndex + 1} / ${images.length}`;
+        wrapper.innerHTML = '';
+
+        images.forEach((imgObj, idx) => {
+          const slide = document.createElement('div');
+          slide.className = 'swiper-slide';
+          const img = document.createElement('img');
+          img.setAttribute('referrerpolicy', 'no-referrer');
+          const cleanUrl = imgObj.url.replace(/^http:/, 'https:');
+          img.src = cleanUrl;
+          img.alt = `图片 ${idx + 1}`;
+          
+          img.addEventListener('click', () => {
+            lightboxImg.src = cleanUrl;
+            lightboxOverlay.style.display = 'flex';
+          });
+          
+          slide.appendChild(img);
+          wrapper.appendChild(slide);
+        });
+
+        badge.style.display = 'block';
+        badge.textContent = `1 / ${images.length}`;
+
+        if (images.length > 1) {
+          prevBtn.style.display = 'flex';
+          nextBtn.style.display = 'flex';
+        } else {
+          prevBtn.style.display = 'none';
+          nextBtn.style.display = 'none';
         }
 
-        updateImage();
-
-        // 点击全屏灯箱放大
-        mainImage.addEventListener('click', () => {
-          lightboxImg.src = images[currentIndex].url;
-          lightboxOverlay.style.display = 'flex';
+        // 初始化工业级 Swiper
+        const swiper = new Swiper('.mySwiper', {
+          speed: 320,
+          resistance: true,
+          resistanceRatio: 0.85,
+          touchAngle: 45, // >45度手势判定为垂直滚动看正文，绝不误抢
+          threshold: 8,   // 8px防抖
+          grabCursor: true,
+          navigation: {
+            nextEl: '#nextBtn',
+            prevEl: '#prevBtn',
+          },
+          on: {
+            slideChange: function () {
+              badge.textContent = `${this.activeIndex + 1} / ${images.length}`;
+            }
+          }
         });
 
         lightboxClose.addEventListener('click', () => {
           lightboxOverlay.style.display = 'none';
         });
 
-        lightboxOverlay.addEventListener('click', (e) => {
-          if (e.target !== lightboxImg) {
-            lightboxOverlay.style.display = 'none';
-          }
+        // 点击全屏灯箱任意区域（包括图片本身或磨砂背景）秒级退出
+        lightboxOverlay.addEventListener('click', () => {
+          lightboxOverlay.style.display = 'none';
         });
 
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') lightboxOverlay.style.display = 'none';
         });
-
-        if (images.length > 1) {
-          prevBtn.style.display = 'flex';
-          nextBtn.style.display = 'flex';
-          badge.style.display = 'block';
-
-          prevBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            updateImage();
-          });
-          nextBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            currentIndex = (currentIndex + 1) % images.length;
-            updateImage();
-          });
-        }
       }
     })();
   </script>
