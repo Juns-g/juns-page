@@ -332,6 +332,54 @@
       .content-col { height: auto; border-left: none; border-top: 1px solid var(--card-border); }
       .note-scroll-area { max-height: 500px; }
     }
+
+    /* 全屏大图灯箱 Lightbox */
+    .lightbox-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.92);
+      backdrop-filter: blur(12px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      cursor: zoom-out;
+      padding: 20px;
+    }
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 95vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      transition: transform 0.2s ease;
+      cursor: default;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 10000;
+    }
+    .lightbox-close:hover {
+      background: rgba(255,255,255,0.35);
+    }
   </style>
 </head>
 <body>
@@ -351,7 +399,7 @@
     <div class="xhs-modal">
       <!-- 左侧多图画廊 -->
       <div class="gallery-col">
-        <img id="mainImage" class="gallery-img" src="" alt="">
+        <img id="mainImage" class="gallery-img" src="" alt="" style="cursor: zoom-in;" title="点击放大查看全图">
         <button id="prevBtn" class="gallery-arrow arrow-left" style="display:none">‹</button>
         <button id="nextBtn" class="gallery-arrow arrow-right" style="display:none">›</button>
         <div id="galleryBadge" class="gallery-badge" style="display:none">1 / 1</div>
@@ -402,6 +450,12 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- 全屏沉浸式大图灯箱 -->
+  <div id="lightboxOverlay" class="lightbox-overlay">
+    <button id="lightboxClose" class="lightbox-close">✕</button>
+    <img id="lightboxImg" class="lightbox-img" src="" alt="">
   </div>
 
   <script>
@@ -529,6 +583,30 @@
         }
 
         updateImage();
+
+        // 点击主图弹出全屏大图灯箱
+        const lightboxOverlay = document.getElementById('lightboxOverlay');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.getElementById('lightboxClose');
+
+        mainImage.addEventListener('click', () => {
+          lightboxImg.src = images[currentIndex].url;
+          lightboxOverlay.style.display = 'flex';
+        });
+
+        lightboxClose.addEventListener('click', () => {
+          lightboxOverlay.style.display = 'none';
+        });
+
+        lightboxOverlay.addEventListener('click', (e) => {
+          if (e.target !== lightboxImg) {
+            lightboxOverlay.style.display = 'none';
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') lightboxOverlay.style.display = 'none';
+        });
 
         if (images.length > 1) {
           prevBtn.style.display = 'flex';
