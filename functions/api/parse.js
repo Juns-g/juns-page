@@ -260,7 +260,8 @@ function extractTitleFromText(text) {
   let clean = text.replace(/https?:\/\/[^\s\u4e00-\u9fa5]+/g, '');
   clean = clean.replace(/【(淘宝|闲鱼|京东|哔哩哔哩|小红书|拼多多|抖音)】/g, '');
   clean = clean.replace(/(?:复制打开抖音|复制本条信息|打开【.*?】|看看【.*?的作品】|进入【.*?】|点击链接直接打开|或者复制文案打开.*|复制一下这行字.*)/g, '');
-  clean = clean.replace(/[a-zA-Z0-9]{4,6}:\/[^\s]*/g, '');
+  clean = clean.replace(/[a-zA-Z0-9]{3,6}:\/[^\s]*/g, '');
+  clean = clean.replace(/\s+[a-zA-Z0-9]{3,6}:\/.*$/g, '');
   clean = clean.replace(/CZ\d+|HU\d+|CA\d+/g, '');
   clean = clean.replace(/tk=[a-zA-Z0-9]+/g, '');
   clean = clean.replace(/:\d{1,2}(?:am|pm|分|点).*/g, '');
@@ -272,6 +273,7 @@ function extractTitleFromText(text) {
     let sub = quoteMatch[1].trim();
     sub = sub.replace(/^(?:快来捡漏|更新必看[❗️!]*|好物推荐|推荐)/g, '');
     sub = sub.replace(/[-_—|]哔哩哔哩.*$/g, '');
+    sub = sub.replace(/^[【「“\s]+|[】」”\s]+$/g, '');
     if (sub.length > 1) return sub.trim();
   }
 
