@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>正在打开小红书...</title>
+  <script src="/go/qrcode.min.js"></script>
   <style>
     :root {
       --bg: #f8f8f8;
@@ -57,10 +58,10 @@
       color: white;
       font-size: 26px;
       font-weight: bold;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     h2 { font-size: 19px; margin-bottom: 8px; font-weight: 600; }
-    p { font-size: 14px; color: var(--subtext); margin-bottom: 24px; line-height: 1.5; }
+    p { font-size: 14px; color: var(--subtext); margin-bottom: 20px; line-height: 1.5; }
     .btn {
       display: block;
       width: 100%;
@@ -87,6 +88,24 @@
       padding: 10px;
     }
     .btn-secondary:hover { text-decoration: underline; color: var(--text); }
+    
+    /* 桌面扫码区域 */
+    .qr-container {
+      display: none;
+      margin-bottom: 20px;
+    }
+    .qr-box {
+      background: white;
+      padding: 12px;
+      border-radius: 16px;
+      display: inline-block;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .qr-tip {
+      font-size: 13px;
+      color: var(--subtext);
+      margin-top: 12px;
+    }
   </style>
 </head>
 <body>
@@ -94,9 +113,17 @@
     <div class="icon">📕</div>
     <h2 id="title">正在跳转小红书...</h2>
     <p id="desc">系统即将自动唤起小红书 App 打开笔记</p>
+
+    <!-- 桌面扫码容器 -->
+    <div id="qrContainer" class="qr-container">
+      <div class="qr-box">
+        <div id="qrcode"></div>
+      </div>
+      <div class="qr-tip">📱 拿起手机或 iPad 扫码即看（电脑免登录）</div>
+    </div>
     
     <a id="appBtn" class="btn btn-primary" href="#">👉 点此打开小红书 App</a>
-    <a id="webBtn" class="btn btn-secondary" href="#" target="_blank">在浏览器查看网页版</a>
+    <a id="webBtn" class="btn btn-secondary" href="#" target="_blank">在浏览器查看网页版 ↗</a>
   </div>
 
   <script>
@@ -109,6 +136,7 @@
       const descEl = document.getElementById('desc');
       const appBtn = document.getElementById('appBtn');
       const webBtn = document.getElementById('webBtn');
+      const qrContainer = document.getElementById('qrContainer');
 
       if (!noteId) {
         titleEl.textContent = '缺少笔记 ID';
@@ -127,15 +155,17 @@
       appBtn.href = schemeUrl;
       webBtn.href = webUrl;
 
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      // 核心：iPad 物理多点触控特征识别（即使开启“请求桌面网站”也能 100% 识破）
+      const isIPad = (navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1) 
+                  || /iPad/i.test(navigator.userAgent);
+      const isMobile = isIPad || /iPhone|iPod|Android/i.test(navigator.userAgent);
 
       if (isMobile) {
-        // 移动端/iPad：优先自动尝试唤起 App
+        // 移动端 / iPad：优先自动尝试唤起原生 App（支持 iPad HD 版）
         setTimeout(() => {
           window.location.href = schemeUrl;
         }, 50);
 
-        // 兜底检测：如果 1.5 秒后页面仍可见，说明自动唤起被拦截（或用户未安装）
         setTimeout(() => {
           if (!document.hidden) {
             titleEl.textContent = '未自动打开？';
@@ -143,12 +173,23 @@
           }
         }, 1500);
       } else {
-        // PC 电脑端：默认没有小红书 App，自动转网页版
-        titleEl.textContent = '正在前往网页版...';
-        descEl.textContent = '检测到当前为电脑端，即将进入小红书电脑网页版。';
-        setTimeout(() => {
-          window.location.href = webUrl;
-        }, 300);
+        // 真正的 Mac / PC 电脑端：坚决不自动跳走，彻底避免小红书强制登录全屏遮罩
+        titleEl.textContent = '小红书手机接力';
+        descEl.textContent = '免去电脑网页版扫码登录，手机扫码全屏沉浸看';
+        appBtn.style.display = 'none';
+        qrContainer.style.display = 'block';
+
+        // 生成扫码二维码：扫码内容就是当前页面 URL，手机扫码后会自动打开跳板并秒弹小红书 App
+        if (window.QRCode) {
+          new QRCode(document.getElementById('qrcode'), {
+            text: window.location.href,
+            width: 170,
+            height: 170,
+            colorDark: "#1a1a1a",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.M
+          });
+        }
       }
     })();
   </script>
