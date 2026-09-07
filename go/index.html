@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Juns Go · 优雅分享清洗转换器</title>
+  <style>
+    :root {
+      --bg: #0d0e12;
+      --card-bg: #161820;
+      --card-border: #232733;
+      --text: #f0f2f5;
+      --subtext: #8b92a4;
+      --accent: #4f78ff;
+      --accent-hover: #3b66f5;
+      --input-bg: #101218;
+      --input-border: #2c3242;
+      --success: #10b981;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f5f6f9;
+        --card-bg: #ffffff;
+        --card-border: #e4e7ec;
+        --text: #1a1c22;
+        --subtext: #667085;
+        --accent: #2563eb;
+        --accent-hover: #1d4ed8;
+        --input-bg: #fafbfc;
+        --input-border: #d0d5dd;
+        --success: #059669;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .container {
+      width: 100%;
+      max-width: 520px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .header p {
+      font-size: 14px;
+      color: var(--subtext);
+      line-height: 1.5;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+    textarea {
+      width: 100%;
+      height: 110px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
+      padding: 14px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+      resize: none;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      margin-bottom: 14px;
+    }
+    textarea:focus {
+      border-color: var(--accent);
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      flex: 1;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-paste {
+      background: var(--card-border);
+      color: var(--text);
+    }
+    .btn-paste:active { transform: scale(0.98); }
+    .btn-submit {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .result {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--card-border);
+      display: none;
+    }
+    .result.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+    .url-box {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      font-size: 13px;
+      word-break: break-all;
+      color: var(--accent);
+      margin-bottom: 14px;
+      user-select: all;
+    }
+    .result-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-copy {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-open {
+      background: var(--input-bg);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      flex: 1;
+    }
+    .btn-open:hover { text-decoration: none; }
+    .footer-tags {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--subtext);
+    }
+    .tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .tag {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><span>⚡</span> Juns Go 链接清洗</h1>
+      <p>告别繁杂口令与火星文，一键还原专属直达跳板</p>
+    </div>
+
+    <div class="card">
+      <textarea id="inputText" placeholder="把微信、短信里复制的那一整大坨分享文字直接粘贴在这里..."></textarea>
+      
+      <div class="actions">
+        <button id="pasteBtn" class="btn-paste">📋 粘贴</button>
+        <button id="convertBtn" class="btn-submit">清洗转换</button>
+      </div>
+
+      <div id="resultBox" class="result">
+        <div class="badge" id="platformBadge"><span>📺</span> 哔哩哔哩</div>
+        <div class="url-box" id="urlDisplay">https://juns.page/go/...</div>
+        <div class="result-actions">
+          <button id="copyBtn" class="btn-copy">复制链接</button>
+          <a id="openLink" class="btn-open" href="#" target="_blank">直接打开 ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-tags">
+      <p>已支持全自动解析短链与深度唤端：</p>
+      <div class="tags-list">
+        <span class="tag">📕 小红书</span>
+        <span class="tag">🐟 闲鱼</span>
+        <span class="tag">📺 哔哩哔哩</span>
+        <span class="tag">🐶 京东</span>
+        <span class="tag">🛍️ 淘宝/天猫</span>
+        <span class="tag">🛒 拼多多</span>
+        <span class="tag">🎵 抖音</span>
+        <span class="tag">🌿 酷安</span>
+        <span class="tag">💡 知乎</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const inputText = document.getElementById('inputText');
+      const pasteBtn = document.getElementById('pasteBtn');
+      const convertBtn = document.getElementById('convertBtn');
+      const resultBox = document.getElementById('resultBox');
+      const platformBadge = document.getElementById('platformBadge');
+      const urlDisplay = document.getElementById('urlDisplay');
+      const copyBtn = document.getElementById('copyBtn');
+      const openLink = document.getElementById('openLink');
+
+      let currentGeneratedUrl = '';
+
+      pasteBtn.addEventListener('click', async () => {
+        try {
+          const text = await navigator.clipboard.readText();
+          if (text) {
+            inputText.value = text;
+            doConvert();
+          }
+        } catch (e) {
+          inputText.focus();
+        }
+      });
+
+      convertBtn.addEventListener('click', doConvert);
+
+      inputText.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+          doConvert();
+        }
+      });
+
+      async function doConvert() {
+        const text = inputText.value.trim();
+        if (!text) return;
+
+        convertBtn.disabled = true;
+        convertBtn.textContent = '解析中...';
+        resultBox.classList.remove('active');
+
+        try {
+          const res = await fetch('/api/parse', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+          });
+          const data = await res.json();
+
+          if (!res.ok || data.error) {
+            alert(data.error || '未能成功解析该内容');
+            return;
+          }
+
+          currentGeneratedUrl = data.url;
+          platformBadge.innerHTML = `<span>${data.icon || '🔗'}</span> ${data.name || data.platform}`;
+          urlDisplay.textContent = currentGeneratedUrl;
+          openLink.href = currentGeneratedUrl;
+          resultBox.classList.add('active');
+
+          // 自动复制
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(currentGeneratedUrl).then(() => {
+              copyBtn.textContent = '已自动复制 ✓';
+              setTimeout(() => { copyBtn.textContent = '复制链接'; }, 2000);
+            }).catch(() => {});
+          }
+        } catch (err) {
+          alert('网络错误，请稍后重试');
+        } finally {
+          convertBtn.disabled = false;
+          convertBtn.textContent = '清洗转换';
+        }
+      }
+
+      copyBtn.addEventListener('click', () => {
+        if (!currentGeneratedUrl) return;
+        navigator.clipboard.writeText(currentGeneratedUrl).then(() => {
+          copyBtn.textContent = '已复制 ✓';
+          setTimeout(() => { copyBtn.textContent = '复制链接'; }, 2000);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
