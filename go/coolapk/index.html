@@ -91,10 +91,10 @@
 <body>
   <div class="card">
     <div class="icon">🌿</div>
-    <h2 id="title">正在跳转酷安...</h2>
-    <p id="desc">系统即将自动唤起酷安 App 打开动态</p>
+    <h2 id="title">前往酷安查看动态</h2>
+    <p id="desc">轻点下方按钮唤起酷安 App 或在浏览器查看</p>
     
-    <a id="appBtn" class="btn btn-primary" href="#">👉 点此打开酷安 App</a>
+    <a id="appBtn" class="btn btn-primary" href="#">👉 打开酷安 App</a>
     <a id="webBtn" class="btn btn-secondary" href="#" target="_blank">在浏览器查看网页版</a>
   </div>
 
@@ -117,44 +117,32 @@
       }
 
       const isAndroid = /Android/i.test(navigator.userAgent);
-      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-      const isMobile = isAndroid || isIOS;
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      // 酷安的官方唤端规则：
-      // Android 必须带 host：coolmarket://www.coolapk.com/feed/<id>
-      // iOS 使用 universalLink：https://www.coolapk.com/feed/<id>?openAppLink=... 或 coolmarket://feed/<id>
-      const androidScheme = 'coolmarket://www.coolapk.com/feed/' + encodeURIComponent(feedId);
-      const iosScheme = 'coolmarket://feed/' + encodeURIComponent(feedId);
-      const targetScheme = isAndroid ? androidScheme : iosScheme;
+      // 酷安 Android 规则带完整 host，iOS 则通过标准 scheme 或 universal link
+      const targetScheme = isAndroid 
+        ? 'coolmarket://www.coolapk.com/feed/' + encodeURIComponent(feedId)
+        : 'coolmarket://feed/' + encodeURIComponent(feedId);
       const webUrl = 'https://www.coolapk.com/feed/' + encodeURIComponent(feedId);
-      const uLink = webUrl + '?openAppLink=' + Date.now();
 
       appBtn.href = targetScheme;
       webBtn.href = webUrl;
 
-      if (isMobile) {
-        setTimeout(() => {
-          if (isIOS) {
-            // iOS 尝试唤端
-            window.location.href = targetScheme;
-          } else {
-            // Android 唤端
-            window.location.href = targetScheme;
-          }
-        }, 50);
-
-        setTimeout(() => {
-          if (!document.hidden) {
-            titleEl.textContent = '未自动打开？';
-            descEl.textContent = '请点击下方绿色按钮手动唤起 App，或选择在网页查看。';
-          }
-        }, 1500);
-      } else {
-        titleEl.textContent = '正在前往网页版...';
-        descEl.textContent = '检测到当前为电脑端，即将进入酷安网页版。';
+      if (!isMobile) {
+        // 电脑端自动跳网页版
+        titleEl.textContent = '正在前往酷安网页版...';
         setTimeout(() => {
           window.location.href = webUrl;
         }, 300);
+      } else {
+        // 移动端通过用户手势唤起，杜绝系统"网址无效"弹窗
+        appBtn.addEventListener('click', function(e) {
+          setTimeout(() => {
+            if (!document.hidden) {
+              window.location.href = webUrl;
+            }
+          }, 1800);
+        });
       }
     })();
   </script>
