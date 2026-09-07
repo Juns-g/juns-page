@@ -91,10 +91,10 @@
 <body>
   <div class="card">
     <div class="icon">🐶</div>
-    <h2 id="title">前往京东查看商品</h2>
-    <p id="desc">轻点下方按钮唤起京东 App 或在浏览器查看</p>
+    <h2 id="title">正在跳转京东...</h2>
+    <p id="desc">系统即将自动唤起京东 App 查看商品</p>
     
-    <a id="appBtn" class="btn btn-primary" href="#">👉 打开京东 App</a>
+    <a id="appBtn" class="btn btn-primary" href="#">👉 点此打开京东 App</a>
     <a id="webBtn" class="btn btn-secondary" href="#" target="_blank">在浏览器查看网页版</a>
   </div>
 
@@ -123,7 +123,7 @@
         sourceType: "item",
         sourceValue: "warp-direct"
       });
-      // 京东最新的通用 scheme 统一为 openapp.jdmobile://
+      // iOS / Android 通用京东协议
       const schemeUrl = 'openapp.jdmobile://virtual?params=' + encodeURIComponent(paramsJson);
       const webUrl = 'https://item.jd.com/' + encodeURIComponent(skuId) + '.html';
 
@@ -132,23 +132,25 @@
 
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      if (!isMobile) {
-        // 电脑端直接自动进网页版
+      if (isMobile) {
+        // 移动端自动尝试唤起
+        setTimeout(() => {
+          window.location.href = schemeUrl;
+        }, 50);
+
+        setTimeout(() => {
+          if (!document.hidden) {
+            titleEl.textContent = '未自动打开？';
+            descEl.textContent = '请点击下方红色按钮手动唤起 App，或选择在网页查看。';
+          }
+        }, 1500);
+      } else {
+        // 电脑端自动跳转网页版
         titleEl.textContent = '正在前往京东网页版...';
+        descEl.textContent = '检测到当前为电脑端，即将进入京东网页版。';
         setTimeout(() => {
           window.location.href = webUrl;
         }, 300);
-      } else {
-        // 移动端绑定用户手势点击，彻底杜绝 Safari "网址无效" 弹窗
-        appBtn.addEventListener('click', function(e) {
-          // 尝试唤起
-          setTimeout(() => {
-            if (!document.hidden) {
-              // 若未安装或未唤起，平滑降级跳网页版
-              window.location.href = webUrl;
-            }
-          }, 1800);
-        });
       }
     })();
   </script>
