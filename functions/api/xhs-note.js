@@ -49,11 +49,30 @@ export async function onRequestGet(context) {
     const user = noteData.user || {};
     const author = user.nickname || '小红书用户';
     const avatar = user.avatar || '';
-    const time = noteData.time ? new Date(noteData.time).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) : '';
+    const ipLocation = noteData.ipLocation || '';
     
+    // 互动数据
+    const interact = noteData.interactInfo || {};
+    const likes = interact.likedCount || '0';
+    const collects = interact.collectedCount || '0';
+    const comments = interact.commentCount || '0';
+
+    // 格式化时间
+    let timeStr = '';
+    if (noteData.time) {
+      const d = new Date(noteData.time);
+      const m = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      timeStr = `${m}-${day}`;
+    }
+
     const images = (noteData.imageList || []).map(img => {
-      return img.urlDefault || img.url || '';
-    }).filter(Boolean);
+      return {
+        url: img.urlDefault || img.url || '',
+        width: img.width || 0,
+        height: img.height || 0
+      };
+    }).filter(x => !!x.url);
 
     return jsonResponse({
       id: noteId,
@@ -61,7 +80,11 @@ export async function onRequestGet(context) {
       desc,
       author,
       avatar,
-      time,
+      time: timeStr,
+      ipLocation,
+      likes,
+      collects,
+      comments,
       images
     });
 
