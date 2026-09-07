@@ -417,34 +417,64 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(0, 0, 0, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       z-index: 9999;
       display: none;
       align-items: center;
       justify-content: center;
-      overflow: auto;
       cursor: zoom-out;
-      padding: 20px;
+    }
+    .lightboxSwiper {
+      width: 100%;
+      height: 100%;
+    }
+    .lightboxSwiper .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 16px;
+      cursor: zoom-out;
     }
     .lightbox-img {
-      max-width: 94vw;
+      max-width: 96vw;
       max-height: 94vh;
       object-fit: contain;
-      border-radius: 8px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-      transition: transform 0.2s ease;
+      border-radius: 6px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.85);
       cursor: zoom-out;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .lightbox-badge {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 0.5px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 10000;
+      pointer-events: none;
     }
     .lightbox-close {
       position: fixed;
       top: 20px;
       right: 20px;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       color: white;
       border: none;
       font-size: 22px;
@@ -615,10 +645,13 @@
     <span>打开 App</span>
   </a>
 
-  <!-- 全屏沉浸式大图灯箱 -->
+  <!-- 全屏沉浸式大图灯箱（集成全屏 Swiper 画廊） -->
   <div id="lightboxOverlay" class="lightbox-overlay">
     <button id="lightboxClose" class="lightbox-close">✕</button>
-    <img id="lightboxImg" class="lightbox-img" referrerpolicy="no-referrer" src="" alt="">
+    <div id="lightboxBadge" class="lightbox-badge">1 / 1</div>
+    <div class="swiper lightboxSwiper">
+      <div class="swiper-wrapper" id="lightboxWrapper"></div>
+    </div>
   </div>
 
   <script>
@@ -727,16 +760,21 @@
       function initGallery(images) {
         if (!images || images.length === 0) return;
         const wrapper = document.getElementById('swiperWrapper');
+        const lightboxWrapper = document.getElementById('lightboxWrapper');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const badge = document.getElementById('galleryBadge');
+        const lightboxBadge = document.getElementById('lightboxBadge');
         const lightboxOverlay = document.getElementById('lightboxOverlay');
-        const lightboxImg = document.getElementById('lightboxImg');
         const lightboxClose = document.getElementById('lightboxClose');
 
         wrapper.innerHTML = '';
+        lightboxWrapper.innerHTML = '';
+        let swiper = null;
+        let lightboxSwiper = null;
 
         images.forEach((imgObj, idx) => {
+          // 主页面 slide
           const slide = document.createElement('div');
           slide.className = 'swiper-slide';
           const img = document.createElement('img');
@@ -746,12 +784,22 @@
           img.alt = `图片 ${idx + 1}`;
           
           img.addEventListener('click', () => {
-            lightboxImg.src = cleanUrl;
-            lightboxOverlay.style.display = 'flex';
+            openLightbox(idx);
           });
           
           slide.appendChild(img);
           wrapper.appendChild(slide);
+
+          // 全屏灯箱 slide
+          const lbSlide = document.createElement('div');
+          lbSlide.className = 'swiper-slide';
+          const lbImg = document.createElement('img');
+          lbImg.className = 'lightbox-img';
+          lbImg.setAttribute('referrerpolicy', 'no-referrer');
+          lbImg.src = cleanUrl;
+          lbImg.alt = `全屏大图 ${idx + 1}`;
+          lbSlide.appendChild(lbImg);
+          lightboxWrapper.appendChild(lbSlide);
         });
 
         badge.style.display = 'block';
@@ -765,13 +813,13 @@
           nextBtn.style.display = 'none';
         }
 
-        // 初始化工业级 Swiper
-        const swiper = new Swiper('.mySwiper', {
+        // 初始化主画廊 Swiper
+        swiper = new Swiper('.mySwiper', {
           speed: 320,
           resistance: true,
           resistanceRatio: 0.85,
-          touchAngle: 45, // >45度手势判定为垂直滚动看正文，绝不误抢
-          threshold: 8,   // 8px防抖
+          touchAngle: 45,
+          threshold: 8,
           grabCursor: true,
           navigation: {
             nextEl: '#nextBtn',
@@ -784,17 +832,52 @@
           }
         });
 
-        lightboxClose.addEventListener('click', () => {
-          lightboxOverlay.style.display = 'none';
-        });
+        function updateLightboxBadge(idx) {
+          lightboxBadge.textContent = `${idx + 1} / ${images.length}`;
+        }
 
-        // 点击全屏灯箱任意区域（包括图片本身或磨砂背景）秒级退出
-        lightboxOverlay.addEventListener('click', () => {
+        function openLightbox(idx) {
+          lightboxOverlay.style.display = 'flex';
+          updateLightboxBadge(idx);
+
+          if (!lightboxSwiper) {
+            lightboxSwiper = new Swiper('.lightboxSwiper', {
+              initialSlide: idx,
+              speed: 300,
+              resistanceRatio: 0.85,
+              grabCursor: true,
+              keyboard: {
+                enabled: true,
+              },
+              on: {
+                slideChange: function () {
+                  updateLightboxBadge(this.activeIndex);
+                  // 同步主页面位置
+                  if (swiper) swiper.slideTo(this.activeIndex, 0);
+                },
+                tap: function () {
+                  // 轻点（无拖拽手势）立即退出灯箱
+                  closeLightbox();
+                }
+              }
+            });
+          } else {
+            lightboxSwiper.update();
+            lightboxSwiper.slideTo(idx, 0);
+          }
+        }
+
+        function closeLightbox() {
           lightboxOverlay.style.display = 'none';
+        }
+
+        lightboxClose.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeLightbox();
         });
 
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') lightboxOverlay.style.display = 'none';
+          if (e.key === 'Escape') closeLightbox();
         });
       }
     })();
