@@ -7,23 +7,27 @@
   <script src="/go/qrcode.min.js"></script>
   <style>
     :root {
-      --bg: #f8f8f8;
-      --card-bg: #ffffff;
-      --text: #1a1a1a;
-      --subtext: #888888;
+      --bg: #0d0e12;
+      --card-bg: #161820;
+      --card-border: #232733;
+      --text: #f0f2f5;
+      --subtext: #8b92a4;
       --red: #ff2442;
       --red-hover: #e01d38;
-      --border: #eeeeee;
+      --input-bg: #101218;
+      --border: #2c3242;
     }
-    @media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme: light) {
       :root {
-        --bg: #121212;
-        --card-bg: #1e1e1e;
-        --text: #f0f0f0;
-        --subtext: #aaaaaa;
-        --red: #ff2e4d;
-        --red-hover: #ff4763;
-        --border: #2a2a2a;
+        --bg: #f5f6f9;
+        --card-bg: #ffffff;
+        --card-border: #e4e7ec;
+        --text: #1a1c22;
+        --subtext: #667085;
+        --red: #ff2442;
+        --red-hover: #e01d38;
+        --input-bg: #fafbfc;
+        --border: #d0d5dd;
       }
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,41 +37,42 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 24px 16px;
     }
     .card {
       background: var(--card-bg);
       border-radius: 20px;
       padding: 32px 24px;
       width: 100%;
-      max-width: 400px;
+      max-width: 420px;
       text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      border: 1px solid var(--card-border);
     }
     .icon {
-      width: 60px;
-      height: 60px;
+      width: 54px;
+      height: 54px;
       background: var(--red);
-      border-radius: 16px;
+      border-radius: 15px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 26px;
+      font-size: 24px;
       font-weight: bold;
       margin-bottom: 16px;
     }
-    h2 { font-size: 19px; margin-bottom: 8px; font-weight: 600; }
-    p { font-size: 14px; color: var(--subtext); margin-bottom: 20px; line-height: 1.5; }
+    h2 { font-size: 18px; margin-bottom: 8px; font-weight: 600; letter-spacing: -0.3px; }
+    p { font-size: 13px; color: var(--subtext); margin-bottom: 20px; line-height: 1.5; }
     .btn {
       display: block;
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       border-radius: 12px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       text-decoration: none;
       transition: all 0.2s ease;
@@ -83,47 +88,158 @@
     .btn-secondary {
       background: transparent;
       color: var(--subtext);
-      font-size: 14px;
+      font-size: 13px;
       font-weight: normal;
-      padding: 10px;
+      padding: 8px;
     }
     .btn-secondary:hover { text-decoration: underline; color: var(--text); }
     
-    /* 桌面扫码区域 */
-    .qr-container {
+    /* 桌面端特供：扫码与免登录图文看板 */
+    .desktop-panel {
       display: none;
+      width: 100%;
+      max-width: 680px;
+      margin-top: 10px;
+    }
+    .qr-relay {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 20px;
+      gap: 16px;
     }
-    .qr-box {
-      background: white;
-      padding: 12px;
-      border-radius: 16px;
-      display: inline-block;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    .qr-info {
+      text-align: left;
     }
-    .qr-tip {
+    .qr-info h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .qr-info p {
       font-size: 13px;
+      margin-bottom: 0;
       color: var(--subtext);
-      margin-top: 12px;
+    }
+    .qr-code-box {
+      background: white;
+      padding: 8px;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+    
+    /* 免登录阅读文章卡片 */
+    .note-article {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px;
+      text-align: left;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+    .note-author-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .author-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--input-bg);
+    }
+    .author-meta h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .author-meta span {
+      font-size: 12px;
+      color: var(--subtext);
+    }
+    .note-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 16px;
+      letter-spacing: -0.4px;
+    }
+    .note-desc {
+      font-size: 15px;
+      line-height: 1.68;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 22px;
+    }
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      display: block;
+      background: var(--input-bg);
+    }
+    .article-footer {
+      margin-top: 24px;
+      display: flex;
+      justify-content: flex-end;
+      border-top: 1px solid var(--card-border);
+      padding-top: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="card">
+  <!-- 移动端模式 / 兜底模式 -->
+  <div id="mobileCard" class="card">
     <div class="icon">📕</div>
     <h2 id="title">正在跳转小红书...</h2>
     <p id="desc">系统即将自动唤起小红书 App 打开笔记</p>
-
-    <!-- 桌面扫码容器 -->
-    <div id="qrContainer" class="qr-container">
-      <div class="qr-box">
-        <div id="qrcode"></div>
-      </div>
-      <div class="qr-tip">📱 拿起手机或 iPad 扫码即看（电脑免登录）</div>
-    </div>
-    
     <a id="appBtn" class="btn btn-primary" href="#">👉 点此打开小红书 App</a>
     <a id="webBtn" class="btn btn-secondary" href="#" target="_blank">在浏览器查看网页版 ↗</a>
+  </div>
+
+  <!-- 电脑端免登录沉浸阅读模式 -->
+  <div id="desktopPanel" class="desktop-panel">
+    <!-- 顶部接力栏 -->
+    <div class="qr-relay">
+      <div class="qr-info">
+        <h3>📱 小红书 App 扫码直达</h3>
+        <p>支持手机/iPad 扫码接力，无需在电脑上扫码登录</p>
+      </div>
+      <div class="qr-code-box">
+        <div id="qrcode"></div>
+      </div>
+    </div>
+
+    <!-- 正文纯净内容阅读 -->
+    <div class="note-article" id="noteArticle">
+      <div class="note-author-bar">
+        <img id="authorAvatar" class="author-avatar" src="" alt="">
+        <div class="author-meta">
+          <h4 id="authorName">加载中...</h4>
+          <span id="publishTime"></span>
+        </div>
+      </div>
+      <h1 id="noteTitle" class="note-title"></h1>
+      <div id="noteDesc" class="note-desc"></div>
+      <div id="gallery" class="gallery"></div>
+      <div class="article-footer">
+        <a id="desktopWebBtn" class="btn-secondary" href="#" target="_blank">前往小红书官方网页 ↗</a>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -132,11 +248,13 @@
       const noteId = params.get('id');
       const xsecToken = params.get('xsec_token') || '';
 
+      const mobileCard = document.getElementById('mobileCard');
+      const desktopPanel = document.getElementById('desktopPanel');
       const titleEl = document.getElementById('title');
       const descEl = document.getElementById('desc');
       const appBtn = document.getElementById('appBtn');
       const webBtn = document.getElementById('webBtn');
-      const qrContainer = document.getElementById('qrContainer');
+      const desktopWebBtn = document.getElementById('desktopWebBtn');
 
       if (!noteId) {
         titleEl.textContent = '缺少笔记 ID';
@@ -154,14 +272,18 @@
 
       appBtn.href = schemeUrl;
       webBtn.href = webUrl;
+      desktopWebBtn.href = webUrl;
 
-      // 核心：iPad 物理多点触控特征识别（即使开启“请求桌面网站”也能 100% 识破）
+      // iPad 物理多点触控特征识别
       const isIPad = (navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1) 
                   || /iPad/i.test(navigator.userAgent);
       const isMobile = isIPad || /iPhone|iPod|Android/i.test(navigator.userAgent);
 
       if (isMobile) {
-        // 移动端 / iPad：优先自动尝试唤起原生 App（支持 iPad HD 版）
+        // 移动端 / iPad：直接唤起 App
+        mobileCard.style.display = 'block';
+        desktopPanel.style.display = 'none';
+
         setTimeout(() => {
           window.location.href = schemeUrl;
         }, 50);
@@ -173,23 +295,52 @@
           }
         }, 1500);
       } else {
-        // 真正的 Mac / PC 电脑端：坚决不自动跳走，彻底避免小红书强制登录全屏遮罩
-        titleEl.textContent = '小红书手机接力';
-        descEl.textContent = '免去电脑网页版扫码登录，手机扫码全屏沉浸看';
-        appBtn.style.display = 'none';
-        qrContainer.style.display = 'block';
+        // 真正的 Mac / Windows 电脑端：开启免登录纯净图文 + 扫码接力
+        mobileCard.style.display = 'none';
+        desktopPanel.style.display = 'block';
 
-        // 生成扫码二维码：扫码内容就是当前页面 URL，手机扫码后会自动打开跳板并秒弹小红书 App
+        // 生成扫码二维码
         if (window.QRCode) {
           new QRCode(document.getElementById('qrcode'), {
             text: window.location.href,
-            width: 170,
-            height: 170,
+            width: 100,
+            height: 100,
             colorDark: "#1a1a1a",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.M
           });
         }
+
+        // 调用 Cloudflare 边缘接口拉取真实纯净图文
+        fetch(`/api/xhs-note?id=${encodeURIComponent(noteId)}&xsec_token=${encodeURIComponent(xsecToken)}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.error) {
+              document.getElementById('noteTitle').textContent = '未能加载图文';
+              document.getElementById('noteDesc').textContent = '可能已被小红书风控拦截，请直接使用上方二维码扫码在手机中查看。';
+              return;
+            }
+
+            document.title = data.title || '小红书精选笔记';
+            document.getElementById('authorName').textContent = data.author || '小红书用户';
+            document.getElementById('authorAvatar').src = data.avatar || '';
+            document.getElementById('publishTime').textContent = data.time || '';
+            document.getElementById('noteTitle').textContent = data.title || '';
+            document.getElementById('noteDesc').textContent = data.desc || '';
+
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+            (data.images || []).forEach(imgUrl => {
+              const img = document.createElement('img');
+              img.src = imgUrl;
+              img.loading = 'lazy';
+              gallery.appendChild(img);
+            });
+          })
+          .catch(() => {
+            document.getElementById('noteTitle').textContent = '图文拉取异常';
+            document.getElementById('noteDesc').textContent = '请直接使用手机扫码查看。';
+          });
       }
     })();
   </script>
