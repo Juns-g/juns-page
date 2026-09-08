@@ -87,14 +87,17 @@
     }
     .btn-secondary:hover { text-decoration: underline; color: var(--text); }
   </style>
+  <script src="/go/qrcode.min.js"></script>
 </head>
 <body>
   <div class="card">
     <div class="icon">🛍️</div>
     <h2 id="title">正在跳转淘宝...</h2>
-    <p id="desc">系统即将自动唤起手机淘宝 App 查看商品</p>
+    <p id="desc">系统即将自动唤起手机淘宝查看宝贝</p>
     
-    <a id="appBtn" class="btn btn-primary" href="#">👉 点此打开淘宝 App</a>
+    <div id="qrcode" style="display:none; margin: 0 auto 20px; padding: 12px; background: #ffffff; border-radius: 14px; width: fit-content; box-shadow: 0 4px 16px rgba(0,0,0,0.08);"></div>
+
+    <a id="appBtn" class="btn btn-primary" href="#">👉 点此打开手机淘宝</a>
     <a id="webBtn" class="btn btn-secondary" href="#" target="_blank">在浏览器查看网页版</a>
   </div>
 
@@ -109,7 +112,7 @@
       const webBtn = document.getElementById('webBtn');
 
       if (!itemId) {
-        titleEl.textContent = '缺少商品 ID';
+        titleEl.textContent = '缺少宝贝 ID';
         descEl.textContent = '链接中未包含有效的 id 参数，无法完成跳转。';
         appBtn.style.display = 'none';
         webBtn.style.display = 'none';
@@ -122,7 +125,9 @@
       appBtn.href = schemeUrl;
       webBtn.href = webUrl;
 
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const isIPad = (navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1) 
+                  || /iPad/i.test(navigator.userAgent);
+      const isMobile = isIPad || /iPhone|iPod|Android/i.test(navigator.userAgent);
 
       if (isMobile) {
         setTimeout(() => {
@@ -136,11 +141,26 @@
           }
         }, 1500);
       } else {
-        titleEl.textContent = '正在前往网页版...';
-        descEl.textContent = '检测到当前为电脑端，即将进入淘宝网页版。';
-        setTimeout(() => {
-          window.location.href = webUrl;
-        }, 300);
+        // PC 电脑端：安静停留在当前页，展示扫码二维码，由用户决定是否进入网页版
+        titleEl.textContent = '淘宝商品详情';
+        descEl.textContent = '请使用手机淘宝 App 扫码查看，或点击下方按钮进入网页版。';
+        appBtn.style.display = 'none';
+        webBtn.className = 'btn btn-primary';
+        webBtn.textContent = '在浏览器打开网页版 ↗';
+        if (window.QRCode) {
+          const qrContainer = document.getElementById('qrcode');
+          if (qrContainer) {
+            qrContainer.style.display = 'block';
+            new QRCode(qrContainer, {
+              text: webUrl,
+              width: 150,
+              height: 150,
+              colorDark: "#1a1a1a",
+              colorLight: "#ffffff",
+              correctLevel: QRCode.CorrectLevel.M
+            });
+          }
+        }
       }
     })();
   </script>
