@@ -1,0 +1,4 @@
+/go/* https://go.juns.page/:splat 301
+/go https://go.juns.page/ 301
+/xhs/* https://go.juns.page/xhs/:splat 301
+/goofish/* https://go.juns.page/goofish/:splat 301
