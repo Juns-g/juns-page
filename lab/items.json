@@ -1,0 +1,461 @@
+{
+  "updated": "2026-10-23",
+  "items": [
+    {
+      "id": "go-cleaner",
+      "featured": true,
+      "name": {
+        "zh": "Juns Go 分享链接清洗器",
+        "en": "Juns Go share-link cleaner"
+      },
+      "summary": {
+        "zh": "粘贴小红书、闲鱼、淘宝等 App 的分享文案，得到一条干净短链；手机点开直接唤起对应 App，电脑端显示扫码二维码。",
+        "en": "Paste share text from apps like Xiaohongshu, Xianyu or Taobao and get a clean short link that opens the app on phones and shows a QR code on desktop."
+      },
+      "type": "web",
+      "status": "daily",
+      "role": "ai",
+      "date": "2026-09",
+      "links": [
+        {
+          "kind": "try",
+          "url": "https://go.juns.page/"
+        }
+      ]
+    },
+    {
+      "id": "zsctl",
+      "featured": true,
+      "name": {
+        "zh": "zsctl：极空间 NAS 命令行",
+        "en": "zsctl: ZSpace NAS CLI"
+      },
+      "summary": {
+        "zh": "用命令行和 Agent Skill 管理极空间 NAS：Docker 容器、存储池、硬盘休眠诊断和下载任务。",
+        "en": "A CLI and agent skill for ZSpace NAS: Docker containers, storage pools, disk-sleep diagnostics and downloads."
+      },
+      "type": "cli",
+      "status": "daily",
+      "role": "ai",
+      "date": "2026-09",
+      "links": [
+        {
+          "kind": "code",
+          "url": "https://github.com/Juns-g/zsctl"
+        }
+      ]
+    },
+    {
+      "id": "crispctl",
+      "featured": true,
+      "name": {
+        "zh": "Crisp：crispctl 命令行控制",
+        "en": "Crisp: crispctl controls"
+      },
+      "summary": {
+        "zh": "给 macOS 显示器工具 Crisp 提交的 4 个 PR，均已合并：本地控制入口、显示器信息、Extra Brightness 和外接 HDR 开关。",
+        "en": "Four merged PRs to the macOS display app Crisp: a local control socket, display metadata, Extra Brightness and external HDR controls."
+      },
+      "type": "contrib",
+      "status": "merged",
+      "role": "contrib",
+      "date": "2026-09",
+      "links": [
+        {
+          "kind": "pr",
+          "label": "#75",
+          "url": "https://github.com/didriksg/Crisp/pull/75"
+        },
+        {
+          "kind": "pr",
+          "label": "#81",
+          "url": "https://github.com/didriksg/Crisp/pull/81"
+        },
+        {
+          "kind": "pr",
+          "label": "#102",
+          "url": "https://github.com/didriksg/Crisp/pull/102"
+        },
+        {
+          "kind": "pr",
+          "label": "#116",
+          "url": "https://github.com/didriksg/Crisp/pull/116"
+        }
+      ]
+    },
+    {
+      "id": "rclick",
+      "featured": false,
+      "name": {
+        "zh": "RClick：多级右键菜单与外接盘",
+        "en": "RClick: nested menus and mounted volumes"
+      },
+      "summary": {
+        "zh": "给 macOS 右键菜单工具 RClick 提交的 2 个 PR，均已合并：用 JSON 声明多级菜单；外接盘和网络盘挂载后也能用右键菜单。",
+        "en": "Two merged PRs to the macOS Finder menu app RClick: JSON-declared nested menus, and support for external and network volumes."
+      },
+      "type": "contrib",
+      "status": "merged",
+      "role": "contrib",
+      "date": "2026-09",
+      "links": [
+        {
+          "kind": "pr",
+          "label": "#151",
+          "url": "https://github.com/wflixu/RClick/pull/151"
+        },
+        {
+          "kind": "pr",
+          "label": "#152",
+          "url": "https://github.com/wflixu/RClick/pull/152"
+        }
+      ]
+    },
+    {
+      "id": "delta-maps",
+      "featured": false,
+      "name": {
+        "zh": "三角洲《胜者为王》地图轮换",
+        "en": "Delta Force map rotation"
+      },
+      "summary": {
+        "zh": "选一个日期，查看当天及之后 7 天的地图轮换；可以标记偏好地图。数据只覆盖 S10 赛季（至 2026-11-04）。",
+        "en": "Pick a date to see the map rotation for that day and the next seven, with favourite maps highlighted. Covers season S10 only (until 2026-11-04)."
+      },
+      "type": "web",
+      "status": "works",
+      "role": "ai",
+      "date": "2026-09",
+      "links": [
+        {
+          "kind": "try",
+          "url": "https://game.juns.page/delta/"
+        },
+        {
+          "kind": "code",
+          "url": "https://github.com/Juns-g/juns-game"
+        }
+      ]
+    },
+    {
+      "id": "evidence-ledger",
+      "featured": false,
+      "name": {
+        "zh": "Evidence Ledger：证据简报生成器",
+        "en": "Evidence Ledger"
+      },
+      "summary": {
+        "zh": "读取本地 JSON 证据包，保留原始链接并去重，按事实、个人体验、推断和待核验缺口分区生成 Markdown 简报。不负责联网搜索。",
+        "en": "Turns a local JSON evidence bundle into a Markdown brief that keeps source links and separates facts, experiences, inferences and coverage gaps. It does not search the web."
+      },
+      "type": "cli",
+      "status": "works",
+      "role": "ai",
+      "date": "2026-08",
+      "links": [
+        {
+          "kind": "code",
+          "url": "https://github.com/Juns-g/evidence-ledger"
+        }
+      ]
+    },
+    {
+      "id": "mac-unlock",
+      "featured": false,
+      "name": {
+        "zh": "mac-unlock：Mac 锁屏解锁助手",
+        "en": "mac-unlock"
+      },
+      "summary": {
+        "zh": "本地 Agent 被 Mac 普通锁屏卡住时，按需调起原生窗口输入密码，并返回 JSON 回执。公开版尚未重新做实机测试。",
+        "en": "When a local agent is blocked by an ordinary Mac lock screen, it opens a native prompt for the password and returns a JSON receipt. The public build has not been re-tested on a real machine."
+      },
+      "type": "cli",
+      "status": "experimental",
+      "role": "ai",
+      "date": "2026-10",
+      "links": [
+        {
+          "kind": "code",
+          "url": "https://github.com/Juns-g/mac-unlock"
+        }
+      ]
+    },
+    {
+      "id": "android-unlock",
+      "featured": false,
+      "name": {
+        "zh": "android-unlock：安卓锁屏解锁助手",
+        "en": "android-unlock"
+      },
+      "summary": {
+        "zh": "通过已授权的 ADB 输入普通 PIN 解锁安卓手机，PIN 存在本机钥匙串；不 root、不绕过系统安全。公开版尚未重新做实机测试。",
+        "en": "Unlocks an Android phone with an ordinary PIN over already-authorised ADB, keeping the PIN in the local Keychain. No root, no bypass. The public build has not been re-tested on a real device."
+      },
+      "type": "cli",
+      "status": "experimental",
+      "role": "ai",
+      "date": "2026-10",
+      "links": [
+        {
+          "kind": "code",
+          "url": "https://github.com/Juns-g/android-unlock"
+        }
+      ]
+    },
+    {
+      "id": "ai-dialogue",
+      "featured": false,
+      "name": {
+        "zh": "我和 AI 的对话量",
+        "en": "How much I talk to AI"
+      },
+      "summary": {
+        "zh": "把本地留存的 AI 对话记录脱敏汇总成图表：30 天内每天发了多少条、写了多少字。只含数字，不含对话内容。",
+        "en": "A de-identified chart of my local AI chat history: messages and characters per day over 30 days. Numbers only, no conversation content."
+      },
+      "type": "page",
+      "status": "archived",
+      "role": "ai",
+      "date": "2026-10",
+      "links": [
+        {
+          "kind": "view",
+          "url": "https://go.juns.page/f/ai-dialogue-f0d3672a7e9f"
+        }
+      ]
+    },
+    {
+      "id": "flight-radar",
+      "featured": true,
+      "name": {
+        "zh": "机票好价监控",
+        "en": "Flight deal monitor"
+      },
+      "summary": {
+        "zh": "定时巡检日本周末往返航班，并汇总小红书机票博主的特价帖，每天生成一份网页报告。",
+        "en": "A scheduled job that checks weekend round trips to Japan and collects fare posts from Xiaohongshu deal-hunters, producing a daily web report."
+      },
+      "type": "workflow",
+      "status": "daily",
+      "role": "ai",
+      "date": "2026-10",
+      "links": [
+        {
+          "kind": "sample",
+          "label": {
+            "zh": "日本航班日报",
+            "en": "Japan report"
+          },
+          "url": "https://go.juns.page/f/japan-flight-20261019-d00a80"
+        },
+        {
+          "kind": "sample",
+          "label": {
+            "zh": "特价机票日报",
+            "en": "Deals digest"
+          },
+          "url": "https://go.juns.page/f/flight-20261012-k8n3w7"
+        }
+      ]
+    },
+    {
+      "id": "hermes-usage",
+      "group": "writing",
+      "name": {
+        "zh": "我如何使用 Hermes Agent",
+        "en": "How I use Hermes Agent"
+      },
+      "summary": {
+        "zh": "把 Hermes 当成个人 AI 中枢的日常用法：协调项目、把代码交给 Codex、管理 NAS、做旅行研究、调度 Cloudflare 和多台设备。",
+        "en": "How I use Hermes as a personal AI hub: coordinating projects, handing code to Codex, running the NAS, travel research, Cloudflare and multiple devices."
+      },
+      "topic": "tech",
+      "date": "2026-09-13",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/hermes"
+        }
+      ],
+      "mark": "Hermes",
+      "hue": 235
+    },
+    {
+      "id": "pwi",
+      "group": "writing",
+      "name": {
+        "zh": "私有微信行动与事实索引：架构设计",
+        "en": "A private WeChat action index: architecture"
+      },
+      "summary": {
+        "zh": "在本机给自己的微信记录建一个可追溯的待办与事实索引：受控解密、来源可回查、原子写入。这是设计稿，不是运行验收。",
+        "en": "Design notes for a local, traceable index of to-dos and facts from my own WeChat history: controlled decryption, source tracing and atomic writes. A design, not a tested system."
+      },
+      "topic": "tech",
+      "date": "2026-09-17",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/pwi-architecture"
+        }
+      ],
+      "mark": "WeChat",
+      "hue": 150
+    },
+    {
+      "id": "airpods",
+      "group": "writing",
+      "name": {
+        "zh": "AirPods 头部追踪在 Mac 上能怎么玩",
+        "en": "What AirPods head tracking can do on a Mac"
+      },
+      "summary": {
+        "zh": "整理 HeadOrbit、CoreMotion 接口和社区玩法：飞行模拟头瞄、免手切歌、光标控制、坐姿提醒。",
+        "en": "A round-up of HeadOrbit, the CoreMotion API and community ideas: head-aim in flight sims, hands-free track skipping, cursor control and posture reminders."
+      },
+      "topic": "tech",
+      "date": "2026-10-10",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/airpods-head-tracking"
+        }
+      ],
+      "mark": "AirPods",
+      "hue": 215
+    },
+    {
+      "id": "podcasts",
+      "group": "writing",
+      "name": {
+        "zh": "高能量中文播客清单与评论区拆解",
+        "en": "High-energy Chinese podcasts, unpacked"
+      },
+      "summary": {
+        "zh": "汇总 4 部被推荐的中文长访谈，附评论区的批评意见，以及一段 3 分钟双人浓缩播客。",
+        "en": "Four recommended long-form Chinese interviews, the critical takes from the replies, and a 3-minute two-voice summary episode."
+      },
+      "topic": "research",
+      "date": "2026-10-10",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/high-energy-podcasts-deconstruction"
+        }
+      ],
+      "mark": "Podcast",
+      "hue": 275
+    },
+    {
+      "id": "tripod",
+      "group": "writing",
+      "name": {
+        "zh": "三脚架怎么选：节数、结构与品牌",
+        "en": "Choosing a tripod: sections, design and brands"
+      },
+      "summary": {
+        "zh": "3、4、5 节怎么选，要不要中轴，以及富图宝、马小路、巅峰、思锐、徕图的定位和参考价。",
+        "en": "Three vs four vs five sections, centre column or not, and where Fotopro, Marsace, Peak Design, Sirui and Leofoto sit, with reference prices."
+      },
+      "topic": "shopping",
+      "date": "2026-10-03",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/tripod-guide-20261003"
+        }
+      ],
+      "mark": "Tripod",
+      "hue": 35
+    },
+    {
+      "id": "noodles",
+      "group": "writing",
+      "name": {
+        "zh": "出境自驾带什么泡面",
+        "en": "Instant noodles for an overseas road trip"
+      },
+      "summary": {
+        "zh": "出境自驾的袋装泡面清单：好收纳、口味稳，以及海关申报要注意什么。",
+        "en": "A packet-noodle list for a road trip abroad: easy to pack, reliable flavours, and what to watch for at customs."
+      },
+      "topic": "life",
+      "date": "2026-09-20",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/noodles-guide"
+        }
+      ],
+      "mark": "Noodles",
+      "hue": 12
+    },
+    {
+      "id": "hk-layover",
+      "group": "writing",
+      "name": {
+        "zh": "香港转机 8 小时：烧鹅与 ifc",
+        "en": "An 8-hour Hong Kong layover"
+      },
+      "summary": {
+        "zh": "8 小时转机出机场吃甘棠烧鹅、逛香港站和 ifc 的路线，附东涌备选和来不及时的返程边界。",
+        "en": "Leaving the airport on an 8-hour layover for roast goose, Hong Kong Station and ifc, with a Tung Chung fallback and a hard turn-back time."
+      },
+      "topic": "travel",
+      "date": "2026-09-23",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/hk-layover-20260925"
+        }
+      ],
+      "mark": "HKG · 8h",
+      "hue": 340
+    },
+    {
+      "id": "penguins",
+      "group": "writing",
+      "name": {
+        "zh": "墨尔本小火车 × 企鹅归巢",
+        "en": "Puffing Billy and the Phillip Island penguins"
+      },
+      "summary": {
+        "zh": "墨尔本一日行程的图文速查：Puffing Billy 小火车、转场时间、拍照机会，以及企鹅保护区的拍摄限制。",
+        "en": "A visual cheat sheet for a Melbourne day trip: Puffing Billy, transfer timing, photo spots and the camera rules at the penguin parade."
+      },
+      "topic": "travel",
+      "date": "2026-09-26",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/melbourne-puffing-penguins-27sep26-k9h6j3"
+        }
+      ],
+      "mark": "Penguins",
+      "hue": 160
+    },
+    {
+      "id": "cebu",
+      "group": "writing",
+      "name": {
+        "zh": "五一去宿务：机票、玩法与路线",
+        "en": "Cebu for a May Day break"
+      },
+      "summary": {
+        "zh": "比较上海、杭州、香港出发的五一航班，整理墨宝、卡瓦山、薄荷岛玩法和短假路线。",
+        "en": "Comparing May Day flights from Shanghai, Hangzhou and Hong Kong, plus Moalboal, Kawasan, Bohol and a short-break route."
+      },
+      "topic": "travel",
+      "date": "2026-10-09",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/mayday-cebu-2027-visual"
+        }
+      ],
+      "mark": "Cebu",
+      "hue": 190
+    }
+  ]
+}

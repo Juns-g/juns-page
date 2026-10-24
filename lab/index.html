@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>Lab · Juns</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --canvas: #f6f6f3;
+        --surface: #fdfdfb;
+        --ink: #171716;
+        --muted: #6e6e68;
+        --rule: #d9d9d2;
+        --rule-strong: #acaca2;
+        --accent: #2f7d4f;
+        --accent-soft: rgba(47, 125, 79, 0.08);
+        --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --canvas: #11110f;
+          --surface: #1c1c1a;
+          --ink: #f3f2ec;
+          --muted: #b4b3ac;
+          --rule: #3a3a35;
+          --rule-strong: #66665d;
+          --accent: #7fd1a0;
+          --accent-soft: rgba(127, 209, 160, 0.1);
+          --card-shadow: none;
+        }
+      }
+      * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
+      body {
+        margin: 0;
+        padding: 1.5rem 1.25rem 3rem;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: ui-rounded, "Avenir Next", Avenir, "SF Pro Rounded", system-ui, sans-serif;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+        text-wrap: pretty;
+      }
+      .page { max-width: 64rem; margin: 0 auto; }
+      header h1, #intro { max-width: 40rem; }
+      nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+      a { color: inherit; text-underline-offset: 0.2em; }
+      a:hover, button:hover { color: var(--muted); }
+      :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+      nav a, button { font-size: 0.875rem; }
+      button {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0.5rem;
+        border: 1px solid var(--rule);
+        border-radius: 2rem;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        cursor: pointer;
+      }
+      h1 {
+        margin: 2.4rem 0 1.5rem;
+        font-size: clamp(3rem, 11vw, 5.6rem);
+        font-weight: 650;
+        letter-spacing: -0.075em;
+        line-height: 0.9;
+      }
+      #intro { margin: 0; font-size: 1.05rem; color: var(--muted); }
+      .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.75rem; }
+      .filters button { flex: 0 0 auto; min-height: 36px; padding: 0.35rem 0.85rem; border-radius: 2rem; font-size: 0.8125rem; white-space: nowrap; }
+      .filters button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+      .filters button[aria-pressed="true"]:hover { color: var(--canvas); }
+      .count { margin-left: 0.3em; opacity: 0.55; font-variant-numeric: tabular-nums; }
+      [aria-pressed="true"] .count { opacity: 0.75; }
+      section { margin-top: 2.5rem; }
+      h2 { margin: 0 0 0.9rem; font-size: 1rem; font-weight: 650; color: var(--ink); }
+      ul { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; margin: 0; padding: 0; list-style: none; }
+      .card { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 1.1rem 1.2rem; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease; }
+      .cover {
+        --h: 220; --x: 78%; --y: 22%;
+        position: relative; display: flex; align-items: flex-end;
+        margin: -1.1rem -1.2rem 1rem; padding: 0.9rem 1.1rem;
+        aspect-ratio: 3 / 1; overflow: hidden; border-radius: 13px 13px 0 0;
+        background: hsl(var(--h) 45% 94%);
+        color: hsl(var(--h) 45% 26%);
+      }
+      .cover::before {
+        content: ""; position: absolute; inset: -30%;
+        background:
+          radial-gradient(42% 60% at var(--x) var(--y), hsl(var(--h) 85% 72% / 0.75), transparent 70%),
+          radial-gradient(35% 45% at calc(100% - var(--x)) 55%, hsl(calc(var(--h) + 40) 80% 80% / 0.4), transparent 70%);
+        filter: blur(18px);
+        transition: transform 400ms ease;
+      }
+      .mark { position: relative; font-size: 1.9rem; font-weight: 650; letter-spacing: -0.04em; line-height: 1; }
+      @media (prefers-color-scheme: dark) {
+        .cover { background: hsl(var(--h) 30% 13%); color: hsl(var(--h) 70% 86%); }
+        .cover::before {
+          background:
+            radial-gradient(42% 60% at var(--x) var(--y), hsl(var(--h) 70% 52% / 0.5), transparent 70%);
+        }
+      }
+      .card-top { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.75rem; margin-bottom: 0.75rem; }
+      h3 { margin: 0; font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
+      #featured h3 { font-size: 1.12rem; }
+      .card-link { text-decoration: none; }
+      .card-link:hover { color: inherit; }
+      .card-link::after { content: ""; position: absolute; inset: 0; border-radius: 14px; }
+      .card-link:focus-visible { outline: none; }
+      .card:has(.card-link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
+      .meta { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.5rem; color: var(--muted); font-size: 0.75rem; }
+      .status { padding: 0.1em 0.5em; border-radius: 1em; background: var(--canvas); color: var(--ink); }
+      .status-daily { color: var(--accent); background: var(--accent-soft); }
+      .status-experimental { background: transparent; outline: 1px dashed var(--rule-strong); outline-offset: -1px; }
+      .status-archived { opacity: 0.7; }
+      .destination::before { content: "·"; margin-right: 0.5em; }
+      .arrow { display: inline-block; transition: transform 160ms ease; }
+      .summary { margin: 0.6rem 0 1.2rem; color: var(--muted); font-size: 0.92rem; line-height: 1.55; }
+      #more .summary, #writing .summary { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+      .note { margin: -0.25rem 0 0.75rem; color: var(--muted); font-size: 0.875rem; }
+      .card-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.6rem; margin-top: auto; color: var(--muted); font-size: 0.75rem; }
+      time { font-variant-numeric: tabular-nums; }
+      .links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.35rem; margin-left: auto; }
+      .pill { max-width: 100%; padding: 0.2rem 0.65rem; border: 1px solid var(--rule); border-radius: 2rem; color: var(--ink); text-decoration: none; }
+      .pill.primary { border-color: var(--rule-strong); }
+      .pill .arrow { margin-left: 0.3em; }
+      a.pill { position: relative; z-index: 1; }
+      a.pill:hover { border-color: var(--ink); color: var(--ink); }
+      #message, noscript, footer { color: var(--muted); font-size: 0.875rem; }
+      #message { margin-top: 2rem; }
+      footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+      @media (min-width: 600px) { body { padding: 2rem 1.5rem 4rem; } }
+      @media (min-width: 640px) {
+        #featured ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        #more ul, #writing ul { grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); }
+      }
+      @media (hover: hover) and (pointer: fine) {
+        .card:hover { border-color: var(--rule-strong); transform: translateY(-2px); box-shadow: var(--card-shadow); }
+        .card:hover .arrow { transform: translate(2px, -2px); }
+        .card:hover .cover::before { transform: translate(-4%, 3%) scale(1.06); }
+      }
+      .card:active { transform: scale(0.99); }
+      @media (prefers-reduced-motion: reduce) {
+        .card, .arrow, .cover::before { transition: none; }
+        .card:hover, .card:active, .card:hover .arrow, .card:hover .cover::before { transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <nav aria-label="Lab">
+          <a href="/">Juns</a>
+          <button id="language" type="button" hidden></button>
+        </nav>
+        <h1>Lab</h1>
+        <p id="intro"></p>
+      </header>
+      <div id="filters" class="filters" role="group" hidden></div>
+      <main>
+        <p id="message" role="status"></p>
+        <noscript>请启用 JavaScript，或查看 / Enable JavaScript, or view <a href="items.json">items.json</a>.</noscript>
+        <section id="featured" aria-labelledby="featured-title" hidden>
+          <h2 id="featured-title"></h2>
+          <ul></ul>
+        </section>
+        <section id="more" aria-labelledby="more-title" hidden>
+          <h2 id="more-title"></h2>
+          <ul></ul>
+        </section>
+        <section id="writing" aria-labelledby="writing-title" hidden>
+          <h2 id="writing-title"></h2>
+          <p id="writing-note" class="note"></p>
+          <ul></ul>
+        </section>
+      </main>
+      <footer hidden></footer>
+    </div>
+    <script>
+      const copy = {
+        zh: {
+          title: 'Lab · Juns',
+          intro: '这里陈列我用 AI 做的小工具、网页、接入和文章。大多是给自己顺手做的，质量参差，按现状陈列，不保证可用或仍然准确，仅供参考和启发。',
+          toggle: 'EN', toggleLabel: '切换为英文',
+          featured: '精选', more: '其他', writing: '文章与研究', writingNote: 'AI 整理的说明、指南和研究笔记。旅行和价格信息都是当时的快照。', updated: '更新于',
+          loading: '正在读取项目…', error: '暂时无法读取项目，请稍后重试。',
+          type: { web: '网页', cli: '命令行', page: '页面', contrib: '上游贡献', workflow: '工作流' },
+          status: { daily: '常用', works: '能用', experimental: '实验', merged: '已合并', archived: '快照' },
+          role: { ai: 'AI 生成为主', contrib: '给他人项目的 PR' },
+          links: { try: '试用', code: '代码', view: '查看', read: '阅读' },
+          filters: { all: '全部', tools: '工具', workflow: '工作流', contrib: '上游贡献', writing: '文章' },
+          filterLabel: '筛选项目',
+          topic: { tech: '技术', research: '研究', shopping: '选购', life: '生活', travel: '旅行' }
+        },
+        en: {
+          title: 'Lab · Juns',
+          intro: "Small tools, pages, integrations and write-ups I made with AI. Most were made for my own use; quality varies. Listed as-is, with no guarantee they work or are still accurate — take what's useful.",
+          toggle: '中文', toggleLabel: 'Switch to Chinese',
+          featured: 'Featured', more: 'More', writing: 'Writing', writingNote: 'Explainers, guides and research notes put together with AI, mostly in Chinese. Travel details and prices are snapshots.', updated: 'Updated',
+          loading: 'Loading projects…', error: 'Could not load projects. Please try again later.',
+          type: { web: 'Web', cli: 'CLI', page: 'Page', contrib: 'Contribution', workflow: 'Workflow' },
+          status: { daily: 'Daily use', works: 'Works', experimental: 'Experimental', merged: 'Merged', archived: 'Snapshot' },
+          role: { ai: 'Mostly AI-written', contrib: "PR to someone else's project" },
+          links: { try: 'Try', code: 'Code', view: 'View', read: 'Read' },
+          filters: { all: 'All', tools: 'Tools', workflow: 'Workflows', contrib: 'Contributions', writing: 'Writing' },
+          filterLabel: 'Filter projects',
+          topic: { tech: 'Tech', research: 'Research', shopping: 'Buying guide', life: 'Life', travel: 'Travel' }
+        }
+      };
+      const queryLanguage = new URL(window.location.href).searchParams.get('lang');
+      let savedLanguage;
+      try { savedLanguage = localStorage.getItem('lab-lang'); } catch {}
+      const validLanguage = value => value === 'zh' || value === 'en';
+      let language = validLanguage(queryLanguage) ? queryLanguage
+        : validLanguage(savedLanguage) ? savedLanguage
+        : navigator.language.toLowerCase().startsWith('zh') ? 'zh' : 'en';
+      let data;
+      let failed = false;
+      const toggle = document.getElementById('language');
+      const filters = document.getElementById('filters');
+      const queryFilter = new URL(window.location.href).searchParams.get('f');
+      let filter = ['tools', 'workflow', 'contrib', 'writing'].includes(queryFilter) ? queryFilter : 'all';
+
+      function itemFilter(item) {
+        return item.group === 'writing' ? 'writing'
+          : ['web', 'cli', 'page'].includes(item.type) ? 'tools' : item.type;
+      }
+
+      function linkLabel(link, text) {
+        return link.kind === 'pr' ? `PR ${link.label}`
+          : link.label ? link.label[language] : text.links[link.kind];
+      }
+
+      function applyFilter() {
+        for (const button of filters.querySelectorAll('button')) {
+          button.setAttribute('aria-pressed', String(button.dataset.filter === filter));
+        }
+        for (const section of document.querySelectorAll('main section')) {
+          const cards = [...section.querySelectorAll('.card')];
+          for (const card of cards) {
+            card.hidden = filter !== 'all' && card.dataset.filter !== filter;
+          }
+          section.hidden = !cards.some(card => !card.hidden);
+        }
+      }
+
+      function renderFilters(text, items) {
+        filters.setAttribute('aria-label', text.filterLabel);
+        filters.replaceChildren();
+        for (const key of Object.keys(text.filters)) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.dataset.filter = key;
+          const count = items.filter(item => key === 'all' || itemFilter(item) === key).length;
+          const countLabel = document.createElement('span');
+          countLabel.className = 'count';
+          countLabel.textContent = count;
+          button.append(text.filters[key], countLabel);
+          button.addEventListener('click', () => {
+            filter = key;
+            const url = new URL(window.location.href);
+            if (filter === 'all') url.searchParams.delete('f');
+            else url.searchParams.set('f', filter);
+            history.replaceState(null, '', url);
+            applyFilter();
+          });
+          filters.append(button);
+        }
+        filters.hidden = false;
+      }
+
+      function renderItem(item, text) {
+        const row = document.createElement('li');
+        row.className = 'card';
+        row.dataset.filter = itemFilter(item);
+        const heading = document.createElement('div');
+        heading.className = 'card-top';
+        const name = document.createElement('h3');
+        const primary = item.links[0];
+        const titleLink = document.createElement('a');
+        titleLink.className = 'card-link';
+        titleLink.textContent = item.name[language];
+        titleLink.href = primary.url;
+        titleLink.target = '_blank';
+        titleLink.rel = 'noopener';
+        titleLink.setAttribute('aria-label', `${item.name[language]} — ${linkLabel(primary, text)}`);
+        name.append(titleLink);
+        const meta = document.createElement('span');
+        meta.className = 'meta';
+        const date = document.createElement('time');
+        date.dateTime = item.date;
+        date.textContent = item.date;
+        const type = document.createElement('span');
+        if (item.group === 'writing') {
+          type.textContent = text.topic[item.topic];
+          meta.append(type);
+        } else {
+          type.textContent = text.type[item.type];
+          const status = document.createElement('span');
+          status.className = `status status-${item.status}`;
+          status.textContent = text.status[item.status];
+          meta.append(type, status);
+        }
+        const destination = document.createElement('span');
+        destination.className = 'destination';
+        const hostname = new URL(primary.url).hostname.replace(/^www\./, '');
+        destination.textContent = hostname === 'github.com' ? 'GitHub' : hostname;
+        meta.append(destination);
+        heading.append(meta);
+        const summary = document.createElement('p');
+        summary.className = 'summary';
+        summary.textContent = item.summary[language];
+        const bottom = document.createElement('div');
+        bottom.className = 'card-bottom';
+        bottom.append(date);
+        const links = document.createElement('div');
+        links.className = 'links';
+        const hint = document.createElement('span');
+        hint.className = 'pill primary';
+        hint.setAttribute('aria-hidden', 'true');
+        const arrow = document.createElement('span');
+        arrow.className = 'arrow';
+        arrow.textContent = '↗';
+        hint.append(linkLabel(primary, text), arrow);
+        links.append(hint);
+        for (const link of item.links.slice(1)) {
+          const anchor = document.createElement('a');
+          anchor.className = 'pill primary';
+          const linkArrow = document.createElement('span');
+          linkArrow.className = 'arrow';
+          linkArrow.textContent = '↗';
+          linkArrow.setAttribute('aria-hidden', 'true');
+          anchor.append(linkLabel(link, text), linkArrow);
+          anchor.href = link.url;
+          anchor.target = '_blank';
+          anchor.rel = 'noopener';
+          links.append(anchor);
+        }
+        bottom.append(links);
+        if (item.mark) {
+          const cover = document.createElement('div');
+          cover.className = 'cover';
+          cover.setAttribute('aria-hidden', 'true');
+          cover.style.setProperty('--h', item.hue ?? 220);
+          const seed = [...item.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+          cover.style.setProperty('--x', `${60 + (seed % 30)}%`);
+          cover.style.setProperty('--y', `${10 + (seed * 7 % 40)}%`);
+          const mark = document.createElement('span');
+          mark.className = 'mark';
+          mark.textContent = item.mark;
+          cover.append(mark);
+          row.append(cover);
+        }
+        row.append(heading, name, summary, bottom);
+        return row;
+      }
+
+      function render() {
+        const text = copy[language];
+        document.documentElement.lang = language;
+        document.title = text.title;
+        document.getElementById('intro').textContent = text.intro;
+        toggle.textContent = text.toggle;
+        toggle.setAttribute('aria-label', text.toggleLabel);
+        toggle.hidden = false;
+        const message = document.getElementById('message');
+        message.textContent = failed ? text.error : data ? '' : text.loading;
+        message.hidden = Boolean(data);
+        if (!data) return;
+        const items = [...data.items].sort((a, b) => b.date.localeCompare(a.date));
+        renderFilters(text, items);
+        const groups = {
+          featured: item => item.group !== 'writing' && item.featured,
+          more: item => item.group !== 'writing' && !item.featured,
+          writing: item => item.group === 'writing'
+        };
+        document.getElementById('writing-note').textContent = text.writingNote;
+        for (const key of Object.keys(groups)) {
+          const section = document.getElementById(key);
+          document.getElementById(`${key}-title`).textContent = text[key];
+          section.querySelector('ul').replaceChildren(...items
+            .filter(groups[key])
+            .map(item => renderItem(item, text)));
+        }
+        applyFilter();
+        const footer = document.querySelector('footer');
+        footer.textContent = `${text.updated} ${data.updated}`;
+        footer.hidden = false;
+      }
+
+      toggle.addEventListener('click', () => {
+        language = language === 'zh' ? 'en' : 'zh';
+        try { localStorage.setItem('lab-lang', language); } catch {}
+        const url = new URL(window.location.href);
+        url.searchParams.set('lang', language);
+        history.replaceState(null, '', url);
+        render();
+      });
+
+      render();
+      fetch('items.json')
+        .then(response => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.json();
+        })
+        .then(result => { data = result; render(); })
+        .catch(() => { data = undefined; failed = true; render(); });
+    </script>
+  </body>
+</html>
