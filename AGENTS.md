@@ -27,3 +27,6 @@ This repository hosts the static source and Cloudflare Pages deployment for `jun
    - Perform iterative changes, bug fixes, and parameter tweaks locally.
    - Verify on local/LAN devices first.
    - Once verified, organize changes into clean, atomic commits and push only when the feature or fix is complete.
+
+4. **Design Language**:
+   - Read `DESIGN.md` before adding or restyling any page. It defines the shared tokens, card pattern, CSS glow covers (no screenshots) and the home-page entry pattern.
