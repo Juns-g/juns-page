@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-23",
+  "updated": "2026-10-25",
   "items": [
     {
       "id": "go-cleaner",
@@ -258,6 +258,28 @@
           "url": "https://go.juns.page/f/flight-20261012-k8n3w7"
         }
       ]
+    },
+    {
+      "id": "baguan-video",
+      "group": "writing",
+      "name": {
+        "zh": "《八观识人》视频文字导读",
+        "en": "Eight ways of reading people: video notes"
+      },
+      "summary": {
+        "zh": "把一段约 9 分钟的识人视频整理成带时间点的分章导读，区分观察角度与讲者判断，附原视频和中文字幕入口；非逐字稿。",
+        "en": "Timestamped notes on a nine-minute video about reading people, separating observations from the speaker’s judgments, with links to the video and Chinese captions. Not a verbatim transcript."
+      },
+      "topic": "life",
+      "date": "2026-10-25",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/baguan-video-2114225669496561988"
+        }
+      ],
+      "mark": "Insight",
+      "hue": 300
     },
     {
       "id": "hermes-usage",
