@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Cities I've been to, on a dot map.">
+<title>Footprint · Juns</title>
+<style>
+  :root { color-scheme:light dark; --canvas:#f6f6f3; --surface:#fdfdfb; --ink:#171716; --muted:#6e6e68; --rule:#d9d9d2; --rule-strong:#acaca2; --accent:#2f7d4f; }
+  @media (prefers-color-scheme: dark) { :root { --canvas:#11110f; --surface:#1c1c1a; --ink:#f3f2ec; --muted:#b4b3ac; --rule:#3a3a35; --rule-strong:#66665d; --accent:#7fd1a0; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--canvas); color:var(--ink); font:16px/1.55 ui-rounded,"Avenir Next",Avenir,"SF Pro Rounded",system-ui,sans-serif; }
+  main { max-width:64rem; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
+  @media (min-width:600px) { main { padding:2rem 1.5rem 4rem; } }
+  a { color:inherit; text-underline-offset:.2em; }
+  :focus-visible { outline:2px solid var(--ink); outline-offset:4px; }
+  nav { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+  nav a, #language { font-size:.875rem; }
+  #language { min-width:44px; min-height:44px; padding:.5rem; border:1px solid var(--rule); border-radius:2rem; background:transparent; color:var(--ink); font-family:inherit; cursor:pointer; }
+  @media (hover:hover) and (pointer:fine) { a:hover, #language:hover { color:var(--muted); } }
+  h1 { margin:2.4rem 0 1rem; font-size:clamp(3rem,11vw,5.6rem); font-weight:650; letter-spacing:-.075em; line-height:.9; }
+  .meta { margin:.25rem 0 0; font:.8rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .map { position:relative; margin:2rem 0 2.5rem; height:min(62vh,560px); aspect-ratio:auto; border:1px solid var(--rule); border-radius:14px; overflow:hidden; background:var(--surface); }
+  @media (max-width:600px) { .map { height:auto; aspect-ratio:5/4; } }
+  canvas { display:block; width:100%; height:100%; touch-action:none; cursor:grab; }
+  canvas.drag { cursor:grabbing; }
+  .ctl { position:absolute; right:.75rem; top:.75rem; display:flex; gap:.4rem; }
+  .ctl button { display:grid; place-items:center; width:36px; height:36px; padding:0; border:1px solid var(--rule); border-radius:2rem; background:var(--surface); color:var(--ink); cursor:pointer; }
+  .ctl svg { width:16px; height:16px; display:block; }
+  .ctl button:hover { border-color:var(--rule-strong); }
+  .tip { position:absolute; pointer-events:none; padding:.3rem .6rem; border:1px solid var(--rule); border-radius:2rem; background:var(--surface);
+         font-size:.8rem; white-space:nowrap; transform:translate(-50%,-150%); opacity:0; transition:opacity .12s; }
+  .list { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.4rem 2rem; }
+  .list h2 { margin:0 0 .3rem; font-size:.95rem; font-weight:600; display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+  .list h2 span { font:.75rem ui-monospace,SFMono-Regular,Menlo,monospace; color:var(--muted); font-weight:400; }
+  .list p { margin:0; color:var(--muted); font-size:.88rem; text-wrap:pretty; }
+  .list i { font-style:normal; white-space:nowrap; cursor:pointer; }
+  .list i:hover { color:var(--ink); }
+  footer { margin-top:3rem; padding-top:1rem; border-top:1px solid var(--rule); color:var(--muted); font-size:.875rem; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <nav aria-label="Footprint"><a href="/">Juns</a><button id="language" type="button"></button></nav>
+    <h1 id="title">Footprint</h1>
+    <p class="meta" id="meta"></p>
+  </header>
+  <div class="map" id="box">
+    <canvas id="c"></canvas><div class="tip" id="tip"></div>
+    <div class="ctl"><button id="zin" aria-label="Zoom in"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 3.5v9M3.5 8h9"/></svg></button><button id="zout" aria-label="Zoom out"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.5 8h9"/></svg></button><button id="home" aria-label="Fit visited"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg></button></div>
+  </div>
+  <section class="list" id="list"></section>
+  <footer id="foot" hidden></footer>
+</main>
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const qLang = new URL(location.href).searchParams.get("lang");
+let saved = null; try { saved = localStorage.getItem("lab-lang"); } catch {}
+let lang = ["en", "zh"].includes(qLang) ? qLang : ["en", "zh"].includes(saved) ? saved : navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en";
+const nm = c => lang === "zh" ? (c.zh || c.name) : c.name;
+const cn = c => lang === "zh" ? (c.country_zh || c.country) : c.country;
+
+Promise.all([fetch("cities.json").then(r => r.json()), fetch("grid.json").then(r => r.json())]).then(([d, G]) => {
+  const S = 1, cities = d.cities;
+  const unpack = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  const levels = G.levels.map(l => ({ ...l, land: unpack(l.land), visited: unpack(l.visited) }));
+  const bit = (a, i) => a[i >> 3] & (128 >> (i & 7));
+  const visitedCC = new Set(cities.map(c => c.cc));
+  const meta = () => { document.getElementById("title").textContent = lang === "zh" ? "足迹" : "Footprint";
+    document.getElementById("meta").textContent = lang === "zh" ? `${d.stats.countries} 个国家 · ${d.stats.cities} 个城市 · 自 ${d.stats.from}` : `${d.stats.countries} countries · ${d.stats.cities} cities · since ${d.stats.from}`; };
+
+  // group cities sharing a grid cell
+  const hot = new Map();
+  for (const c of cities) {
+    const k = `${Math.floor(c.lon / S)},${Math.floor(c.lat / S)}`, h = hot.get(k) || { lon: (Math.floor(c.lon / S) + .5) * S, lat: (Math.floor(c.lat / S) + .5) * S, names: [] };
+    h.names.push(c); hot.set(k, h);
+  }
+  const hots = [...hot.values()];
+
+  // world extent in degrees; view = { cx, cy (deg), z (px per degree) }
+  const W0 = -180, W1 = 180, N = 84, Sx = -58;
+  const box = document.getElementById("box"), cv = document.getElementById("c"), ctx = cv.getContext("2d"), tip = document.getElementById("tip");
+  let vw = 0, vh = 0, view = { cx: 0, cy: 10, z: 3 };
+  const zMin = () => Math.min(vw / (W1 - W0), vh / (N - Sx)) * 0.98, zMax = 60;
+  let sel = null;
+
+  function fitVisited() {
+    let a = 180, b = -180, c = 90, e = -90;
+    for (const h of hots) { a = Math.min(a, h.lon); b = Math.max(b, h.lon); c = Math.min(c, h.lat); e = Math.max(e, h.lat); }
+    a -= 4; b += 4; c -= 4; e += 5;
+    const px = vw < 600 ? 28 : 48;  // screen padding so edge clusters and controls stay clear
+    view = { cx: (a + b) / 2, cy: (c + e) / 2, z: Math.min((vw - 2 * px) / (b - a), (vh - 2 * px) / (e - c)) };
+    clamp();
+  }
+  function clamp() {
+    view.z = Math.max(zMin(), Math.min(zMax, view.z));
+    const hw = vw / 2 / view.z, hh = vh / 2 / view.z;
+    // centre may move up to 25% of the viewport past the world edge, so edge places (NZ, Alaska) can be centred
+    const ox = Math.min(hw * .5, 40), oy = Math.min(hh * .5, 20);
+    const lim = (c, lo, hi, half, o) => (hi - lo) <= 2 * half ? (lo + hi) / 2 : Math.max(lo + half - o, Math.min(hi - half + o, c));
+    view.cx = lim(view.cx, W0, W1, hw, ox); view.cy = lim(view.cy, Sx, N, hh, oy);
+  }
+  const toX = lon => vw / 2 + (lon - view.cx) * view.z, toY = lat => vh / 2 - (lat - view.cy) * view.z;
+  const toLon = x => view.cx + (x - vw / 2) / view.z, toLat = y => view.cy - (y - vh / 2) / view.z;
+
+  function dot(x, y, r) { ctx.beginPath(); ctx.arc(x, y, r, 0, 6.2832); ctx.fill(); }
+  function draw() {
+    const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    ctx.clearRect(0, 0, vw, vh);
+    // choose the finest grid whose dot spacing stays >= 5 css px
+    let L = levels[0];
+    for (const l of levels) if (l.step * view.z >= 5) L = l;
+    const st = L.step, cw = st * view.z, r = Math.max(.6, cw * .36);
+    const land = css("--rule"), landV = css("--rule-strong"), acc = css("--accent");
+    const [W0g, , , N0g] = G.bounds;
+    const i0 = Math.max(0, Math.floor((toLon(0) - W0g) / st) - 1), i1 = Math.min(L.cols - 1, Math.ceil((toLon(vw) - W0g) / st) + 1);
+    const j0 = Math.max(0, Math.floor((N0g - toLat(0)) / st) - 1), j1 = Math.min(L.rows - 1, Math.ceil((N0g - toLat(vh)) / st) + 1);
+    for (const pass of [0, 1]) {
+      ctx.fillStyle = pass ? landV : land; ctx.globalAlpha = pass ? (dark ? .75 : .7) : (dark ? .55 : .85);
+      ctx.beginPath();
+      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+        const k = j * L.cols + i;
+        if (!bit(L.land, k) || (!!bit(L.visited, k)) !== !!pass) continue;
+        const x = toX(W0g + (i + .5) * st), y = toY(N0g - (j + .5) * st);
+        ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 6.2832);
+      }
+      ctx.fill();
+    }
+    ctx.fillStyle = acc;
+    const core = Math.min(6, Math.max(3.4, view.z * .5));
+    for (const c of cities) {
+      const x = toX(c.lon), y = toY(c.lat);
+      if (x < -20 || y < -20 || x > vw + 20 || y > vh + 20) continue;
+      ctx.globalAlpha = dark ? .2 : .14; dot(x, y, core * (view.z >= 15 ? 2.4 : 1.9));
+    }
+    ctx.globalAlpha = 1;
+    for (const c of cities) {
+      const x = toX(c.lon), y = toY(c.lat);
+      if (x < -20 || y < -20 || x > vw + 20 || y > vh + 20) continue;
+      dot(x, y, core);
+      if (sel === c) { ctx.strokeStyle = acc; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x, y, core + 4, 0, 6.2832); ctx.stroke(); }
+    }
+    // labels when zoomed in enough
+    if (view.z >= 9) {
+      ctx.font = "500 12px ui-rounded, 'Avenir Next', system-ui, sans-serif"; ctx.fillStyle = css("--ink"); ctx.textBaseline = "middle";
+      const placed = [];
+      for (const c of [...cities].sort((a, b) => b.days - a.days)) {
+        const label = nm(c), ax = toX(c.lon), ay = toY(c.lat), w = ctx.measureText(label).width;
+        if (ax < 0 || ax > vw || ay < 8 || ay > vh - 8) continue;
+        const dots = cities.map(o => [toX(o.lon), toY(o.lat)]);
+        const cand = [[ax + core + 5, ay], [ax - core - 5 - w, ay], [ax - w / 2, ay - core - 9], [ax - w / 2, ay + core + 9]];
+        const ok = cand.find(([x, y]) => x >= 4 && x + w <= vw - 4 && y >= 10 && y <= vh - 10 && !placed.some(p => x < p[0] + p[2] + 4 && x + w + 4 > p[0] && Math.abs(y - p[1]) < 14)
+          && !dots.some(([dx, dy]) => dx > x - 3 && dx < x + w + 3 && Math.abs(dy - y) < 8));
+        if (!ok) continue;
+        placed.push([ok[0], ok[1], w]); ctx.globalAlpha = .9; ctx.lineWidth = 3; ctx.strokeStyle = css("--surface"); ctx.strokeText(label, ok[0], ok[1]); ctx.fillText(label, ok[0], ok[1]);
+      }
+      ctx.globalAlpha = 1;
+    }
+    ctx.globalAlpha = 1;
+  }
+  let raf = 0; const redraw = () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; draw(); }); };
+
+  function resize(first) {
+    const dpr = devicePixelRatio || 1; vw = box.clientWidth; vh = box.clientHeight;
+    cv.width = vw * dpr; cv.height = vh * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (first) fitVisited(); else clamp();
+    draw();
+  }
+  function zoomAt(f, x = vw / 2, y = vh / 2) {
+    const lon = toLon(x), lat = toLat(y);
+    view.z *= f; clamp();
+    view.cx += lon - toLon(x); view.cy += lat - toLat(y); clamp(); redraw();
+  }
+  function animateTo(target) {
+    const from = { ...view }, t0 = performance.now();
+    const step = t => { const k = Math.min(1, (t - t0) / 350), e = 1 - Math.pow(1 - k, 3);
+      view = { cx: from.cx + (target.cx - from.cx) * e, cy: from.cy + (target.cy - from.cy) * e, z: from.z * Math.pow(target.z / from.z, e) };
+      clamp(); draw(); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+
+  // pointer: drag, pinch, tap
+  const pts = new Map(); let last = null, moved = 0, pinch = 0;
+  cv.addEventListener("pointerdown", e => { cv.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.offsetX, e.offsetY]); moved = 0; last = [e.offsetX, e.offsetY]; cv.classList.add("drag"); });
+  cv.addEventListener("pointermove", e => {
+    if (!pts.has(e.pointerId)) { hover(e.offsetX, e.offsetY); return; }
+    pts.set(e.pointerId, [e.offsetX, e.offsetY]);
+    if (pts.size === 2) {
+      const [a, b] = [...pts.values()], dd = Math.hypot(a[0] - b[0], a[1] - b[1]);
+      if (pinch) zoomAt(dd / pinch, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2);
+      pinch = dd; moved += 10; return;
+    }
+    const dx = e.offsetX - last[0], dy = e.offsetY - last[1]; last = [e.offsetX, e.offsetY]; moved += Math.abs(dx) + Math.abs(dy);
+    view.cx -= dx / view.z; view.cy += dy / view.z; clamp(); redraw(); tip.style.opacity = 0;
+  });
+  const up = e => { pts.delete(e.pointerId); if (pts.size < 2) pinch = 0; if (!pts.size) cv.classList.remove("drag");
+    if (moved < 6 && e.type === "pointerup") hover(e.offsetX, e.offsetY, true);
+    if (pts.size === 1) last = [...pts.values()][0]; };
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  cv.addEventListener("pointerleave", () => { if (!pts.size) tip.style.opacity = 0; });
+  cv.addEventListener("wheel", e => { e.preventDefault(); zoomAt(Math.exp(-e.deltaY * (e.ctrlKey ? .01 : .0025)), e.offsetX, e.offsetY); }, { passive: false });
+  cv.addEventListener("dblclick", e => zoomAt(2, e.offsetX, e.offsetY));
+  document.getElementById("zin").onclick = () => zoomAt(1.6);
+  document.getElementById("zout").onclick = () => zoomAt(1 / 1.6);
+  document.getElementById("home").onclick = () => { const cur = { ...view }; fitVisited(); const t = { ...view }; view = cur; animateTo(t); };
+
+  function hover(mx, my, tap) {
+    let best = null, bd = 16;
+    for (const c of cities) { const dd = Math.hypot(toX(c.lon) - mx, toY(c.lat) - my); if (dd < bd) { bd = dd; best = c; } }
+    if (!best) { tip.style.opacity = 0; return; }
+    const near = cities.filter(c => Math.hypot(toX(c.lon) - toX(best.lon), toY(c.lat) - toY(best.lat)) < 8);
+    tip.textContent = near.map(nm).join(" · ");
+    tip.style.left = toX(best.lon) + "px"; tip.style.top = toY(best.lat) + "px"; tip.style.opacity = 1;
+  }
+
+  resize(true);
+  new ResizeObserver(() => resize(false)).observe(box);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+
+  // list grouped by country; clicking a city flies to it
+  const by = new Map();
+  for (const c of cities) (by.get(c.cc) || by.set(c.cc, []).get(c.cc)).push(c);
+  const list = document.getElementById("list");
+  const render = () => { meta(); document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+    const t = document.getElementById("language");
+    t.textContent = lang === "zh" ? "EN" : "中文"; t.setAttribute("aria-label", lang === "zh" ? "切换为英文" : "Switch to Chinese");
+    document.title = lang === "zh" ? "足迹 · Juns" : "Footprint · Juns";
+    const f = document.getElementById("foot"); if (d.stats.updated) { f.textContent = (lang === "zh" ? "更新于 " : "Updated ") + d.stats.updated; f.hidden = false; }
+    list.innerHTML = [...by.entries()].sort((a, b) => b[1].length - a[1].length).map(([cc, cs]) =>
+      `<div><h2>${cn(cs[0])}<span>${cs.length}</span></h2><p>${cs.map((c, i) =>
+        `<i data-lon="${c.lon}" data-lat="${c.lat}">${nm(c)}${i < cs.length - 1 ? (lang === "zh" ? "、" : " ·") : ""}</i>`).join(lang === "zh" ? "" : " ")}</p></div>`).join("");
+    draw(); };
+  render();
+  document.getElementById("language").onclick = () => {
+    lang = lang === "zh" ? "en" : "zh";
+    try { localStorage.setItem("lab-lang", lang); } catch {}
+    const u = new URL(location.href); u.searchParams.set("lang", lang); history.replaceState(null, "", u);
+    render(); };
+  list.addEventListener("click", e => {
+    const t = e.target.closest("i"); if (!t) return;
+    box.scrollIntoView({ behavior: "smooth", block: "center" });
+    sel = cities.find(c => c.lon === +t.dataset.lon && c.lat === +t.dataset.lat);
+    animateTo({ cx: +t.dataset.lon, cy: +t.dataset.lat, z: 48 });
+  });
+});
+</script>
+</body>
+</html>

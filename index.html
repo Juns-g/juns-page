@@ -112,6 +112,10 @@
         <a class="lab" href="https://photos.juns.page">
           <span class="lab-text">Photos I've taken <span class="lab-arrow" aria-hidden="true">→</span> <strong>Photos</strong></span>
         </a>
+        <a class="lab" href="/map/">
+          <span class="lab-text">Places I've been <span class="lab-arrow" aria-hidden="true">→</span> <strong>Map</strong></span>
+          <span class="lab-meta map-meta" hidden></span>
+        </a>
       </div>
       <span class="domain">juns.page</span>
     </main>
@@ -121,6 +125,14 @@
         .then((data) => {
           const meta = document.querySelector('.lab-meta');
           meta.textContent = `${data.items.length} items · updated ${data.updated}`;
+          meta.hidden = false;
+        })
+        .catch(() => {});
+      fetch('/map/cities.json')
+        .then((response) => (response.ok ? response.json() : Promise.reject()))
+        .then((data) => {
+          const meta = document.querySelector('.map-meta');
+          meta.textContent = `${data.stats.countries} countries · ${data.stats.cities} cities`;
           meta.hidden = false;
         })
         .catch(() => {});
