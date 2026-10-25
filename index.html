@@ -53,9 +53,9 @@
         font-size: clamp(1rem, 2.4vw, 1.2rem);
         line-height: 1.55;
       }
+      .entries { display: grid; justify-items: start; gap: 0.7rem; margin-top: 0.9rem; }
       .lab {
         display: inline-block;
-        margin-top: 0.9rem;
         color: var(--ink);
         text-decoration: none;
         font-size: clamp(1rem, 2.4vw, 1.2rem);
@@ -70,12 +70,15 @@
         transition: text-decoration-color 160ms ease;
       }
       .lab-arrow { display: inline-block; color: var(--muted); transition: transform 160ms ease; }
-      .lab:hover strong, .lab:focus-visible strong { text-decoration-color: currentColor; }
-      .lab:hover .lab-arrow { transform: translateX(3px); }
+      .lab:focus-visible strong { text-decoration-color: currentColor; }
+      @media (hover: hover) and (pointer: fine) {
+        .lab:hover strong { text-decoration-color: currentColor; }
+        .lab:hover .lab-arrow { transform: translateX(3px); }
+      }
       .lab:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 4px; }
       .lab-meta {
         display: block;
-        margin-top: 0.25rem;
+        margin-top: 0.1rem;
         color: var(--muted);
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
         font-size: 0.78rem;
@@ -101,10 +104,15 @@
       <h1 class="wordmark">Juns</h1>
       <hr class="line">
       <p>A small corner of the internet.</p>
-      <a class="lab" href="/lab/">
-        <span class="lab-text">Things I've made with AI <span class="lab-arrow" aria-hidden="true">→</span> <strong>Lab</strong></span>
-        <span class="lab-meta" hidden></span>
-      </a>
+      <div class="entries">
+        <a class="lab" href="/lab/">
+          <span class="lab-text">Things I've made with AI <span class="lab-arrow" aria-hidden="true">→</span> <strong>Lab</strong></span>
+          <span class="lab-meta" hidden></span>
+        </a>
+        <a class="lab" href="https://photos.juns.page">
+          <span class="lab-text">Photos I've taken <span class="lab-arrow" aria-hidden="true">→</span> <strong>Photos</strong></span>
+        </a>
+      </div>
       <span class="domain">juns.page</span>
     </main>
     <script>
