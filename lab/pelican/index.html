@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>GPT-6.1 Terra 鹈鹕测试</title>
+    <meta name="description" content="让 AI 画一只骑自行车的鹈鹕，记录下这三个版本的结果。">
+    <style>
+      :root {
+        color-scheme: light dark;
+        --canvas: #f6f6f3;
+        --surface: #fdfdfb;
+        --ink: #171716;
+        --muted: #6e6e68;
+        --rule: #d9d9d2;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --canvas: #11110f;
+          --surface: #1c1c1a;
+          --ink: #f3f2ec;
+          --muted: #b4b3ac;
+          --rule: #3a3a35;
+        }
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        padding: 1.5rem 1.25rem 3rem;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: ui-rounded, "Avenir Next", Avenir, "SF Pro Rounded", system-ui, sans-serif;
+        line-height: 1.6;
+        text-wrap: pretty;
+        overflow-wrap: anywhere;
+      }
+      .page { max-width: 64rem; margin: 0 auto; }
+      nav { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+      nav a { display: inline-flex; align-items: center; min-height: 44px; }
+      a { color: inherit; text-underline-offset: 0.2em; }
+      a:hover { color: var(--muted); }
+      :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+      header { max-width: 40rem; margin: 3rem 0; }
+      h1 {
+        margin: 0;
+        font-size: clamp(3rem, 11vw, 5.6rem);
+        font-weight: 650;
+        letter-spacing: -0.075em;
+        line-height: 0.9;
+      }
+      header p { margin: 1.5rem 0 0; color: var(--muted); }
+      section { margin-top: 2rem; }
+      .version-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1rem; margin-bottom: 0.75rem; }
+      h2 { margin: 0; font-size: 1rem; font-weight: 650; }
+      .version-heading a { padding: 0.5rem 0; font-size: 0.82rem; color: var(--muted); }
+      iframe {
+        display: block;
+        width: 100%;
+        height: clamp(36rem, 85vw, 56rem);
+        border: 1px solid var(--rule);
+        border-radius: 14px;
+        background: var(--surface);
+      }
+      .sol { height: 60rem; }
+      footer {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--rule);
+        color: var(--muted);
+        font: 0.8rem ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-variant-numeric: tabular-nums;
+      }
+      @media (min-width: 600px) {
+        body { padding: 2rem 1.5rem 4rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <nav aria-label="导航">
+        <a href="/">Juns</a>
+        <a href="/lab/?lang=zh&amp;f=writing">返回 Lab</a>
+      </nav>
+      <main>
+        <header>
+          <h1>GPT-6.1 Terra 鹈鹕测试</h1>
+          <p>让 AI 画一只骑自行车的鹈鹕，记录下这三个版本的结果。</p>
+        </header>
+        <section aria-labelledby="terra-ultra">
+          <div class="version-heading">
+            <h2 id="terra-ultra">codex ultra</h2>
+            <a href="https://go.juns.page/f/pelican-terra-9f4e3a18c62d">打开原页 ↗</a>
+          </div>
+          <iframe src="versions/terra-ultra.html" title="codex ultra：骑自行车的鹈鹕动画与播放控制" sandbox="allow-scripts"></iframe>
+        </section>
+        <section aria-labelledby="terra-xhigh">
+          <div class="version-heading">
+            <h2 id="terra-xhigh">codex xhigh</h2>
+            <a href="https://go.juns.page/f/pelican-codex-terra-xhigh-8f2a1c">打开原页 ↗</a>
+          </div>
+          <iframe src="versions/terra-xhigh.html" title="codex xhigh：骑自行车的鹈鹕动画" sandbox="allow-scripts" loading="lazy"></iframe>
+        </section>
+        <section aria-labelledby="sol-ultra">
+          <div class="version-heading">
+            <h2 id="sol-ultra">6.1 sol ultra + codex</h2>
+            <a href="https://go.juns.page/f/pelican-codex-sol-ultra">打开原页 ↗</a>
+          </div>
+          <iframe class="sol" src="versions/sol-ultra.html" title="6.1 sol ultra + codex：骑自行车的鹈鹕动画、播放与速度控制" sandbox="allow-scripts" loading="lazy"></iframe>
+        </section>
+      </main>
+      <footer>Updated <time datetime="2026-10-27">2026-10-27</time></footer>
+    </div>
+  </body>
+</html>

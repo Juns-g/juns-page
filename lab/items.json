@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-25",
+  "updated": "2026-10-27",
   "items": [
     {
       "id": "go-cleaner",
@@ -258,6 +258,28 @@
           "url": "https://go.juns.page/f/flight-20261012-k8n3w7"
         }
       ]
+    },
+    {
+      "id": "pelican-terra",
+      "group": "writing",
+      "name": {
+        "zh": "GPT-6.1 Terra 鹈鹕测试",
+        "en": "GPT-6.1 Terra pelican test"
+      },
+      "summary": {
+        "zh": "让 AI 画一只骑自行车的鹈鹕，记录下这三个版本的结果。",
+        "en": "Three versions of an AI-drawn pelican riding a bicycle."
+      },
+      "topic": "tech",
+      "date": "2026-10-27",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://juns.page/lab/pelican/"
+        }
+      ],
+      "mark": "Pelican",
+      "hue": 180
     },
     {
       "id": "baguan-video",
