@@ -206,6 +206,28 @@
       ]
     },
     {
+      "id": "monocode-paseo",
+      "featured": false,
+      "name": {
+        "zh": "Monocode Paseo：原生桌面客户端",
+        "en": "Monocode Paseo: native desktop client"
+      },
+      "summary": {
+        "zh": "基于 MonoCode 的个人实验 fork，用原生 GPUI 界面连接本机 Paseo，两边复用同一批对话与历史，可以接着聊。需要本机 Paseo，不保证兼容性与稳定性。",
+        "en": "A personal experimental MonoCode fork: a native GPUI interface for a local Paseo daemon, sharing conversations and history across both clients. Requires local Paseo; no compatibility or stability guarantees."
+      },
+      "type": "app",
+      "status": "experimental",
+      "role": "ai",
+      "date": "2026-10-28",
+      "links": [
+        {
+          "kind": "code",
+          "url": "https://github.com/Juns-g/monocode-paseo"
+        }
+      ]
+    },
+    {
       "id": "mac-unlock",
       "featured": false,
       "name": {

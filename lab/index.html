@@ -187,7 +187,7 @@
           toggle: 'EN', toggleLabel: '切换为英文',
           featured: '精选', more: '其他', writing: '文章与研究', writingNote: 'AI 整理的说明、指南和研究笔记。旅行和价格信息都是当时的快照。', updated: '更新于',
           loading: '正在读取项目…', error: '暂时无法读取项目，请稍后重试。',
-          type: { web: '网页', cli: '命令行', page: '页面', contrib: '上游贡献', workflow: '工作流' },
+          type: { web: '网页', cli: '命令行', page: '页面', app: '桌面应用', contrib: '上游贡献', workflow: '工作流' },
           status: { daily: '常用', works: '能用', experimental: '实验', merged: '已合并', archived: '快照' },
           role: { ai: 'AI 生成为主', contrib: '给他人项目的 PR' },
           links: { try: '试用', code: '代码', view: '查看', read: '阅读' },
@@ -201,7 +201,7 @@
           toggle: '中文', toggleLabel: 'Switch to Chinese',
           featured: 'Featured', more: 'More', writing: 'Writing', writingNote: 'Explainers, guides and research notes put together with AI, mostly in Chinese. Travel details and prices are snapshots.', updated: 'Updated',
           loading: 'Loading projects…', error: 'Could not load projects. Please try again later.',
-          type: { web: 'Web', cli: 'CLI', page: 'Page', contrib: 'Contribution', workflow: 'Workflow' },
+          type: { web: 'Web', cli: 'CLI', page: 'Page', app: 'Desktop app', contrib: 'Contribution', workflow: 'Workflow' },
           status: { daily: 'Daily use', works: 'Works', experimental: 'Experimental', merged: 'Merged', archived: 'Snapshot' },
           role: { ai: 'Mostly AI-written', contrib: "PR to someone else's project" },
           links: { try: 'Try', code: 'Code', view: 'View', read: 'Read' },
@@ -226,7 +226,7 @@
 
       function itemFilter(item) {
         return item.group === 'writing' ? 'writing'
-          : ['web', 'cli', 'page'].includes(item.type) ? 'tools' : item.type;
+          : ['web', 'cli', 'page', 'app'].includes(item.type) ? 'tools' : item.type;
       }
 
       function linkLabel(link, text) {
