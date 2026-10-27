@@ -876,6 +876,94 @@
       ],
       "mark": "DNS · Block",
       "hue": 205
+    },
+    {
+      "id": "claude-duet-video-notes",
+      "group": "writing",
+      "name": {
+        "zh": "Claude Duet：把想法变成能推进的任务",
+        "en": "Claude Duet: turning ideas into actionable tasks"
+      },
+      "summary": {
+        "zh": "Alex Finn 视频的中文图文解读：总对话如何拆任务、分项目、主动提出下一步，以及电脑操作的限制；作者演示与个人评价分开说明。",
+        "en": "Chinese illustrated notes on Alex Finn's video: one chat, project tasks, proactive suggestions and computer-use limits. Demonstrations and personal opinions are distinguished."
+      },
+      "topic": "tech",
+      "date": "2026-10-28",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/alexfinn-duet-20261028-a7c9"
+        }
+      ],
+      "mark": "Duet",
+      "hue": 180
+    },
+    {
+      "id": "claude-code-karpathy-notes",
+      "group": "writing",
+      "name": {
+        "zh": "Claude Code 从需求到交付，以及 Karpathy 的学习方法",
+        "en": "Claude Code delivery and Karpathy's learning method"
+      },
+      "summary": {
+        "zh": "分别解读 Cat Wu 的 Claude Code 旧发布会演示与 DmitroCP 的 Karpathy 教学法文章：功能需求、测试与 PR 交付，以及最小实现和公开讲解；标明原帖引语与材料的出入。",
+        "en": "Chinese notes on Cat Wu's historical Claude Code demo and DmitroCP's Karpathy essay: requirements, tests and PRs alongside small implementations and public teaching. Unsupported post claims are flagged."
+      },
+      "topic": "tech",
+      "date": "2026-10-28",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/claude-code-karpathy-20261028-b8d3"
+        }
+      ],
+      "mark": "Code",
+      "hue": 255
+    },
+    {
+      "id": "agent-trust-harness-notes",
+      "group": "writing",
+      "name": {
+        "zh": "信任 Agent，要把检查变成系统",
+        "en": "Trusting agents means building checks into the system"
+      },
+      "summary": {
+        "zh": "Lauren Tan 约一小时分享与 rari 的 Harness Engineering 文章解读：运行验证、功能地图、技能评估和机械约束。讲者的产量自述与未核说法保留限定。",
+        "en": "Chinese notes on Lauren Tan's hour-long talk and rari's harness essay: runtime verification, feature maps, skill evaluations and enforceable constraints. Productivity claims remain attributed and unverified."
+      },
+      "topic": "tech",
+      "date": "2026-10-28",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/akari-agent-trust-20261028-c6e2"
+        }
+      ],
+      "mark": "Trust",
+      "hue": 145
+    },
+    {
+      "id": "karpathy-llm-harness-notes",
+      "group": "writing",
+      "name": {
+        "zh": "Karpathy 如何使用 LLM，以及长任务如何做完",
+        "en": "How Karpathy uses LLMs, and how to finish long tasks"
+      },
+      "summary": {
+        "zh": "两份来源分开读：Karpathy 2025 年《How I use LLMs》的模型、搜索、工具与多模态用法；beamnxw 的 Opus 5.5 长任务七层配置。附章节、截图、流程与示例限制。",
+        "en": "Two sources kept separate: Karpathy's 2025 guide to models, search, tools and multimodal apps, and beamnxw's seven-layer Opus 5.5 harness setup. Chinese chapter notes, screenshots and qualified examples."
+      },
+      "topic": "tech",
+      "date": "2026-10-28",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/karpathy-llm-harness-20261028-d4f8"
+        }
+      ],
+      "mark": "LLMs",
+      "hue": 325
     }
   ]
 }
