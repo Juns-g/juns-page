@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-27",
+  "updated": "2026-10-28",
   "items": [
     {
       "id": "go-cleaner",
@@ -810,6 +810,28 @@
       ],
       "mark": "NZ · Drive",
       "hue": 175
+    },
+    {
+      "id": "home-dns-blocking",
+      "group": "writing",
+      "name": {
+        "zh": "全屋 DNS 拦截：哪些能拦，哪些别拦",
+        "en": "Home DNS blocking: what to block and what to leave alone"
+      },
+      "summary": {
+        "zh": "用一台 AdGuard Home 一天的拦截数据，配上 Apple、Android 和国产推送的官方放行清单：哪些统计和上报可以挡，推送、联网检测、证书校验为什么别碰，以及 DNS 拦不住的信息流广告。",
+        "en": "One day of AdGuard Home data plus Apple, Android and Chinese push-service docs: which telemetry is safe to block, why push, connectivity checks and certificate validation should stay open, and what DNS can't stop."
+      },
+      "topic": "tech",
+      "date": "2026-10-28",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/home-dns-blocking-20261028-0b64f1"
+        }
+      ],
+      "mark": "DNS · Block",
+      "hue": 205
     }
   ]
 }
