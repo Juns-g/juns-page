@@ -812,6 +812,28 @@
       "hue": 175
     },
     {
+      "id": "ai-browser-routes",
+      "group": "writing",
+      "name": {
+        "zh": "AI 怎么操作浏览器：八种方案的白话解读",
+        "en": "How AI operates a browser: eight approaches explained"
+      },
+      "summary": {
+        "zh": "沿陈大黄原文的八条路线，讲清脚本、控制接口、浏览器插件、原生 Agent 浏览器、自主操作、云端浏览器、专业采集和 WebMCP 的用途、区别与短板。",
+        "en": "A plain-language reading of Chen Dahuang's eight browser automation approaches, from scripts and extensions to autonomous agents, cloud browsers, extraction and WebMCP."
+      },
+      "topic": "tech",
+      "date": "2026-10-28",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/browser-routes-explained-2115127451701698568"
+        }
+      ],
+      "mark": "Browser",
+      "hue": 235
+    },
+    {
       "id": "home-dns-blocking",
       "group": "writing",
       "name": {
