@@ -112,6 +112,52 @@
       ]
     },
     {
+      "id": "paseo-omp",
+      "featured": false,
+      "name": {
+        "zh": "Paseo：OMP 冷启动超时",
+        "en": "Paseo: OMP cold-start timeout"
+      },
+      "summary": {
+        "zh": "给多 Agent 编排工具 Paseo 提交的 PR，已合并：OMP 冷启动等待从 10 秒放宽到 20 秒，显式配置的超时同时作用于启动和后续调用。",
+        "en": "A merged PR to the multi-agent orchestrator Paseo: OMP's cold-start ready wait goes from 10 to 20 seconds, and a configured timeout now covers both startup and later RPCs."
+      },
+      "type": "contrib",
+      "status": "merged",
+      "role": "contrib",
+      "date": "2026-09",
+      "links": [
+        {
+          "kind": "pr",
+          "label": "#4143",
+          "url": "https://github.com/getpaseo/paseo/pull/4143"
+        }
+      ]
+    },
+    {
+      "id": "bb-picker",
+      "featured": false,
+      "name": {
+        "zh": "bb：矮窗口下模型选择器可滚动",
+        "en": "bb: scrollable model picker"
+      },
+      "summary": {
+        "zh": "给 Agent IDE bb 提交的 PR，已合并：窗口高度不够时，模型选择列表仍可滚动选到底部选项。",
+        "en": "A merged PR to the agent IDE bb: the model picker stays scrollable when the window is short."
+      },
+      "type": "contrib",
+      "status": "merged",
+      "role": "contrib",
+      "date": "2026-08",
+      "links": [
+        {
+          "kind": "pr",
+          "label": "#1596",
+          "url": "https://github.com/get-bb/bb/pull/1596"
+        }
+      ]
+    },
+    {
       "id": "delta-maps",
       "featured": false,
       "name": {
@@ -698,6 +744,72 @@
       ],
       "mark": "Cebu",
       "hue": 190
+    },
+    {
+      "id": "msft-veo",
+      "group": "writing",
+      "name": {
+        "zh": "微软“6 万人自愿离职”到底是什么",
+        "en": "What Microsoft's 60,000-person exit offer really is"
+      },
+      "summary": {
+        "zh": "6 万是有资格申请自愿离职的人数，不是裁员人数；拆开官方内部信和媒体补充的范围、补偿、期限与背后的 AI 基建成本。",
+        "en": "60,000 is the number eligible for a voluntary exit offer, not a layoff count. What the internal memo and press reports say about scope, terms, deadlines and AI capex."
+      },
+      "topic": "research",
+      "date": "2026-10-27",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/msft-veo-871aa4b6"
+        }
+      ],
+      "mark": "VEO",
+      "hue": 205
+    },
+    {
+      "id": "sun-yuchen-interview",
+      "group": "writing",
+      "name": {
+        "zh": "邵艾伦 × 孙宇晨：四小时访谈值得带走什么",
+        "en": "Four hours with Sun Yuchen: what's worth keeping"
+      },
+      "summary": {
+        "zh": "把口号和方法拆开：持续记录、扩大选项、小步行动、根据反馈修正值得学；医学、投资和财富相关说法要打折扣。附时间导航。",
+        "en": "Separating slogans from method: keep records, widen options, act in small steps and adjust. Claims about health, investing and wealth need a discount. With a timestamp guide."
+      },
+      "topic": "life",
+      "date": "2026-10-09",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/ynGv2XP9"
+        }
+      ],
+      "mark": "Interview",
+      "hue": 25
+    },
+    {
+      "id": "nz-driving",
+      "group": "writing",
+      "name": {
+        "zh": "新西兰南岛自驾：先看图再上路",
+        "en": "Driving New Zealand's South Island, in pictures"
+      },
+      "summary": {
+        "zh": "手机上看的视觉学习卡：靠左行驶、环岛、单车道桥、限速与黄线、租车保险要问的问题，以及出发当天该查的路况入口。",
+        "en": "Phone-sized visual cards: keeping left, roundabouts, one-lane bridges, speed limits and yellow lines, rental insurance questions, and where to check road conditions on the day."
+      },
+      "topic": "travel",
+      "date": "2026-09-27",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/nz-south-island-driving-20260927-q8m2v6"
+        }
+      ],
+      "mark": "NZ · Drive",
+      "hue": 175
     }
   ]
 }
