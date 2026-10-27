@@ -282,6 +282,72 @@
       "hue": 180
     },
     {
+      "id": "agents-thorsten",
+      "group": "writing",
+      "name": {
+        "zh": "Thorsten Ball：我现在怎么和 Agent 一起写代码",
+        "en": "Thorsten Ball on working with coding agents"
+      },
+      "summary": {
+        "zh": "Amp 工程师的 15 条编码 Agent 用法：用最强模型、让 Agent 看到完整开发流程、要求拿出证据、只审高风险代码；附评论区补充。",
+        "en": "Fifteen tips from an Amp engineer: use the strongest model, let the agent see the whole dev loop, demand evidence, review only high-risk code. With notes from the replies."
+      },
+      "topic": "tech",
+      "date": "2026-10-27",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/agents-tb-909e1f"
+        }
+      ],
+      "mark": "Agents",
+      "hue": 255
+    },
+    {
+      "id": "ecny-payroll",
+      "group": "writing",
+      "name": {
+        "zh": "工资会全面改发数字人民币吗？",
+        "en": "Will salaries move to the digital yuan?"
+      },
+      "summary": {
+        "zh": "核对“2026／2027 年大部分公司改发数字人民币工资”的传闻：部分地区和单位确有试点，没有查到全国统一改发的文件；附计息、转回银行卡和隐私方面的区别。",
+        "en": "Fact-checking the claim that most Chinese employers will pay wages in e-CNY by 2026/27: local pilots are real, no nationwide mandate was found. Plus how it differs on interest, withdrawals and privacy."
+      },
+      "topic": "research",
+      "date": "2026-10-27",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/ecny-payroll-20261027-q7m4"
+        }
+      ],
+      "mark": "e-CNY",
+      "hue": 10
+    },
+    {
+      "id": "claude-code-review",
+      "group": "writing",
+      "name": {
+        "zh": "AI 写代码后，谁来审？",
+        "en": "Who reviews AI-written code?"
+      },
+      "summary": {
+        "zh": "Addy Osmani 介绍 Claude Code 团队的审查流程：常规找错交给自动检查，人只看方向、架构和高风险改动，再靠快速回滚兜底。",
+        "en": "Addy Osmani on the Claude Code team's review flow: automated checks catch routine bugs, people focus on direction, architecture and risky changes, and fast rollback is the safety net."
+      },
+      "topic": "tech",
+      "date": "2026-10-26",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/claude-code-review-20261026-k7m4q"
+        }
+      ],
+      "mark": "Review",
+      "hue": 150
+    },
+    {
       "id": "baguan-video",
       "group": "writing",
       "name": {
@@ -302,6 +368,138 @@
       ],
       "mark": "Insight",
       "hue": 300
+    },
+    {
+      "id": "browsers",
+      "group": "writing",
+      "name": {
+        "zh": "Arc、Phi、Ardia：基础浏览体验对比",
+        "en": "Arc vs Phi vs Ardia"
+      },
+      "summary": {
+        "zh": "不看 AI 功能，只比侧栏、置顶、分屏和同步：重视多层侧栏目录选 Phi，要 Chromium 配套和三窗格可以试 Ardia。",
+        "en": "Ignoring AI features and comparing sidebars, pinning, split view and sync: Phi for nested sidebar folders, Ardia for Chromium extras and three-pane split."
+      },
+      "topic": "tech",
+      "date": "2026-10-23",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/browsers-eb74c9117fdc"
+        }
+      ],
+      "mark": "Browser",
+      "hue": 195
+    },
+    {
+      "id": "english-three-steps",
+      "group": "writing",
+      "name": {
+        "zh": "英语听说三步练习法",
+        "en": "Three steps to English listening and speaking"
+      },
+      "summary": {
+        "zh": "把一段英语学习视频整理成听、想、说三步练法，附每天 25 分钟安排，并分开标出作者原话、本页建议和不靠谱的说法。",
+        "en": "A video's listen–think–speak method turned into a 25-minute daily routine, marking what the author said, what this page suggests, and which claims don't hold up."
+      },
+      "topic": "life",
+      "date": "2026-10-20",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/english-three-steps-q7mR4vN2"
+        }
+      ],
+      "mark": "English",
+      "hue": 55
+    },
+    {
+      "id": "li-lu-2026",
+      "group": "writing",
+      "name": {
+        "zh": "李录这场对谈，究竟讲了什么",
+        "en": "What Li Lu actually said at Columbia"
+      },
+      "summary": {
+        "zh": "2026 年哥大格雷厄姆—多德午餐会上李录对谈的中文导读：价值投资、AI 和中国经济用的是同一套判断标准。",
+        "en": "A Chinese guide to Li Lu's 2026 Graham & Dodd talk at Columbia, where one yardstick covers value investing, AI and China's economy."
+      },
+      "topic": "research",
+      "date": "2026-10-20",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/li-lu-2026-f74f6e915a"
+        }
+      ],
+      "mark": "Li Lu",
+      "hue": 40
+    },
+    {
+      "id": "accumulation",
+      "group": "writing",
+      "name": {
+        "zh": "原始积累的 5 条建议｜视频精读",
+        "en": "Five rules for building early savings"
+      },
+      "summary": {
+        "zh": "一期 29 分钟视频的精读：认真工作攒结余，把结余变成长期资产，用真实账目判断离“少依赖工资”还有多远。",
+        "en": "Notes on a 29-minute video: earn a surplus, turn it into long-term assets, and use real numbers to see how far you are from depending less on a salary."
+      },
+      "topic": "life",
+      "date": "2026-10-19",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/accumulation-GCMlpMNK9c0-7d3c8a2e"
+        }
+      ],
+      "mark": "Savings",
+      "hue": 120
+    },
+    {
+      "id": "whoop-oura",
+      "group": "writing",
+      "name": {
+        "zh": "WHOOP、Oura 还是 Apple Watch",
+        "en": "WHOOP, Oura or Apple Watch"
+      },
+      "summary": {
+        "zh": "按人民币算三款健康穿戴的总成本，并汇总真实用户口碑：用 iPhone、能每天充电就先选 Apple Watch。",
+        "en": "Total cost in RMB and real-user feedback for three health wearables. On iPhone and fine with daily charging? Start with Apple Watch."
+      },
+      "topic": "shopping",
+      "date": "2026-10-17",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/whoop-oura-cny-20261017"
+        }
+      ],
+      "mark": "Wearable",
+      "hue": 330
+    },
+    {
+      "id": "iphone-control",
+      "group": "writing",
+      "name": {
+        "zh": "iCTRL、ios-use、iphone-use：怎么选",
+        "en": "Choosing an iPhone control tool for agents"
+      },
+      "summary": {
+        "zh": "三款让 Agent 操作真机 iPhone 的工具：无线跨设备选 iCTRL，固定批处理选 ios-use，要完整工作台看 iphone-use；附许可和安全边界。",
+        "en": "Three tools that let agents drive a real iPhone: iCTRL for wireless use, ios-use for scripted batches, iphone-use for a full workbench. With licence and security notes."
+      },
+      "topic": "tech",
+      "date": "2026-10-14",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/iphone-tools-LRAO8iDYTJ58"
+        }
+      ],
+      "mark": "iPhone",
+      "hue": 275
     },
     {
       "id": "hermes-usage",
