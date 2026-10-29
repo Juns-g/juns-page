@@ -1,6 +1,28 @@
 {
-  "updated": "2026-10-28",
+  "updated": "2026-10-29",
   "items": [
+    {
+      "id": "single-agent-loop",
+      "group": "writing",
+      "name": {
+        "zh": "单 Agent 主循环：该合并哪些子 Agent？",
+        "en": "The single-agent loop: which subagents should be folded in?"
+      },
+      "summary": {
+        "zh": "对照 cxuan 与 Anthropic 原文，解释单循环、Skills 和工具搜索；讲清哪些交接可以减少，哪些并行任务与独立验证仍应保留。",
+        "en": "A reading of cxuan and Anthropic on agent loops, skills and tool search: which handoffs to simplify, and where parallel work and independent verification still help."
+      },
+      "topic": "tech",
+      "date": "2026-10-29",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/single-agent-loop-20261029-c8f2"
+        }
+      ],
+      "mark": "Loop",
+      "hue": 165
+    },
     {
       "id": "go-cleaner",
       "featured": true,
