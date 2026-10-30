@@ -1,6 +1,28 @@
 {
-  "updated": "2026-10-29",
+  "updated": "2026-10-30",
   "items": [
+    {
+      "id": "michael-love-six",
+      "group": "writing",
+      "name": {
+        "zh": "关于爱情，想明白的六件事",
+        "en": "Six reflections on love and lasting relationships"
+      },
+      "summary": {
+        "zh": "Michael大麦哥36分钟视频导读：独立、空间、付出、沟通、吸引力与自主决定，附章节回看和重新认识伴侣的五个问题。依据AI字幕整理，非逐字稿。",
+        "en": "A reading guide to Michael Damai's 36-minute video on independence, space, giving, communication, attraction and personal decisions, with chapter links and five questions to reconnect. Based on AI captions, not a verbatim transcript."
+      },
+      "topic": "life",
+      "date": "2026-10-30",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/michael-love-six-b7e4c29a"
+        }
+      ],
+      "mark": "Love",
+      "hue": 340
+    },
     {
       "id": "single-agent-loop",
       "group": "writing",
