@@ -306,7 +306,7 @@
         }
         const destination = document.createElement('span');
         destination.className = 'destination';
-        const hostname = new URL(primary.url).hostname.replace(/^www\./, '');
+        const hostname = new URL(primary.url, window.location.href).hostname.replace(/^www\./, '');
         destination.textContent = hostname === 'github.com' ? 'GitHub' : hostname;
         meta.append(destination);
         heading.append(meta);
