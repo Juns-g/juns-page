@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30",
+  "updated": "2026-11-07",
   "items": [
     {
       "id": "michael-love-six",
@@ -44,6 +44,28 @@
       ],
       "mark": "Loop",
       "hue": 165
+    },
+    {
+      "id": "visual-prompt-vault",
+      "featured": true,
+      "name": {
+        "zh": "Prompts：视觉与生图玩法库",
+        "en": "Prompts: Visual & Photo Skills Vault"
+      },
+      "summary": {
+        "zh": "收纳常用的 GPT 生图提示词与 25 个照片类 Agent Skill，全部带完整比例实测/作者样图，支持一键复制提示词或带仓库地址的调用口令。",
+        "en": "A curated vault of my go-to GPT image prompts and 25 photo Agent Skills with uncropped showcase images and one-click copy."
+      },
+      "type": "web",
+      "status": "daily",
+      "role": "ai",
+      "date": "2026-11",
+      "links": [
+        {
+          "kind": "try",
+          "url": "/prompts/"
+        }
+      ]
     },
     {
       "id": "go-cleaner",

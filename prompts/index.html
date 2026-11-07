@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>Prompts · Juns</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --canvas: #f6f6f3;
+        --surface: #fdfdfb;
+        --ink: #171716;
+        --muted: #6e6e68;
+        --rule: #d9d9d2;
+        --rule-strong: #acaca2;
+        --accent: #2f7d4f;
+        --accent-soft: rgba(47, 125, 79, 0.08);
+        --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --canvas: #11110f;
+          --surface: #1c1c1a;
+          --ink: #f3f2ec;
+          --muted: #b4b3ac;
+          --rule: #3a3a35;
+          --rule-strong: #66665d;
+          --accent: #7fd1a0;
+          --accent-soft: rgba(127, 209, 160, 0.1);
+          --card-shadow: none;
+        }
+      }
+      * { box-sizing: border-box; }
+      [hidden] { display: none !important; }
+      html:has(dialog[open]) { overflow: hidden; }
+      body {
+        margin: 0;
+        padding: 1.5rem 1.25rem 3rem;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family: ui-rounded, "Avenir Next", Avenir, "SF Pro Rounded", system-ui, sans-serif;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+        text-wrap: pretty;
+      }
+      .page { max-width: 64rem; margin: 0 auto; }
+      header h1, #intro { max-width: 40rem; }
+      nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+      a { color: inherit; text-underline-offset: 0.2em; }
+      a:hover, button:hover { color: var(--muted); }
+      :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+      nav a, button { font-size: 0.875rem; }
+      button {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0.5rem;
+        border: 1px solid var(--rule);
+        border-radius: 2rem;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+        font-size: 0.875rem;
+        cursor: pointer;
+      }
+      h1 {
+        margin: 2.4rem 0 1.5rem;
+        font-size: clamp(3rem, 11vw, 5.6rem);
+        font-weight: 650;
+        letter-spacing: -0.075em;
+        line-height: 0.9;
+      }
+      #intro { margin: 0; font-size: 1.05rem; color: var(--muted); }
+
+      /* filters */
+      .filters { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.75rem; }
+      .fgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+      .flabel { flex: 0 0 3.2rem; color: var(--muted); font: 0.75rem var(--mono); }
+      .fgroup button { flex: 0 0 auto; min-height: 36px; padding: 0.35rem 0.85rem; font-size: 0.8125rem; white-space: nowrap; }
+      .fgroup button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+      .fgroup button[aria-pressed="true"]:hover { color: var(--canvas); }
+      .count { margin-left: 0.3em; opacity: 0.55; font-variant-numeric: tabular-nums; }
+      [aria-pressed="true"] .count { opacity: 0.75; }
+
+      /* masonry feed */
+      #feed { display: flex; gap: 1rem; align-items: flex-start; margin-top: 1.75rem; }
+      .masonry-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 1rem; }
+      .card {
+        position: relative; overflow: hidden; min-width: 0;
+        background: var(--surface); border: 1px solid var(--rule); border-radius: 14px;
+        transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+      }
+      .media { position: relative; line-height: 0; background: var(--canvas); background: color-mix(in srgb, var(--ph, #888) 16%, var(--surface)); }
+      .media img { display: block; width: 100%; height: auto; }
+      .badge {
+        position: absolute; top: 0.6rem; right: 0.6rem; padding: 0.1rem 0.55rem;
+        border-radius: 2rem; background: rgba(253, 253, 251, 0.82); background: color-mix(in srgb, var(--surface) 82%, transparent);
+        -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+        color: var(--ink); font: 0.7rem/1.5 var(--mono); pointer-events: none;
+      }
+      .switch { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0.6rem 1rem 0; }
+      .switch button { position: relative; z-index: 1; min-width: 0; min-height: 32px; padding: 0.15rem 0.7rem; font-size: 0.75rem; }
+      .switch button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+      .switch button[aria-pressed="true"]:hover { color: var(--canvas); }
+      .body { padding: 0.85rem 1rem 1rem; }
+      .meta { margin: 0; color: var(--muted); font-size: 0.75rem; }
+      h3 { margin: 0.25rem 0 0; font-size: 1.02rem; font-weight: 600; line-height: 1.4; }
+      .card-link { text-decoration: none; }
+      .card-link:hover { color: inherit; }
+      .card-link::after { content: ""; position: absolute; inset: 0; border-radius: 14px; }
+      .card-link:focus-visible { outline: none; }
+      .card:has(.card-link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
+      .summary {
+        display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
+        margin: 0.5rem 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.55;
+      }
+      .card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; margin-top: 0.9rem; }
+      .copy, .srclink { position: relative; z-index: 1; border-color: var(--rule-strong); }
+      .copy { padding: 0.4rem 1rem; }
+      .srclink {
+        display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+        min-width: 44px; min-height: 44px; padding: 0.4rem 0.9rem; border: 1px solid var(--rule-strong); border-radius: 2rem;
+        color: var(--ink); font-size: 0.875rem; text-decoration: none;
+      }
+      .srclink:hover { border-color: var(--ink); color: var(--ink); }
+      .copy:hover { border-color: var(--ink); color: var(--ink); }
+      #empty { margin: 2rem 0 0; color: var(--muted); font-size: 0.9rem; }
+      #empty button { margin-left: 0.5rem; }
+      #message, noscript, footer { color: var(--muted); font-size: 0.875rem; }
+      #message { margin-top: 2rem; }
+      footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+      .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+      /* detail dialog */
+      dialog {
+        width: min(calc(100vw - 2rem), 60rem); max-width: none; max-height: calc(100dvh - 2rem);
+        margin: auto; padding: 0; overflow: hidden; border: 1px solid var(--rule); border-radius: 16px;
+        background: var(--surface); color: var(--ink);
+      }
+      dialog[open] { display: flex; flex-direction: column; }
+      dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+      .sheet { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+      .close {
+        position: absolute; top: 0.6rem; right: 0.6rem; z-index: 2; padding: 0; font-size: 1.5rem; line-height: 1;
+        background: rgba(253, 253, 251, 0.82); background: color-mix(in srgb, var(--surface) 82%, transparent);
+        -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+      }
+      .gallery { background: var(--canvas); }
+      .shot { margin: 0; }
+      .text > .meta { padding-right: 2.75rem; }
+      .shot a { display: block; line-height: 0; background: var(--canvas); cursor: zoom-in; }
+      /* Uncropped: scale to fit the viewport height, never object-fit. */
+      .shot img { display: block; width: auto; max-width: 100%; height: auto; max-height: min(82dvh, 56rem); margin: 0 auto; }
+      .shot figcaption { padding: 0.4rem 1.25rem; color: var(--muted); font-size: 0.75rem; line-height: 1.4; }
+      .text { padding: 1.25rem; }
+      .text h2 { margin: 0.3rem 0 0; font-size: 1.3rem; line-height: 1.35; }
+      .text .lead { margin: 0.6rem 0 0; color: var(--muted); }
+      .sec-h { margin: 1.5rem 0 0.5rem; font-size: 0.8125rem; font-weight: 650; }
+      .slots, .notes { margin: 0; padding-left: 1.2rem; }
+      .slots li { margin: 0.25rem 0; font-size: 0.9rem; }
+      .notes { margin-top: 1.25rem; color: var(--muted); font-size: 0.8125rem; line-height: 1.55; }
+      .notes li { margin: 0.2rem 0; }
+      mark.slot { padding: 0 0.15em; border-radius: 2px; background: var(--accent-soft); color: var(--accent); }
+      .copy-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 1.5rem 0 0.5rem; }
+      .copy-head .sec-h { margin: 0; }
+      pre {
+        margin: 0; max-height: 22rem; overflow: auto; padding: 0.9rem;
+        background: var(--canvas); border: 1px solid var(--rule); border-radius: 10px;
+        font: 0.8rem/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere;
+      }
+      .links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+      .links a {
+        display: inline-flex; align-items: center; min-height: 44px; padding: 0.4rem 1rem;
+        border: 1px solid var(--rule); border-radius: 2rem; color: var(--ink); font-size: 0.875rem; text-decoration: none;
+      }
+      .links a.primary { border-color: var(--rule-strong); }
+      .links a:hover { border-color: var(--ink); color: var(--ink); }
+
+      @media (min-width: 600px) { body { padding: 2rem 1.5rem 4rem; } }
+      @media (max-width: 679px) {
+        dialog { width: 100%; max-height: calc(100dvh - 0.75rem); margin: auto 0 0; border-radius: 16px 16px 0 0; border-bottom: 0; }
+        .flabel { flex-basis: 100%; }
+      }
+      /* Desktop detail: artwork left, sticky text pane right, so copy stays in view. */
+      @media (min-width: 900px) {
+        .sheet { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; }
+        .gallery { display: flex; flex-direction: column; gap: 0.25rem; min-height: 100%; }
+        .shot img { max-height: none; }
+        .text { position: sticky; top: 0; max-height: calc(100dvh - 2rem); overflow-y: auto; padding: 1.5rem; }
+      }
+      @media (hover: hover) and (pointer: fine) {
+        .card:hover { border-color: var(--rule-strong); transform: translateY(-2px); box-shadow: var(--card-shadow); }
+      }
+      .card:active { transform: scale(0.99); }
+      @media (prefers-reduced-motion: reduce) {
+        .card { transition: none; }
+        .card:hover, .card:active { transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <nav aria-label="Prompts">
+          <a href="/">Juns</a>
+          <button id="language" type="button"></button>
+        </nav>
+        <h1>Prompts</h1>
+        <p id="intro"></p>
+      </header>
+      <div id="filters" class="filters" hidden></div>
+      <main>
+        <p id="message" role="status"></p>
+        <noscript>请启用 JavaScript，或查看 / Enable JavaScript, or view <a href="items.json">items.json</a>.</noscript>
+        <p id="empty" hidden><span></span><button type="button"></button></p>
+        <div id="feed"></div>
+      </main>
+      <footer hidden></footer>
+    </div>
+    <div id="live" class="sr" role="status" aria-live="polite"></div>
+    <dialog id="detail" aria-labelledby="detail-title">
+      <button id="close" class="close" type="button">×</button>
+      <div id="sheet" class="sheet"></div>
+    </dialog>
+    <script>
+      const STRINGS = {
+        zh: {
+          title: 'Prompts · Juns',
+          intro: '常用的 GPT 生图提示词与照片类 Agent Skill。复制即带完整提示词或 Skill 仓库链接。',
+          toggle: 'EN', toggleLabel: '切换为英文',
+          groups: { type: '类型', input: '输入', run: '运行' }, filterLabel: '筛选',
+          chips: {
+            type: { all: '全部', prompt: '提示词', skill: 'Skill' },
+            input: { all: '全部', photo: '照片', text: '文字' },
+            run: { all: '全部', gpt: 'GPT 直出', local: '本地' }
+          },
+          kind: { prompt: '提示词', skill: 'Skill' },
+          updated: (date, n) => `更新于 ${date} · ${n} 项`,
+          loading: '正在读取…', error: '暂时无法读取，请稍后重试。',
+          empty: '没有符合条件的项目。', reset: '清除筛选',
+          copied: '已复制', copyFailed: '复制失败', copiedLive: title => `已复制：${title}`,
+          close: '关闭', fullSize: '点击查看原图',
+          slots: '可替换', copyBlock: '复制内容', source: '原仓库', sourceShort: '原仓库（新标签页）'
+        },
+        en: {
+          title: 'Prompts · Juns',
+          intro: 'GPT image prompts and photo Agent Skills. Every copy includes the full prompt or Skill repo URL.',
+          toggle: '中文', toggleLabel: 'Switch to Chinese',
+          groups: { type: 'Type', input: 'Input', run: 'Runtime' }, filterLabel: 'Filters',
+          chips: {
+            type: { all: 'All', prompt: 'Prompt', skill: 'Skill' },
+            input: { all: 'All', photo: 'Photo', text: 'Text' },
+            run: { all: 'All', gpt: 'GPT direct', local: 'Local' }
+          },
+          kind: { prompt: 'Prompt', skill: 'Skill' },
+          updated: (date, n) => `Updated ${date} · ${n} items`,
+          loading: 'Loading…', error: 'Could not load. Please try again later.',
+          empty: 'No items match these filters.', reset: 'Clear filters',
+          copied: 'Copied', copyFailed: 'Copy failed', copiedLive: title => `Copied: ${title}`,
+          close: 'Close', fullSize: 'Open full size',
+          slots: 'Fill in', copyBlock: 'Copy text', source: 'Source', sourceShort: 'Source (new tab)'
+        }
+      };
+      const FILTERS = {
+        type: { values: ['prompt', 'skill'], test: (it, v) => it.kind === v },
+        input: { values: ['photo', 'text'], test: (it, v) => (it.input_mode === 'text') === (v === 'text') },
+        run: { values: ['gpt', 'local'], test: (it, v) => (it.runtime_mode === 'gpt-direct') === (v === 'gpt') }
+      };
+      const $ = id => document.getElementById(id);
+      const feed = $('feed'), filtersEl = $('filters'), toggle = $('language'), dlg = $('detail'), sheet = $('sheet'), live = $('live');
+      const el = (tag, cls, text) => {
+        const node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text != null) node.textContent = text;
+        return node;
+      };
+      const query = new URL(location.href).searchParams;
+      const sel = {};
+      for (const k in FILTERS) sel[k] = FILTERS[k].values.includes(query.get(k)) ? query.get(k) : 'all';
+      let saved;
+      try { saved = localStorage.getItem('prompts-lang'); } catch {}
+      const isLang = v => v === 'zh' || v === 'en';
+      let lang = isLang(query.get('lang')) ? query.get('lang') : isLang(saved) ? saved : 'zh';
+      let data, failed = false, chips = [], current = null, opener = null, laidCols = 0;
+      const cardCache = {};
+      const picked = {};
+      const S = () => STRINGS[lang];
+      const T = (it, field) => it[`${field}_${lang}`] || '';
+
+      const passes = (it, skip) => Object.keys(FILTERS).every(k => k === skip || sel[k] === 'all' || FILTERS[k].test(it, sel[k]));
+      const visible = () => data.items.filter(it => passes(it));
+
+      function syncUrl(extra) {
+        const url = new URL(location.href);
+        for (const k in sel) sel[k] === 'all' ? url.searchParams.delete(k) : url.searchParams.set(k, sel[k]);
+        url.searchParams.set('lang', lang);
+        if (lang === 'zh' && !query.get('lang')) url.searchParams.delete('lang');
+        if (extra) extra(url);
+        history.replaceState(null, '', url);
+      }
+
+      function highlight(parent, text) {
+        for (const part of text.split(/(【[^】]*】)/)) {
+          if (!part) continue;
+          if (part.startsWith('【')) parent.append(el('mark', 'slot', part));
+          else parent.append(part);
+        }
+        return parent;
+      }
+
+      async function copyToClipboard(text) {
+        try { await navigator.clipboard.writeText(text); return true; } catch {}
+        const area = el('textarea');
+        area.value = text;
+        area.setAttribute('readonly', '');
+        area.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+        (dlg.open ? dlg : document.body).append(area);
+        area.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch {}
+        area.remove();
+        return ok;
+      }
+
+      function copyButton(it, cls) {
+        const label = T(it, 'copy_label');
+        const button = el('button', cls, label);
+        button.type = 'button';
+        button.addEventListener('click', async () => {
+          const ok = await copyToClipboard(it.copy_text);
+          button.textContent = ok ? S().copied : S().copyFailed;
+          live.textContent = '';
+          live.textContent = ok ? S().copiedLive(T(it, 'title')) : S().copyFailed;
+          clearTimeout(button.timer);
+          button.timer = setTimeout(() => { button.textContent = label; }, 1600);
+        });
+        return button;
+      }
+
+      function setImage(img, it, i) {
+        const shot = it.gallery[i];
+        img.src = shot.src;
+        img.width = shot.w;
+        img.height = shot.h;
+        img.alt = it.gallery.length > 1 ? `${T(it, 'title')} — ${T(shot, 'label')}` : T(it, 'title');
+      }
+
+      function buildCard(it, index) {
+        const card = el('article', 'card');
+        const media = el('div', 'media');
+        if (/^#[0-9a-f]{3,8}$/i.test(it.palette?.[0] || '')) media.style.setProperty('--ph', it.palette[0]);
+        const img = el('img');
+        img.decoding = 'async';
+        img.loading = index < 3 ? 'eager' : 'lazy';
+        setImage(img, it, picked[it.id] || 0);
+        media.append(img, el('span', 'badge', S().kind[it.kind]));
+        card.append(media);
+        if (it.gallery.length > 1) {
+          const row = el('div', 'switch');
+          const buttons = it.gallery.map((shot, i) => {
+            const b = el('button', '', T(shot, 'label'));
+            b.type = 'button';
+            b.addEventListener('click', () => {
+              picked[it.id] = i;
+              setImage(img, it, i);
+              buttons.forEach((other, j) => other.setAttribute('aria-pressed', String(j === i)));
+            });
+            return b;
+          });
+          buttons.forEach((b, j) => b.setAttribute('aria-pressed', String(j === (picked[it.id] || 0))));
+          row.append(...buttons);
+          card.append(row);
+        }
+        const body = el('div', 'body');
+        body.append(el('p', 'meta', [T(it, 'input'), T(it, 'runtime'), it.aspect].filter(Boolean).join(' · ')));
+        const title = el('h3');
+        const link = el('a', 'card-link', T(it, 'title'));
+        link.href = `#${encodeURIComponent(it.id)}`;
+        link.addEventListener('click', e => { e.preventDefault(); openItem(it.id, link); });
+        title.append(link);
+        const bottom = el('div', 'card-bottom');
+        const src = el('a', 'srclink', '↗');
+        src.href = it.source_url;
+        src.target = '_blank';
+        src.rel = 'noopener';
+        src.title = S().sourceShort;
+        src.setAttribute('aria-label', S().sourceShort);
+        bottom.append(copyButton(it, 'copy'));
+        if (it.source_url) bottom.append(src);
+        body.append(title, el('p', 'summary', T(it, 'summary')), bottom);
+        card.append(body);
+        return card;
+      }
+
+      // One cache for the current language; rebuilt on toggle so image picks carry over.
+      const cards = () => {
+        if (cardCache.lang !== lang) cardCache.lang = lang, cardCache.map = new Map(data.items.map((it, i) => [it.id, buildCard(it, i)]));
+        return cardCache.map;
+      };
+      const colCount = () => 1 + mqs.filter(m => m.matches).length;
+      const mqs = [matchMedia('(min-width: 680px)'), matchMedia('(min-width: 1024px)')];
+
+      function layout() {
+        laidCols = colCount();
+        const cols = Array.from({ length: laidCols }, () => el('div', 'masonry-col'));
+        feed.replaceChildren(...cols);
+        for (const it of visible()) {
+          const shortest = cols.reduce((a, b) => (b.offsetHeight < a.offsetHeight ? b : a));
+          shortest.append(cards().get(it.id));
+        }
+      }
+
+      function buildFilters() {
+        const s = S();
+        filtersEl.setAttribute('aria-label', s.filterLabel);
+        filtersEl.replaceChildren();
+        chips = [];
+        for (const k in FILTERS) {
+          const group = el('div', 'fgroup');
+          group.setAttribute('role', 'group');
+          group.setAttribute('aria-label', s.groups[k]);
+          group.append(el('span', 'flabel', s.groups[k]));
+          for (const v of ['all', ...FILTERS[k].values]) {
+            const button = el('button', '', s.chips[k][v]);
+            const count = el('span', 'count');
+            button.type = 'button';
+            button.append(count);
+            button.addEventListener('click', () => { sel[k] = v; update(); });
+            group.append(button);
+            chips.push({ k, v, button, count });
+          }
+          filtersEl.append(group);
+        }
+        filtersEl.hidden = false;
+      }
+
+      function update() {
+        for (const { k, v, button, count } of chips) {
+          button.setAttribute('aria-pressed', String(sel[k] === v));
+          count.textContent = data.items.filter(it => passes(it, k) && (v === 'all' || FILTERS[k].test(it, v))).length;
+        }
+        syncUrl();
+        layout();
+        $('empty').hidden = feed.querySelector('.card') !== null;
+      }
+
+      function fillDetail(it) {
+        const s = S();
+        const gallery = el('div', 'gallery');
+        for (const [i, shot] of it.gallery.entries()) {
+          const fig = el('figure', 'shot');
+          const a = el('a');
+          a.href = shot.src;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          a.title = s.fullSize;
+          const img = el('img');
+          img.loading = i ? 'lazy' : 'eager';
+          setImage(img, it, i);
+          img.alt = T(shot, 'label') || T(it, 'title');
+          a.append(img);
+          fig.append(a, el('figcaption', '', T(shot, 'label')));
+          gallery.append(fig);
+        }
+        const text = el('div', 'text');
+        const meta = [s.kind[it.kind], T(it, 'input'), T(it, 'runtime'), it.aspect, it.author, T(it, 'license')].filter(Boolean);
+        const h2 = el('h2', '', T(it, 'title'));
+        h2.id = 'detail-title';
+        text.append(el('p', 'meta', meta.join(' · ')), h2, el('p', 'lead', T(it, 'summary')));
+        if (it.slots_zh?.length) {
+          const list = el('ul', 'slots');
+          for (const slot of it.slots_zh) list.append(highlight(el('li'), slot));
+          text.append(el('h3', 'sec-h', s.slots), list);
+        }
+        const head = el('div', 'copy-head');
+        head.append(el('h3', 'sec-h', s.copyBlock), copyButton(it, 'copy'));
+        text.append(head, highlight(el('pre'), it.copy_text));
+        const notes = it[`notes_${lang}`] || [];
+        if (notes.length) {
+          const list = el('ul', 'notes');
+          for (const note of notes) list.append(el('li', '', note));
+          text.append(list);
+        }
+        const links = el('div', 'links');
+        const add = (href, label, cls) => {
+          const a = el('a', cls, `${label} ↗`);
+          a.href = href;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          links.append(a);
+        };
+        if (it.source_url) add(it.source_url, s.source, 'primary');
+        if (it.discovery_url && it.discovery_url !== it.source_url) add(it.discovery_url, T(it, 'discovery_label') || s.source, '');
+        if (links.childElementCount) text.append(links);
+        sheet.replaceChildren(gallery, text);
+      }
+
+      function openItem(id, from) {
+        const it = data?.items.find(x => x.id === id);
+        if (!it) return;
+        current = it;
+        opener = from || null;
+        fillDetail(it);
+        sheet.scrollTop = 0;
+        if (!dlg.open) dlg.showModal();
+        syncUrl(url => { url.hash = encodeURIComponent(id); });
+      }
+
+      dlg.addEventListener('close', () => {
+        current = null;
+        syncUrl(url => { url.hash = ''; });
+        if (opener?.isConnected) opener.focus();
+        opener = null;
+      });
+      dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+      $('close').addEventListener('click', () => dlg.close());
+
+      function render() {
+        const s = S();
+        document.documentElement.lang = lang;
+        document.title = s.title;
+        $('intro').textContent = s.intro;
+        toggle.textContent = s.toggle;
+        toggle.setAttribute('aria-label', s.toggleLabel);
+        $('close').setAttribute('aria-label', s.close);
+        $('close').title = s.close;
+        const message = $('message');
+        message.textContent = failed ? s.error : data ? '' : s.loading;
+        message.hidden = Boolean(data);
+        if (!data) return;
+        buildFilters();
+        $('empty').firstChild.textContent = s.empty;
+        $('empty').lastChild.textContent = s.reset;
+        update();
+        if (current) fillDetail(current);
+        const footer = document.querySelector('footer');
+        footer.textContent = s.updated(data.updated_at, data.items.length);
+        footer.hidden = false;
+      }
+
+      $('empty').lastChild.addEventListener('click', () => { for (const k in sel) sel[k] = 'all'; update(); });
+      toggle.addEventListener('click', () => {
+        lang = lang === 'zh' ? 'en' : 'zh';
+        try { localStorage.setItem('prompts-lang', lang); } catch {}
+        query.set('lang', lang);
+        render();
+      });
+      mqs.forEach(m => m.addEventListener('change', () => { if (data && colCount() !== laidCols) layout(); }));
+
+      render();
+      fetch('items.json')
+        .then(response => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.json();
+        })
+        .then(result => {
+          data = result;
+          render();
+          const id = decodeURIComponent(location.hash.slice(1));
+          if (id) openItem(id, null);
+        })
+        .catch(() => { data = undefined; failed = true; render(); });
+    </script>
+  </body>
+</html>
