@@ -2,6 +2,28 @@
   "updated": "2026-11-07",
   "items": [
     {
+      "id": "kangle-35-8things",
+      "group": "writing",
+      "name": {
+        "zh": "35岁10年职场，回看20岁不值得去做的8件事",
+        "en": "Looking back from 35: eight things not worth doing in your twenties"
+      },
+      "summary": {
+        "zh": "康乐同学 21 分钟视频拆解与完整逐字稿：健康、体验、环境、感情、攀比、向上社交、资金控制权与数字幻觉，附 4 条自检标尺。",
+        "en": "Full timestamped transcript and breakdown of Kangle’s 21-minute reflection on work, money, travel and relationships, with four self-check rules."
+      },
+      "topic": "life",
+      "date": "2026-11-07",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/kangle-35-8things-20261107"
+        }
+      ],
+      "mark": "20s",
+      "hue": 25
+    },
+    {
       "id": "michael-love-six",
       "group": "writing",
       "name": {
