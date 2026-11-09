@@ -90,6 +90,28 @@
       ]
     },
     {
+      "id": "holidays-2027",
+      "featured": false,
+      "name": {
+        "zh": "2027 放假与请假攻略",
+        "en": "2027 China holidays & leave planner"
+      },
+      "summary": {
+        "zh": "2027 年 7 个法定假期的放假、补班日历，附年假分配器：设定年假天数，套用或在周历上点选请假日，自动算出每段连休天数；另含 2026 年对比。",
+        "en": "China's 2027 public holidays and make-up workdays, with a leave planner: set your annual leave, pick days on the week grid, and see how long each break becomes. Includes a 2026 comparison."
+      },
+      "type": "web",
+      "status": "works",
+      "role": "ai",
+      "date": "2026-11",
+      "links": [
+        {
+          "kind": "try",
+          "url": "https://go.juns.page/f/holidays-2027-2026-8cd718#plan"
+        }
+      ]
+    },
+    {
       "id": "go-cleaner",
       "featured": true,
       "name": {
