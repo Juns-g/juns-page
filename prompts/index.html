@@ -80,8 +80,12 @@
       .fgroup button { flex: 0 0 auto; min-height: 36px; padding: 0.35rem 0.85rem; font-size: 0.8125rem; white-space: nowrap; }
       .fgroup button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
       .fgroup button[aria-pressed="true"]:hover { color: var(--canvas); }
-      .count { margin-left: 0.3em; opacity: 0.55; font-variant-numeric: tabular-nums; }
-      [aria-pressed="true"] .count { opacity: 0.75; }
+      .count {
+        display: inline-block; min-width: 1.5em; margin-left: 0.4em; padding: 0 0.4em;
+        border-radius: 1em; background: color-mix(in srgb, var(--ink) 7%, transparent);
+        color: color-mix(in srgb, var(--ink) 72%, transparent); font-size: 0.75rem; line-height: 1.5; text-align: center; font-variant-numeric: tabular-nums;
+      }
+      [aria-pressed="true"] .count { background: color-mix(in srgb, var(--canvas) 22%, transparent); color: var(--canvas); }
 
       /* masonry feed */
       #feed { display: flex; gap: 1rem; align-items: flex-start; margin-top: 1.75rem; }

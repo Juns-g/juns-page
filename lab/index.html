@@ -73,8 +73,12 @@
       .filters button { flex: 0 0 auto; min-height: 36px; padding: 0.35rem 0.85rem; border-radius: 2rem; font-size: 0.8125rem; white-space: nowrap; }
       .filters button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
       .filters button[aria-pressed="true"]:hover { color: var(--canvas); }
-      .count { margin-left: 0.3em; opacity: 0.55; font-variant-numeric: tabular-nums; }
-      [aria-pressed="true"] .count { opacity: 0.75; }
+      .count {
+        display: inline-block; min-width: 1.5em; margin-left: 0.4em; padding: 0 0.4em;
+        border-radius: 1em; background: color-mix(in srgb, var(--ink) 7%, transparent);
+        color: color-mix(in srgb, var(--ink) 72%, transparent); font-size: 0.75rem; line-height: 1.5; text-align: center; font-variant-numeric: tabular-nums;
+      }
+      [aria-pressed="true"] .count { background: color-mix(in srgb, var(--canvas) 22%, transparent); color: var(--canvas); }
       section { margin-top: 2.5rem; }
       h2 { margin: 0 0 0.9rem; font-size: 1rem; font-weight: 650; color: var(--ink); }
       ul { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; margin: 0; padding: 0; list-style: none; }
@@ -114,6 +118,14 @@
       .meta { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.5rem; color: var(--muted); font-size: 0.75rem; }
       .status { padding: 0.1em 0.5em; border-radius: 1em; background: var(--canvas); color: var(--ink); }
       .status-daily { color: var(--accent); background: var(--accent-soft); }
+      .status-daily::before {
+        content: ""; display: inline-block; width: 0.4em; height: 0.4em; margin-right: 0.35em; vertical-align: 0.12em;
+        border-radius: 50%; background: currentColor; box-shadow: 0 0 0 0 currentColor; animation: live 2.4s ease-out infinite;
+      }
+      @keyframes live {
+        0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 45%, transparent); }
+        70%, 100% { box-shadow: 0 0 0 0.45em transparent; }
+      }
       .status-experimental { background: transparent; outline: 1px dashed var(--rule-strong); outline-offset: -1px; }
       .status-archived { opacity: 0.7; }
       .destination::before { content: "·"; margin-right: 0.5em; }
@@ -145,6 +157,7 @@
       .card:active { transform: scale(0.99); }
       @media (prefers-reduced-motion: reduce) {
         .card, .arrow, .cover::before { transition: none; }
+        .status-daily::before { animation: none; }
         .card:hover, .card:active, .card:hover .arrow, .card:hover .cover::before { transform: none; }
       }
     </style>

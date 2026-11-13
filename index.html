@@ -85,8 +85,15 @@
         letter-spacing: 0.02em;
       }
       .lab-meta[hidden] { display: none; }
+      .lab-meta.loading {
+        width: 11rem; max-width: 60%; height: 0.78rem; margin-top: 0.35rem; border-radius: 0.4rem;
+        background: linear-gradient(90deg, var(--rule) 30%, color-mix(in srgb, var(--rule) 45%, transparent) 50%, var(--rule) 70%);
+        background-size: 300% 100%; animation: shimmer 1.4s ease infinite;
+      }
+      @keyframes shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
       @media (prefers-reduced-motion: reduce) {
         .lab strong, .lab-arrow { transition: none; }
+        .lab-meta.loading { animation: none; }
         .lab:hover .lab-arrow { transform: none; }
       }
       .domain {
@@ -107,18 +114,18 @@
       <div class="entries">
         <a class="lab" href="/lab/">
           <span class="lab-text">Things I've made with AI <span class="lab-arrow" aria-hidden="true">→</span> <strong>Lab</strong></span>
-          <span class="lab-meta" hidden></span>
+          <span class="lab-meta loading" aria-hidden="true"></span>
         </a>
         <a class="lab" href="/prompts/">
           <span class="lab-text">Visual prompts &amp; photo skills <span class="lab-arrow" aria-hidden="true">→</span> <strong>Prompts</strong></span>
-          <span class="lab-meta prompts-meta" hidden></span>
+          <span class="lab-meta prompts-meta loading" aria-hidden="true"></span>
         </a>
         <a class="lab" href="https://photos.juns.page">
           <span class="lab-text">Photos I've taken <span class="lab-arrow" aria-hidden="true">→</span> <strong>Photos</strong></span>
         </a>
         <a class="lab" href="/map/">
           <span class="lab-text">Places I've been <span class="lab-arrow" aria-hidden="true">→</span> <strong>Map</strong></span>
-          <span class="lab-meta map-meta" hidden></span>
+          <span class="lab-meta map-meta loading" aria-hidden="true"></span>
         </a>
       </div>
       <span class="domain">juns.page</span>
@@ -129,25 +136,25 @@
         .then((data) => {
           const meta = document.querySelector('.lab-meta');
           meta.textContent = `${data.items.length} items · updated ${data.updated}`;
-          meta.hidden = false;
+          meta.hidden = false; meta.classList.remove('loading'); meta.removeAttribute('aria-hidden');
         })
-        .catch(() => {});
+        .catch(() => { document.querySelector('.lab-meta').hidden = true; });
       fetch('/prompts/items.json')
         .then((response) => (response.ok ? response.json() : Promise.reject()))
         .then((data) => {
           const meta = document.querySelector('.prompts-meta');
           meta.textContent = `${data.items.length} items · updated ${data.updated_at}`;
-          meta.hidden = false;
+          meta.hidden = false; meta.classList.remove('loading'); meta.removeAttribute('aria-hidden');
         })
-        .catch(() => {});
+        .catch(() => { document.querySelector('.prompts-meta').hidden = true; });
       fetch('/map/cities.json')
         .then((response) => (response.ok ? response.json() : Promise.reject()))
         .then((data) => {
           const meta = document.querySelector('.map-meta');
           meta.textContent = `${data.stats.countries} countries · ${data.stats.cities} cities`;
-          meta.hidden = false;
+          meta.hidden = false; meta.classList.remove('loading'); meta.removeAttribute('aria-hidden');
         })
-        .catch(() => {});
+        .catch(() => { document.querySelector('.map-meta').hidden = true; });
     </script>
   </body>
 </html>
