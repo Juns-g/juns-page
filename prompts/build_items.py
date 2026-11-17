@@ -230,6 +230,38 @@ RAW = [
         ]
     },
     {
+        "id": "photo-abstract-identity-poster",
+        "kind": "prompt",
+        "input_mode": "photo",
+        "runtime_mode": "external-post",
+        "input": "photo",
+        "runtime": "post",
+        "license": "none",
+        "license_tier": "external-link",
+        "discovery": "x",
+        "copy_label": "link",
+        "title_zh": "照片 → 抽象视觉标识海报",
+        "title_en": "Photo → abstract visual identity poster",
+        "summary_zh": "3:4 上下各半：上半保留原照片，下半从轮廓与结构提炼单个抽象标识。",
+        "summary_en": "3:4, split 50:50: the top keeps the photo; the bottom distills its outline and structure into one abstract identity mark.",
+        "aspect": "3:4",
+        "author": "Ciri (@Ciri_ai)",
+        "source_url": "https://x.com/Ciri_ai/status/2122188369497375084",
+        "discovery_url": "https://x.com/Ciri_ai/status/2122188369497375084",
+        "gallery": [],
+        "palette": [],
+        "copy_text": None,
+        "slots_zh": [],
+        "notes_zh": [
+            "上半只轻微调色、不扭曲主体；下半用几何、线条与负空间，取色自原图，配克制微排版。",
+            "原文与3张作者示例见原帖；未核到转载授权，本站不转载。"
+        ],
+        "notes_en": [
+            "Top: light grading, subject undistorted. Bottom: geometry, lines and negative space in the photo's colours, minimal type.",
+            "Full prompt and the author's 3 examples are in the original post; no reuse permission found, so not reproduced here."
+        ]
+    },
+    {
         "id": "gpt-pyramids-editorial-diptych",
         "kind": "prompt",
         "input_mode": "photo",
@@ -1683,6 +1715,6 @@ items = [build_item(r) for r in RAW]
 
 out_json = os.path.join(prompts_dir, "items.json")
 with open(out_json, "w", encoding="utf-8") as f:
-    json.dump({"updated_at": "2026-11-11", "items": items}, f, ensure_ascii=False, indent=2)
+    json.dump({"updated_at": "2026-11-17", "items": items}, f, ensure_ascii=False, indent=2)
 
 print(f"Wrote {len(items)} items to {out_json}")

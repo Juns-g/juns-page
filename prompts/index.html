@@ -192,6 +192,7 @@
         .gallery { display: flex; flex-direction: column; gap: 0.25rem; min-height: 100%; }
         .shot img { max-height: none; }
         .text { position: sticky; top: 0; max-height: calc(100dvh - 2rem); overflow-y: auto; padding: 1.5rem; }
+        .sheet.text-only { display: block; }
       }
       @media (hover: hover) and (pointer: fine) {
         .card:hover { border-color: var(--rule-strong); transform: translateY(-2px); box-shadow: var(--card-shadow); }
@@ -269,7 +270,7 @@
       const FILTERS = {
         type: { values: ['prompt', 'skill'], test: (it, v) => it.kind === v },
         input: { values: ['photo', 'text'], test: (it, v) => (it.input_mode === 'text') === (v === 'text') },
-        run: { values: ['gpt', 'local'], test: (it, v) => (it.runtime_mode === 'gpt-direct') === (v === 'gpt') }
+        run: { values: ['gpt', 'local'], test: (it, v) => it.runtime_mode !== 'external-post' && (it.runtime_mode === 'gpt-direct') === (v === 'gpt') }
       };
       const $ = id => document.getElementById(id);
       const feed = $('feed'), filtersEl = $('filters'), toggle = $('language'), dlg = $('detail'), sheet = $('sheet'), live = $('live');
@@ -352,14 +353,16 @@
 
       function buildCard(it, index) {
         const card = el('article', 'card');
-        const media = el('div', 'media');
-        if (/^#[0-9a-f]{3,8}$/i.test(it.palette?.[0] || '')) media.style.setProperty('--ph', it.palette[0]);
         const img = el('img');
-        img.decoding = 'async';
-        img.loading = index < 3 ? 'eager' : 'lazy';
-        setImage(img, it, picked[it.id] || 0);
-        media.append(img, el('span', 'badge', S().kind[it.kind]));
-        card.append(media);
+        if (it.gallery.length) { // link-only items have no artwork
+          const media = el('div', 'media');
+          if (/^#[0-9a-f]{3,8}$/i.test(it.palette?.[0] || '')) media.style.setProperty('--ph', it.palette[0]);
+          img.decoding = 'async';
+          img.loading = index < 3 ? 'eager' : 'lazy';
+          setImage(img, it, picked[it.id] || 0);
+          media.append(img, el('span', 'badge', S().kind[it.kind]));
+          card.append(media);
+        }
         if (it.gallery.length > 1) {
           const row = el('div', 'switch');
           const buttons = it.gallery.map((shot, i) => {
@@ -497,7 +500,8 @@
         if (it.source_url) add(it.source_url, s.source, 'primary');
         if (it.discovery_url && it.discovery_url !== it.source_url) add(it.discovery_url, T(it, 'discovery_label') || s.source, '');
         if (links.childElementCount) text.append(links);
-        sheet.replaceChildren(gallery, text);
+        sheet.classList.toggle('text-only', !it.gallery.length);
+        sheet.replaceChildren(...(it.gallery.length ? [gallery] : []), text);
       }
 
       function openItem(id, from) {
