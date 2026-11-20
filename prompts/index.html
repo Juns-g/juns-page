@@ -360,7 +360,8 @@
           img.decoding = 'async';
           img.loading = index < 3 ? 'eager' : 'lazy';
           setImage(img, it, picked[it.id] || 0);
-          media.append(img, el('span', 'badge', S().kind[it.kind]));
+          const badge = it.runtime_mode === 'external-post' ? T(it, 'runtime') : S().kind[it.kind];
+          media.append(img, el('span', 'badge', badge));
           card.append(media);
         }
         if (it.gallery.length > 1) {
