@@ -56,6 +56,36 @@ COPY_LABEL = {
 # (kind-specific) items. gallery rows are (file, label_zh, label_en).
 RAW = [
     {
+        "id": "mountain-nine-grid-poster",
+        "kind": "prompt",
+        "input_mode": "photo",
+        "runtime_mode": "gpt-direct",
+        "input": "travel",
+        "runtime": "gpt",
+        "license": "link",
+        "license_tier": "external-link",
+        "discovery": "x",
+        "copy_label": "prompt",
+        "title_zh": "山色藏进九格｜照片 × 复古手绘海报",
+        "title_en": "Mountains in Nine Panels | Photo × retro illustration poster",
+        "summary_zh": "把一张山景照做成 3:4 竖版双联海报：上半保留照片，下半拆成九格复古手绘。内附本站改写的提示词。",
+        "summary_en": "Turn a mountain photo into a 3:4 diptych: the original photo above, nine retro illustrations below. Includes a prompt adapted by this site.",
+        "aspect": "3:4",
+        "author": "阿文AI实战笔记 (@AWENIAI)",
+        "source_url": "https://x.com/aweniai/status/2123395750000525682",
+        "discovery_url": "https://x.com/aweniai/status/2123395750000525682",
+        "gallery": [],
+        "palette": [],
+        "copy_text": "将我上传的山景照片做成一张 3:4 竖版海报。画面上下分区：上半展示照片，保留原构图、山形和光线；下半是一张暖白纸上的插画版面。\n\n在下半中央排一个整齐的 3×3 方格，每格画原图里不同的元素或细节。把最能代表这张照片的景物画在中央，其余格穿插远景、局部和纹理，比如山脊、雪痕、云、林木、草坡或山屋。根据照片取舍，不必硬凑这些例子，也不要把同一座山重复画九遍。\n\n插画用松动、不规则的黑色墨线和有限的平涂色块，留出轻微纸面颗粒。以原照片的蓝绿为主，可选一个暖色作点缀。九格之间保持相同的细间距，周围留出充分的空白；左侧放一个细窄英文标题，右侧只排几行简短关键词。保持上方摄影和下方手绘的质感对照，不要把整张海报做成照片滤镜。\n\n（本站改写版；构思参考阿文AI实战笔记：https://x.com/aweniai/status/2123395750000525682）",
+        "slots_zh": [],
+        "notes_zh": [
+            "本站根据原帖描述与成品改写，并非作者的提示词原文。五张作者示例见原帖。"
+        ],
+        "notes_en": [
+            "Adapted from the post and its examples, not the author's verbatim prompt. See the original post for all five examples."
+        ]
+    },
+    {
         "id": "gpt-editorial-gouache-poster",
         "kind": "prompt",
         "input_mode": "photo",
@@ -1715,6 +1745,6 @@ items = [build_item(r) for r in RAW]
 
 out_json = os.path.join(prompts_dir, "items.json")
 with open(out_json, "w", encoding="utf-8") as f:
-    json.dump({"updated_at": "2026-11-17", "items": items}, f, ensure_ascii=False, indent=2)
+    json.dump({"updated_at": "2026-11-20", "items": items}, f, ensure_ascii=False, indent=2)
 
 print(f"Wrote {len(items)} items to {out_json}")
