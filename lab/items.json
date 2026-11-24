@@ -1,6 +1,28 @@
 {
-  "updated": "2026-11-07",
+  "updated": "2026-11-24",
   "items": [
+    {
+      "id": "langlaile-midlayers",
+      "group": "writing",
+      "name": {
+        "zh": "狼来了的 17 件秋冬户外中间层",
+        "en": "17 autumn–winter outdoor mid-layers from Langlaile"
+      },
+      "summary": {
+        "zh": "抖音博主狼来了 10 分钟视频整理：抓绒、P绒、Octa绒、G棉/P棉、排骨羽绒与美利奴羊毛，逐件列品牌、颜色、尺码、截图和口播要点，附羽绒与 G棉怎么选。",
+        "en": "Notes on a 10-minute Douyin video: 17 fleece, synthetic-fill, down and merino mid-layers with brand, colour, size, screenshots and the creator's comments, plus when to pick down over synthetic fill."
+      },
+      "topic": "shopping",
+      "date": "2026-11-24",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/dy-langlaile-midlayer-648b0bfd"
+        }
+      ],
+      "mark": "Layers",
+      "hue": 28
+    },
     {
       "id": "kangle-35-8things",
       "group": "writing",
