@@ -2,6 +2,28 @@
   "updated": "2026-11-24",
   "items": [
     {
+      "id": "arcteryx-hardshells",
+      "group": "writing",
+      "name": {
+        "zh": "始祖鸟冲锋衣怎么选：8 款硬壳一页看懂",
+        "en": "Choosing an Arc'teryx hardshell: 8 jackets on one page"
+      },
+      "summary": {
+        "zh": "整理抖音博主金村拓哉的硬壳选购视频：Norvan、Beta 全能线到 Alpha 攀登线 8 款，按通勤、旅行、徒步、风雪、攀登筛选，附官网重量面料价格和 Atom SV、Gamma、排骨羽绒补充。",
+        "en": "Notes on a Douyin buying guide: eight Arc'teryx shells from Norvan through the Beta and Alpha lines, filterable by use, with official weight, fabric and price, plus notes on Atom SV, Gamma and Cerium."
+      },
+      "topic": "shopping",
+      "date": "2026-11-24",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/arcteryx-shell-3bc751"
+        }
+      ],
+      "mark": "Shell",
+      "hue": 205
+    },
+    {
       "id": "langlaile-midlayers",
       "group": "writing",
       "name": {
