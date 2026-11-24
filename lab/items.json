@@ -1118,6 +1118,28 @@
       ],
       "mark": "LLMs",
       "hue": 325
+    },
+    {
+      "id": "norway-2027-lofoten-tromso",
+      "group": "writing",
+      "name": {
+        "zh": "2027 春节挪威：罗弗敦自驾 + 特罗姆瑟极光",
+        "en": "Norway at Chinese New Year 2027: Lofoten road trip and Tromsø auroras"
+      },
+      "summary": {
+        "zh": "10 天图文行程卡：罗弗敦 4 晚自驾（Reine、Hamnøy、Flakstad 海滩）、Havila 海岸夜航、特罗姆瑟峡湾摄影、8 人极光团与自驾狗拉雪橇，附拼车与同团方式。",
+        "en": "A 10-day trip in picture cards: four nights driving Lofoten (Reine, Hamnøy, Flakstad beaches), a Havila coastal night sailing, and fjord photography, a small-group aurora chase and self-drive dog sledding in Tromsø, with ways to join."
+      },
+      "topic": "travel",
+      "date": "2026-11-24",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/norway-2027-trip-mi1tcpes"
+        }
+      ],
+      "mark": "Lofoten",
+      "hue": 215
     }
   ]
 }
