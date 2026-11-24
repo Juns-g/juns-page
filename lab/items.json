@@ -2,6 +2,28 @@
   "updated": "2026-11-24",
   "items": [
     {
+      "id": "patagonia-guide",
+      "group": "writing",
+      "name": {
+        "zh": "巴塔哥尼亚怎么选：R 系列、休闲抓绒、C1、Nano 19 款",
+        "en": "Choosing Patagonia: R-series, casual fleece, Capilene Cool and Nano, 19 items"
+      },
+      "summary": {
+        "zh": "整理抖音博主金村拓哉 7 期巴塔哥尼亚视频：R1／R2 TechFace 等 6 款技术抓绒、Retro-X 等 6 款休闲抓绒、5 款 C1 速干和 Nano Puff／Nano-Air，附博主组合推荐、冲锋衣洗护，以及香港、美国、韩国价格和官方最低折合参考价。",
+        "en": "Notes on 7 Douyin videos by Jincun Tuozai covering Patagonia R-series technical fleece, casual fleece, Capilene Cool shirts and Nano insulation: 19 items with the creator's picks, shell-washing tips, HK/US/Korea prices and the lowest official converted price."
+      },
+      "topic": "shopping",
+      "date": "2026-11-25",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/patagonia-guide-7c4e1a"
+        }
+      ],
+      "mark": "Pata",
+      "hue": 25
+    },
+    {
       "id": "arcteryx-hardshells",
       "group": "writing",
       "name": {
