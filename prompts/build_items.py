@@ -77,23 +77,23 @@ RAW = [
         "gallery": [
             [
                 "bear-pop-frame-1.jpg",
-                "天平山红枫 1",
-                "Tianping maples 1"
+                "茅屋",
+                "Thatch"
             ],
             [
                 "bear-pop-frame-2.jpg",
-                "天平山红枫 2",
-                "Tianping maples 2"
+                "仰拍",
+                "Canopy"
             ],
             [
                 "bear-pop-frame-3.jpg",
-                "天平山红枫 3",
-                "Tianping maples 3"
+                "逆光",
+                "Backlit"
             ],
             [
                 "bear-pop-frame-4.jpg",
-                "天平山红枫 4",
-                "Tianping maples 4"
+                "蓝天",
+                "Blue sky"
             ]
         ],
         "palette": [

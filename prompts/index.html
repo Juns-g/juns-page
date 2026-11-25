@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
+    <link rel="icon" href="data:,">
     <title>Prompts · Juns</title>
     <style>
       :root {
@@ -17,6 +18,8 @@
         --accent: #2f7d4f;
         --accent-soft: rgba(47, 125, 79, 0.08);
         --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        --dialog-shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
+        --backdrop: rgba(0, 0, 0, 0.5);
         --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
       }
       @media (prefers-color-scheme: dark) {
@@ -30,6 +33,8 @@
           --accent: #7fd1a0;
           --accent-soft: rgba(127, 209, 160, 0.1);
           --card-shadow: none;
+          --dialog-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+          --backdrop: rgba(0, 0, 0, 0.72);
         }
       }
       * { box-sizing: border-box; }
@@ -44,163 +49,424 @@
         line-height: 1.6;
         overflow-wrap: anywhere;
         text-wrap: pretty;
+        -webkit-font-smoothing: antialiased;
       }
       .page { max-width: 64rem; margin: 0 auto; }
       header h1, #intro { max-width: 40rem; }
       nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
       a { color: inherit; text-underline-offset: 0.2em; }
-      a:hover, button:hover { color: var(--muted); }
-      :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-      nav a, button { font-size: 0.875rem; }
-      button {
-        min-width: 44px;
-        min-height: 44px;
-        padding: 0.5rem;
-        border: 1px solid var(--rule);
-        border-radius: 2rem;
-        background: transparent;
-        color: var(--ink);
-        font: inherit;
+      nav a {
+        display: inline-flex; align-items: center; min-height: 44px; padding: 0.25rem 0;
         font-size: 0.875rem;
-        cursor: pointer;
+        text-decoration-color: var(--muted); text-decoration-thickness: 1px;
+        transition: text-decoration-color 160ms ease, color 160ms ease;
       }
+      :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+      button {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 44px; min-height: 44px; padding: 0 0.85rem;
+        border: 1px solid var(--rule); border-radius: 2rem;
+        background: transparent; color: var(--ink);
+        font: inherit; font-size: 0.875rem; line-height: 1;
+        cursor: pointer;
+        transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease, transform 160ms ease, opacity 160ms ease;
+      }
+      button:active { transform: scale(0.98); }
+      #language { padding: 0 0.75rem; font-size: 0.8125rem; font-weight: 500; }
       h1 {
-        margin: 2.4rem 0 1.5rem;
+        margin: 1.25rem 0 0.75rem;
         font-size: clamp(3rem, 11vw, 5.6rem);
         font-weight: 650;
         letter-spacing: -0.075em;
         line-height: 0.9;
       }
-      #intro { margin: 0; font-size: 1.05rem; color: var(--muted); }
+      #intro { margin: 0; font-size: 0.95rem; line-height: 1.65; color: var(--muted); }
+      :lang(zh) #intro { letter-spacing: 0.01em; }
 
       /* filters */
-      .filters { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.75rem; }
-      .fgroup { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
-      .flabel { flex: 0 0 3.2rem; color: var(--muted); font: 0.75rem var(--mono); }
-      .fgroup button { flex: 0 0 auto; min-height: 36px; padding: 0.35rem 0.85rem; font-size: 0.8125rem; white-space: nowrap; }
-      .fgroup button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
-      .fgroup button[aria-pressed="true"]:hover { color: var(--canvas); }
-      .count {
-        display: inline-block; min-width: 1.5em; margin-left: 0.4em; padding: 0 0.4em;
-        border-radius: 1em; background: color-mix(in srgb, var(--ink) 7%, transparent);
-        color: color-mix(in srgb, var(--ink) 72%, transparent); font-size: 0.75rem; line-height: 1.5; text-align: center; font-variant-numeric: tabular-nums;
+      .filters {
+        display: flex; flex-direction: column; gap: 0.45rem; margin-top: 1.15rem;
+        --flabel-w: 2.35rem;
       }
-      [aria-pressed="true"] .count { background: color-mix(in srgb, var(--canvas) 22%, transparent); color: var(--canvas); }
+      :lang(en) .filters { --flabel-w: 3.6rem; }
+      .fgroup {
+        display: grid; grid-template-columns: var(--flabel-w) minmax(0, 1fr);
+        align-items: start; gap: 0.45rem;
+      }
+      .flabel {
+        display: flex; align-items: center; min-height: 36px;
+        color: var(--muted); font: 0.75rem/1 var(--mono);
+      }
+      .fchips { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; min-width: 0; }
+      .fgroup button {
+        flex: 0 0 auto; min-width: 0; min-height: 36px; padding: 0.3rem 0.72rem;
+        font-size: 0.8125rem; white-space: nowrap;
+      }
+      .fgroup button.is-zero { opacity: 0.45; }
+      .fgroup button[aria-pressed="true"] {
+        background: var(--ink); color: var(--canvas); border-color: var(--ink); opacity: 1;
+      }
+      .count {
+        display: inline-block; min-width: 1.45em; margin-left: 0.35em; padding: 0.08em 0.38em;
+        border-radius: 1em; background: color-mix(in srgb, var(--ink) 7%, transparent);
+        color: color-mix(in srgb, var(--ink) 70%, transparent);
+        font: 0.72rem/1.3 var(--mono); text-align: center; font-variant-numeric: tabular-nums;
+      }
+      [aria-pressed="true"] .count {
+        background: color-mix(in srgb, var(--canvas) 22%, transparent);
+        color: var(--canvas);
+      }
 
       /* masonry feed */
-      #feed { display: flex; gap: 1rem; align-items: flex-start; margin-top: 1.75rem; }
+      #feed { display: flex; gap: 1rem; align-items: flex-start; margin-top: 1.25rem; }
       .masonry-col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 1rem; }
       .card {
         position: relative; overflow: hidden; min-width: 0;
         background: var(--surface); border: 1px solid var(--rule); border-radius: 14px;
         transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
       }
-      .media { position: relative; line-height: 0; background: var(--canvas); background: color-mix(in srgb, var(--ph, #888) 16%, var(--surface)); }
+      .media {
+        position: relative; line-height: 0; overflow: hidden;
+        background: var(--canvas);
+        background: color-mix(in srgb, var(--ph, var(--rule)) 7%, var(--canvas));
+        border-bottom: 1px solid color-mix(in srgb, var(--rule) 65%, transparent);
+      }
+      /* Full-width and uncropped at every size: the artwork is the point of the card. */
       .media img { display: block; width: 100%; height: auto; }
       .badge {
-        position: absolute; top: 0.6rem; right: 0.6rem; padding: 0.1rem 0.55rem;
-        border-radius: 2rem; background: rgba(253, 253, 251, 0.82); background: color-mix(in srgb, var(--surface) 82%, transparent);
-        -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-        color: var(--ink); font: 0.7rem/1.5 var(--mono); pointer-events: none;
+        position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.14rem 0.5rem;
+        border-radius: 2rem;
+        border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+        background: rgba(253, 253, 251, 0.86);
+        background: color-mix(in srgb, var(--surface) 86%, transparent);
+        -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+        color: var(--ink); font: 500 0.68rem/1.35 var(--mono); pointer-events: none;
       }
-      .switch { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0.6rem 1rem 0; }
-      .switch button { position: relative; z-index: 1; min-width: 0; min-height: 32px; padding: 0.15rem 0.7rem; font-size: 0.75rem; }
-      .switch button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
-      .switch button[aria-pressed="true"]:hover { color: var(--canvas); }
-      .body { padding: 0.85rem 1rem 1rem; }
-      .meta { margin: 0; color: var(--muted); font-size: 0.75rem; }
-      h3 { margin: 0.25rem 0 0; font-size: 1.02rem; font-weight: 600; line-height: 1.4; }
+      .switch {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.12rem;
+        padding: 0.35rem 0.65rem;
+        border-bottom: 1px solid color-mix(in srgb, var(--rule) 50%, transparent);
+        background: color-mix(in srgb, var(--canvas) 45%, var(--surface));
+      }
+      .switch button {
+        position: relative; z-index: 1; min-width: 0; min-height: 30px;
+        padding: 0.15rem 0.35rem; border-color: transparent;
+        color: var(--muted); font-size: 0.72rem; font-weight: 450;
+      }
+      .switch button[aria-pressed="true"] {
+        background: color-mix(in srgb, var(--ink) 8%, transparent);
+        border-color: color-mix(in srgb, var(--rule-strong) 75%, transparent);
+        color: var(--ink); font-weight: 550;
+      }
+      .body { padding: 0.9rem 1.1rem 1.05rem; }
+      .switch + .body { padding-top: 0.72rem; }
+      .meta {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.45rem;
+        margin: 0; color: var(--muted); font-size: 0.75rem; line-height: 1.5;
+        font-variant-numeric: tabular-nums;
+      }
+      .meta-items { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+      .meta-track {
+        display: flex; flex-wrap: wrap; align-items: baseline;
+        margin-left: -0.75rem; row-gap: 0.1rem;
+      }
+      .meta-item { display: inline-flex; align-items: baseline; }
+      .meta-item::before {
+        content: "·"; flex: 0 0 auto; width: 0.75rem; text-align: center;
+        color: var(--rule-strong);
+      }
+      .meta-badge {
+        display: inline-flex; align-items: center; padding: 0.08rem 0.5rem;
+        border: 1px solid var(--rule); border-radius: 2rem;
+        background: var(--canvas); color: var(--ink);
+        font: 500 0.7rem/1.35 var(--mono);
+      }
+      h3 {
+        margin: 0.3rem 0 0; font-size: 1.04rem; font-weight: 600;
+        line-height: 1.42; text-wrap: balance;
+      }
+      :lang(en) h3 { letter-spacing: -0.01em; }
       .card-link { text-decoration: none; }
-      .card-link:hover { color: inherit; }
       .card-link::after { content: ""; position: absolute; inset: 0; border-radius: 14px; }
       .card-link:focus-visible { outline: none; }
       .card:has(.card-link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
       .summary {
         display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
-        margin: 0.5rem 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.55;
+        margin: 0.45rem 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.6;
       }
-      .card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; margin-top: 0.9rem; }
-      .copy, .srclink { position: relative; z-index: 1; border-color: var(--rule-strong); }
-      .copy { padding: 0.4rem 1rem; }
+      .card-bottom {
+        display: flex; align-items: center; justify-content: space-between; gap: 0.6rem;
+        margin-top: 0.9rem;
+      }
+      .copy, .srclink { position: relative; z-index: 1; }
+      /* Card actions: compact visual rhythm with 44px touch target via ::before hit area. */
+      .card .copy {
+        min-height: 38px; padding: 0 0.95rem;
+        border-color: var(--rule-strong); background: var(--canvas);
+        font-size: 0.8125rem; font-weight: 500;
+      }
+      .card .copy::before, .srclink::before {
+        content: ""; position: absolute; inset: -3px; border-radius: 2rem;
+      }
+      .copy[data-copied="true"] {
+        border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+        background: var(--accent-soft); color: var(--accent);
+      }
       .srclink {
         display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
-        min-width: 44px; min-height: 44px; padding: 0.4rem 0.9rem; border: 1px solid var(--rule-strong); border-radius: 2rem;
-        color: var(--ink); font-size: 0.875rem; text-decoration: none;
+        width: 38px; height: 38px; padding: 0;
+        border: 1px solid var(--rule); border-radius: 50%;
+        color: var(--muted); font-size: 0.875rem; line-height: 1; text-decoration: none;
+        transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
       }
-      .srclink:hover { border-color: var(--ink); color: var(--ink); }
-      .copy:hover { border-color: var(--ink); color: var(--ink); }
-      #empty { margin: 2rem 0 0; color: var(--muted); font-size: 0.9rem; }
-      #empty button { margin-left: 0.5rem; }
-      #message, noscript, footer { color: var(--muted); font-size: 0.875rem; }
+      .srclink:active { transform: scale(0.96); }
+      .arrow { display: inline-block; transition: transform 160ms ease; }
+
+      /* loading skeleton */
+      .skel-card {
+        overflow: hidden; background: var(--surface);
+        border: 1px solid var(--rule); border-radius: 14px;
+      }
+      .skel-media { aspect-ratio: 4 / 3; }
+      .skel-body { padding: 1rem 1.1rem 1.15rem; display: flex; flex-direction: column; gap: 0.6rem; }
+      .skel-line { height: 0.78rem; border-radius: 0.4rem; }
+      .skel-line.short { width: 42%; height: 0.65rem; }
+      .skel-line.title { width: 78%; height: 1rem; }
+      .skel-line.mid { width: 92%; }
+      .skel-shimmer {
+        background: linear-gradient(90deg,
+          color-mix(in srgb, var(--rule) 55%, var(--canvas)) 25%,
+          color-mix(in srgb, var(--rule) 22%, var(--canvas)) 50%,
+          color-mix(in srgb, var(--rule) 55%, var(--canvas)) 75%);
+        background-size: 250% 100%;
+        animation: shimmer 1.5s ease infinite;
+      }
+      @keyframes shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+      /* states & footer */
+      #empty {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;
+        margin: 2.25rem 0 0; color: var(--muted); font-size: 0.9rem;
+      }
+      #empty button { padding: 0 1.1rem; border-color: var(--rule-strong); }
+      #message, noscript { color: var(--muted); font-size: 0.875rem; }
       #message { margin-top: 2rem; }
-      footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+      footer {
+        margin-top: 3.5rem; padding-top: 1.15rem; border-top: 1px solid var(--rule);
+        color: var(--muted); font: 0.78rem/1.5 var(--mono);
+        letter-spacing: 0.015em; font-variant-numeric: tabular-nums;
+      }
       .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
       /* detail dialog */
       dialog {
         width: min(calc(100vw - 2rem), 60rem); max-width: none; max-height: calc(100dvh - 2rem);
-        margin: auto; padding: 0; overflow: hidden; border: 1px solid var(--rule); border-radius: 16px;
+        margin: auto; padding: 0; overflow: hidden;
+        border: 1px solid var(--rule); border-radius: 16px;
         background: var(--surface); color: var(--ink);
+        box-shadow: var(--dialog-shadow);
       }
+      dialog:focus { outline: none; }
       dialog[open] { display: flex; flex-direction: column; }
-      dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
-      .sheet { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+      dialog::backdrop { background: var(--backdrop); }
+      .sheet {
+        flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+        scrollbar-width: thin; scrollbar-color: var(--rule-strong) transparent;
+      }
       .close {
-        position: absolute; top: 0.6rem; right: 0.6rem; z-index: 2; padding: 0; font-size: 1.5rem; line-height: 1;
-        background: rgba(253, 253, 251, 0.82); background: color-mix(in srgb, var(--surface) 82%, transparent);
-        -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+        position: absolute; top: 0.75rem; right: 0.75rem; z-index: 2;
+        width: 44px; height: 44px; padding: 0;
+        border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+        background: rgba(253, 253, 251, 0.86);
+        background: color-mix(in srgb, var(--surface) 86%, transparent);
+        -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       }
-      .gallery { background: var(--canvas); }
+      .gallery {
+        display: flex; flex-direction: column; gap: 1rem;
+        background: var(--canvas);
+        border-bottom: 1px solid var(--rule);
+      }
       .shot { margin: 0; }
-      .text > .meta { padding-right: 2.75rem; }
-      .shot a { display: block; line-height: 0; background: var(--canvas); cursor: zoom-in; }
-      /* Uncropped: scale to fit the viewport height, never object-fit. */
-      .shot img { display: block; width: auto; max-width: 100%; height: auto; max-height: min(82dvh, 56rem); margin: 0 auto; }
-      .shot figcaption { padding: 0.4rem 1.25rem; color: var(--muted); font-size: 0.75rem; line-height: 1.4; }
-      .text { padding: 1.25rem; }
-      .text h2 { margin: 0.3rem 0 0; font-size: 1.3rem; line-height: 1.35; }
-      .text .lead { margin: 0.6rem 0 0; color: var(--muted); }
-      .sec-h { margin: 1.5rem 0 0.5rem; font-size: 0.8125rem; font-weight: 650; }
-      .slots, .notes { margin: 0; padding-left: 1.2rem; }
-      .slots li { margin: 0.25rem 0; font-size: 0.9rem; }
-      .notes { margin-top: 1.25rem; color: var(--muted); font-size: 0.8125rem; line-height: 1.55; }
-      .notes li { margin: 0.2rem 0; }
-      mark.slot { padding: 0 0.15em; border-radius: 2px; background: var(--accent-soft); color: var(--accent); }
-      .copy-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 1.5rem 0 0.5rem; }
-      .copy-head .sec-h { margin: 0; }
-      pre {
-        margin: 0; max-height: 22rem; overflow: auto; padding: 0.9rem;
-        background: var(--canvas); border: 1px solid var(--rule); border-radius: 10px;
-        font: 0.8rem/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere;
+      .shot a {
+        display: block; line-height: 0; background: var(--canvas); cursor: zoom-in;
       }
-      .links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+      /* Uncropped: scale to fit the viewport height, never object-fit. */
+      .shot img {
+        display: block; width: auto; max-width: 100%; height: auto;
+        max-height: min(68dvh, 42rem); margin: 0 auto;
+      }
+      .shot figcaption {
+        display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem;
+        padding: 0.5rem 1.25rem 0.75rem; color: var(--muted); font-size: 0.75rem; line-height: 1.45;
+      }
+      .cap-index {
+        flex: 0 0 auto; font: 0.72rem/1 var(--mono);
+        color: color-mix(in srgb, var(--muted) 80%, transparent);
+        font-variant-numeric: tabular-nums;
+      }
+      .text { padding: 1.25rem 1.25rem max(1.5rem, env(safe-area-inset-bottom)); }
+      .text > .meta, .text > h2 { padding-right: 3.35rem; }
+      .text h2 {
+        margin: 0.35rem 0 0; font-size: 1.28rem; font-weight: 650;
+        line-height: 1.35; letter-spacing: -0.015em; text-wrap: balance;
+      }
+      .text .lead { margin: 0.65rem 0 0; font-size: 0.95rem; line-height: 1.65; color: var(--muted); }
+      .sec-h {
+        margin: 1.45rem 0 0.5rem; color: var(--muted);
+        font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+      }
+      :lang(en) .sec-h { text-transform: uppercase; }
+      .slots, .notes { margin: 0; padding-left: 1.15rem; }
+      .slots li { margin: 0.3rem 0; font-size: 0.875rem; line-height: 1.65; }
+      .notes { margin-top: 1.15rem; color: var(--muted); font-size: 0.83rem; line-height: 1.65; }
+      .notes li { margin: 0.3rem 0; }
+      .slots li::marker, .notes li::marker { color: var(--rule-strong); }
+      mark.slot {
+        padding: 0.08em 0.32em; border-radius: 4px;
+        background: var(--accent-soft); color: var(--accent); font-weight: 500;
+        -webkit-box-decoration-break: clone; box-decoration-break: clone;
+      }
+      .copy-head {
+        display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+        margin: 1.45rem 0 0.6rem;
+      }
+      .copy-head .sec-h { margin: 0; }
+      .copy-head .copy {
+        min-height: 44px; padding: 0 1.15rem;
+        background: var(--ink); color: var(--canvas); border-color: var(--ink);
+        font-size: 0.84rem; font-weight: 550;
+      }
+      .copy-head .copy[data-copied="true"] {
+        background: var(--accent-soft); color: var(--accent);
+        border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+      }
+      pre {
+        margin: 0; max-height: 23rem; overflow: auto; padding: 0.95rem 1.05rem 1.15rem;
+        border: 1px solid var(--rule); border-radius: 10px;
+        font: 0.8125rem/1.72 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere;
+        scrollbar-width: thin; scrollbar-color: var(--rule-strong) transparent;
+        background:
+          linear-gradient(var(--canvas) 35%, transparent) top / 100% 30px no-repeat local,
+          linear-gradient(transparent, var(--canvas) 65%) bottom / 100% 30px no-repeat local,
+          radial-gradient(farthest-side at 50% 0, color-mix(in srgb, var(--ink) 16%, transparent), transparent) top / 100% 14px no-repeat scroll,
+          radial-gradient(farthest-side at 50% 100%, color-mix(in srgb, var(--ink) 18%, transparent), transparent) bottom / 100% 14px no-repeat scroll,
+          var(--canvas);
+      }
+      .links {
+        display: flex; flex-wrap: wrap; gap: 0.5rem;
+        margin-top: 1.25rem; padding-top: 1rem;
+        border-top: 1px solid color-mix(in srgb, var(--rule) 65%, transparent);
+      }
       .links a {
-        display: inline-flex; align-items: center; min-height: 44px; padding: 0.4rem 1rem;
-        border: 1px solid var(--rule); border-radius: 2rem; color: var(--ink); font-size: 0.875rem; text-decoration: none;
+        display: inline-flex; align-items: center; gap: 0.3em;
+        min-height: 44px; padding: 0 1.05rem;
+        border: 1px solid var(--rule); border-radius: 2rem;
+        color: var(--ink); font-size: 0.84rem; line-height: 1; text-decoration: none;
+        transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
       }
       .links a.primary { border-color: var(--rule-strong); }
-      .links a:hover { border-color: var(--ink); color: var(--ink); }
+      .links a:active { transform: scale(0.98); }
 
-      @media (min-width: 600px) { body { padding: 2rem 1.5rem 4rem; } }
+      @media (min-width: 600px) {
+        body { padding: 2rem 1.5rem 4rem; }
+        h1 { margin: 1.35rem 0 0.8rem; }
+        #intro { font-size: 1.02rem; }
+        .filters { margin-top: 1.15rem; }
+        #feed { margin-top: 1.3rem; }
+      }
+      @media (min-width: 680px) {
+        .media { padding: 0; background: color-mix(in srgb, var(--ph, var(--rule)) 10%, var(--surface)); }
+        .badge { top: 0.65rem; right: 0.65rem; padding: 0.16rem 0.55rem; font-size: 0.7rem; }
+        .switch { padding: 0.38rem 0.75rem; gap: 0.18rem; }
+        .switch button { padding: 0.15rem 0.44rem; }
+        .gallery { padding: 1rem 1.25rem; gap: 1.15rem; }
+        .shot img {
+          border-radius: 8px;
+          outline: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+          outline-offset: -1px;
+        }
+        .shot figcaption { padding: 0.5rem 0.15rem 0; }
+      }
+      @media (min-width: 1024px) {
+        .switch { padding: 0.35rem 0.55rem; gap: 0.08rem; }
+        .switch button { padding: 0.15rem 0.3rem; font-size: 0.71rem; }
+      }
       @media (max-width: 679px) {
-        dialog { width: 100%; max-height: calc(100dvh - 0.75rem); margin: auto 0 0; border-radius: 16px 16px 0 0; border-bottom: 0; }
-        .flabel { flex-basis: 100%; }
+        :lang(zh) .filters { --flabel-w: 1.9rem; }
+        .fgroup { gap: 0.3rem; }
+        .fchips { gap: 0.28rem; }
+        .fgroup button { padding: 0.25rem 0.48rem; font-size: 0.79rem; }
+        .count { min-width: 1.35em; margin-left: 0.24em; padding: 0.05em 0.26em; font-size: 0.7rem; }
+        dialog {
+          width: 100%; max-height: calc(100dvh - 2rem); margin: auto 0 0;
+          border-radius: 18px 18px 0 0; border-left: 0; border-right: 0; border-bottom: 0;
+        }
       }
       /* Desktop detail: artwork left, sticky text pane right, so copy stays in view. */
       @media (min-width: 900px) {
+        dialog:has(.sheet.text-only) { width: min(calc(100vw - 2rem), 40rem); }
         .sheet { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; }
-        .gallery { display: flex; flex-direction: column; gap: 0.25rem; min-height: 100%; }
+        .gallery {
+          min-height: 100%; padding: 1.15rem; gap: 1.25rem;
+          border-bottom: 0; border-right: 1px solid var(--rule);
+        }
         .shot img { max-height: none; }
-        .text { position: sticky; top: 0; max-height: calc(100dvh - 2rem); overflow-y: auto; padding: 1.5rem; }
+        .text {
+          position: sticky; top: 0; max-height: calc(100dvh - 2rem); overflow-y: auto;
+          padding: 1.35rem 1.55rem 1.5rem;
+          scrollbar-width: thin; scrollbar-color: var(--rule-strong) transparent;
+        }
+        .text > .meta, .text > h2 { padding-right: 3.5rem; }
+        .sec-h { margin: 1.15rem 0 0.45rem; }
+        .copy-head { margin: 1.15rem 0 0.5rem; }
+        .notes { margin-top: 1rem; }
+        .links { margin-top: 1.15rem; padding-top: 0.95rem; }
+        pre { max-height: min(40dvh, 22rem); }
         .sheet.text-only { display: block; }
+        .sheet.text-only .text { position: static; max-height: none; padding: 1.65rem 1.85rem 1.85rem; }
+      }
+      @media (prefers-color-scheme: dark) {
+        .media { background: color-mix(in srgb, var(--ph, var(--rule)) 6%, var(--canvas)); }
+        .badge { border-color: color-mix(in srgb, var(--ink) 16%, transparent); }
+        .close { border-color: color-mix(in srgb, var(--ink) 18%, transparent); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35); }
+      }
+      @media (min-width: 680px) and (prefers-color-scheme: dark) {
+        .media { background: color-mix(in srgb, var(--ph, var(--rule)) 10%, var(--surface)); }
       }
       @media (hover: hover) and (pointer: fine) {
+        nav a:hover { text-decoration-color: currentColor; }
+        button:hover { border-color: var(--rule-strong); }
+        #language:hover, .close:hover { border-color: var(--ink); }
+        .fgroup button:hover { border-color: var(--rule-strong); color: var(--ink); opacity: 1; }
+        .fgroup button[aria-pressed="true"]:hover { border-color: var(--ink); color: var(--canvas); }
+        .switch button:hover {
+          color: var(--ink);
+          background: color-mix(in srgb, var(--ink) 5%, transparent);
+        }
+        .switch button[aria-pressed="true"]:hover {
+          background: color-mix(in srgb, var(--ink) 10%, transparent);
+          border-color: var(--rule-strong);
+        }
         .card:hover { border-color: var(--rule-strong); transform: translateY(-2px); box-shadow: var(--card-shadow); }
+        .card .copy:hover { border-color: var(--ink); background: var(--ink); color: var(--canvas); }
+        .card .copy[data-copied="true"]:hover,
+        .copy-head .copy[data-copied="true"]:hover {
+          border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+          background: var(--accent-soft); color: var(--accent);
+        }
+        .copy-head .copy:hover { opacity: 0.86; }
+        .srclink:hover { border-color: var(--rule-strong); color: var(--ink); }
+        .srclink:hover .arrow { transform: translate(1.5px, -1.5px); }
+        .links a:hover { border-color: var(--ink); color: var(--ink); }
+        .links a:hover .arrow { transform: translate(2px, -2px); }
       }
-      .card:active { transform: scale(0.99); }
+      .card:active:not(:has(button:active, .srclink:active)) { transform: scale(0.99); }
       @media (prefers-reduced-motion: reduce) {
-        .card { transition: none; }
-        .card:hover, .card:active { transform: none; }
+        nav a, button, .card, .srclink, .links a, .arrow { transition: none; }
+        .skel-shimmer { animation: none; }
+        button:active, .srclink:active, .links a:active,
+        .card:hover, .card:active, .srclink:hover .arrow, .links a:hover .arrow { transform: none; }
       }
     </style>
   </head>
@@ -224,8 +490,12 @@
       <footer hidden></footer>
     </div>
     <div id="live" class="sr" role="status" aria-live="polite"></div>
-    <dialog id="detail" aria-labelledby="detail-title">
-      <button id="close" class="close" type="button">×</button>
+    <dialog id="detail" tabindex="-1" aria-labelledby="detail-title">
+      <button id="close" class="close" type="button">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/>
+        </svg>
+      </button>
       <div id="sheet" class="sheet"></div>
     </dialog>
     <script>
@@ -238,7 +508,7 @@
           chips: {
             type: { all: '全部', prompt: '提示词', skill: 'Skill' },
             input: { all: '全部', photo: '照片', text: '文字' },
-            run: { all: '全部', gpt: 'GPT 直出', local: '本地' }
+            run: { all: '全部', gpt: 'GPT 直出', local: '本地', post: '原帖' }
           },
           kind: { prompt: '提示词', skill: 'Skill' },
           updated: (date, n) => `更新于 ${date} · ${n} 项`,
@@ -256,7 +526,7 @@
           chips: {
             type: { all: 'All', prompt: 'Prompt', skill: 'Skill' },
             input: { all: 'All', photo: 'Photo', text: 'Text' },
-            run: { all: 'All', gpt: 'GPT direct', local: 'Local' }
+            run: { all: 'All', gpt: 'GPT direct', local: 'Local', post: 'Post' }
           },
           kind: { prompt: 'Prompt', skill: 'Skill' },
           updated: (date, n) => `Updated ${date} · ${n} items`,
@@ -270,7 +540,12 @@
       const FILTERS = {
         type: { values: ['prompt', 'skill'], test: (it, v) => it.kind === v },
         input: { values: ['photo', 'text'], test: (it, v) => (it.input_mode === 'text') === (v === 'text') },
-        run: { values: ['gpt', 'local'], test: (it, v) => it.runtime_mode !== 'external-post' && (it.runtime_mode === 'gpt-direct') === (v === 'gpt') }
+        run: {
+          values: ['gpt', 'local', 'post'],
+          test: (it, v) => v === 'post'
+            ? it.runtime_mode === 'external-post'
+            : it.runtime_mode !== 'external-post' && (it.runtime_mode === 'gpt-direct') === (v === 'gpt')
+        }
       };
       const $ = id => document.getElementById(id);
       const feed = $('feed'), filtersEl = $('filters'), toggle = $('language'), dlg = $('detail'), sheet = $('sheet'), live = $('live');
@@ -305,6 +580,20 @@
         history.replaceState(null, '', url);
       }
 
+      function metaRow(parts, badge) {
+        const p = el('p', 'meta');
+        if (badge) p.append(el('span', 'meta-badge', badge));
+        const items = el('span', 'meta-items');
+        const track = el('span', 'meta-track');
+        for (const part of parts) {
+          if (!part) continue;
+          track.append(el('span', 'meta-item', part.replace(/ · /g, '\u00a0·\u00a0')));
+        }
+        items.append(track);
+        p.append(items);
+        return p;
+      }
+
       function highlight(parent, text) {
         for (const part of text.split(/(【[^】]*】)/)) {
           if (!part) continue;
@@ -334,11 +623,17 @@
         button.type = 'button';
         button.addEventListener('click', async () => {
           const ok = await copyToClipboard(it.copy_text);
+          if (!button.style.minWidth) button.style.minWidth = `${Math.ceil(button.getBoundingClientRect().width)}px`;
           button.textContent = ok ? S().copied : S().copyFailed;
+          button.dataset.copied = ok ? 'true' : 'error';
           live.textContent = '';
           live.textContent = ok ? S().copiedLive(T(it, 'title')) : S().copyFailed;
           clearTimeout(button.timer);
-          button.timer = setTimeout(() => { button.textContent = label; }, 1600);
+          button.timer = setTimeout(() => {
+            button.textContent = label;
+            delete button.dataset.copied;
+            button.style.minWidth = '';
+          }, 1600);
         });
         return button;
       }
@@ -354,14 +649,15 @@
       function buildCard(it, index) {
         const card = el('article', 'card');
         const img = el('img');
+        const isExt = it.runtime_mode === 'external-post';
+        const badgeText = isExt ? T(it, 'runtime') : S().kind[it.kind];
         if (it.gallery.length) { // link-only items have no artwork
           const media = el('div', 'media');
           if (/^#[0-9a-f]{3,8}$/i.test(it.palette?.[0] || '')) media.style.setProperty('--ph', it.palette[0]);
           img.decoding = 'async';
           img.loading = index < 3 ? 'eager' : 'lazy';
           setImage(img, it, picked[it.id] || 0);
-          const badge = it.runtime_mode === 'external-post' ? T(it, 'runtime') : S().kind[it.kind];
-          media.append(img, el('span', 'badge', badge));
+          media.append(img, el('span', 'badge', badgeText));
           card.append(media);
         }
         if (it.gallery.length > 1) {
@@ -381,21 +677,27 @@
           card.append(row);
         }
         const body = el('div', 'body');
-        body.append(el('p', 'meta', [T(it, 'input'), T(it, 'runtime'), it.aspect].filter(Boolean).join(' · ')));
+        const metaParts = isExt
+          ? [S().kind[it.kind], T(it, 'input'), it.aspect]
+          : [T(it, 'input'), T(it, 'runtime'), it.aspect];
+        body.append(metaRow(metaParts, it.gallery.length ? null : badgeText));
         const title = el('h3');
         const link = el('a', 'card-link', T(it, 'title'));
         link.href = `#${encodeURIComponent(it.id)}`;
         link.addEventListener('click', e => { e.preventDefault(); openItem(it.id, link); });
         title.append(link);
         const bottom = el('div', 'card-bottom');
-        const src = el('a', 'srclink', '↗');
-        src.href = it.source_url;
-        src.target = '_blank';
-        src.rel = 'noopener';
-        src.title = S().sourceShort;
-        src.setAttribute('aria-label', S().sourceShort);
         bottom.append(copyButton(it, 'copy'));
-        if (it.source_url) bottom.append(src);
+        if (it.source_url) {
+          const src = el('a', 'srclink');
+          src.href = it.source_url;
+          src.target = '_blank';
+          src.rel = 'noopener';
+          src.title = S().sourceShort;
+          src.setAttribute('aria-label', S().sourceShort);
+          src.append(el('span', 'arrow', '↗'));
+          bottom.append(src);
+        }
         body.append(title, el('p', 'summary', T(it, 'summary')), bottom);
         card.append(body);
         return card;
@@ -408,6 +710,21 @@
       };
       const colCount = () => 1 + mqs.filter(m => m.matches).length;
       const mqs = [matchMedia('(min-width: 680px)'), matchMedia('(min-width: 1024px)')];
+
+      function renderSkeleton() {
+        const n = colCount();
+        const cols = Array.from({ length: n }, () => {
+          const col = el('div', 'masonry-col');
+          const sk = el('div', 'skel-card');
+          sk.setAttribute('aria-hidden', 'true');
+          const body = el('div', 'skel-body');
+          body.append(el('div', 'skel-line short skel-shimmer'), el('div', 'skel-line title skel-shimmer'), el('div', 'skel-line mid skel-shimmer'));
+          sk.append(el('div', 'skel-media skel-shimmer'), body);
+          col.append(sk);
+          return col;
+        });
+        feed.replaceChildren(...cols);
+      }
 
       function layout() {
         laidCols = colCount();
@@ -429,15 +746,17 @@
           group.setAttribute('role', 'group');
           group.setAttribute('aria-label', s.groups[k]);
           group.append(el('span', 'flabel', s.groups[k]));
+          const row = el('div', 'fchips');
           for (const v of ['all', ...FILTERS[k].values]) {
             const button = el('button', '', s.chips[k][v]);
             const count = el('span', 'count');
             button.type = 'button';
             button.append(count);
             button.addEventListener('click', () => { sel[k] = v; update(); });
-            group.append(button);
+            row.append(button);
             chips.push({ k, v, button, count });
           }
+          group.append(row);
           filtersEl.append(group);
         }
         filtersEl.hidden = false;
@@ -445,8 +764,11 @@
 
       function update() {
         for (const { k, v, button, count } of chips) {
-          button.setAttribute('aria-pressed', String(sel[k] === v));
-          count.textContent = data.items.filter(it => passes(it, k) && (v === 'all' || FILTERS[k].test(it, v))).length;
+          const active = sel[k] === v;
+          const n = data.items.filter(it => passes(it, k) && (v === 'all' || FILTERS[k].test(it, v))).length;
+          button.setAttribute('aria-pressed', String(active));
+          button.classList.toggle('is-zero', n === 0 && !active);
+          count.textContent = n;
         }
         syncUrl();
         layout();
@@ -468,14 +790,19 @@
           setImage(img, it, i);
           img.alt = T(shot, 'label') || T(it, 'title');
           a.append(img);
-          fig.append(a, el('figcaption', '', T(shot, 'label')));
+          fig.append(a);
+          const cap = el('figcaption');
+          const label = T(shot, 'label');
+          if (label) cap.append(el('span', 'cap-label', label));
+          if (it.gallery.length > 1) cap.append(el('span', 'cap-index', `${i + 1} / ${it.gallery.length}`));
+          if (cap.childElementCount) fig.append(cap);
           gallery.append(fig);
         }
         const text = el('div', 'text');
-        const meta = [s.kind[it.kind], T(it, 'input'), T(it, 'runtime'), it.aspect, it.author, T(it, 'license')].filter(Boolean);
+        const meta = [s.kind[it.kind], T(it, 'input'), T(it, 'runtime'), it.aspect, it.author, T(it, 'license')];
         const h2 = el('h2', '', T(it, 'title'));
         h2.id = 'detail-title';
-        text.append(el('p', 'meta', meta.join(' · ')), h2, el('p', 'lead', T(it, 'summary')));
+        text.append(metaRow(meta), h2, el('p', 'lead', T(it, 'summary')));
         if (it.slots_zh?.length) {
           const list = el('ul', 'slots');
           for (const slot of it.slots_zh) list.append(highlight(el('li'), slot));
@@ -483,7 +810,10 @@
         }
         const head = el('div', 'copy-head');
         head.append(el('h3', 'sec-h', s.copyBlock), copyButton(it, 'copy'));
-        text.append(head, highlight(el('pre'), it.copy_text));
+        const pre = el('pre');
+        if (it.slots_zh?.length) highlight(pre, it.copy_text);
+        else pre.textContent = it.copy_text;
+        text.append(head, pre);
         const notes = it[`notes_${lang}`] || [];
         if (notes.length) {
           const list = el('ul', 'notes');
@@ -492,10 +822,13 @@
         }
         const links = el('div', 'links');
         const add = (href, label, cls) => {
-          const a = el('a', cls, `${label} ↗`);
+          const a = el('a', cls);
           a.href = href;
           a.target = '_blank';
           a.rel = 'noopener';
+          const arrow = el('span', 'arrow', '↗');
+          arrow.setAttribute('aria-hidden', 'true');
+          a.append(label, arrow);
           links.append(a);
         };
         if (it.source_url) add(it.source_url, s.source, 'primary');
@@ -512,7 +845,10 @@
         opener = from || null;
         fillDetail(it);
         sheet.scrollTop = 0;
-        if (!dlg.open) dlg.showModal();
+        if (!dlg.open) {
+          dlg.showModal();
+          dlg.focus({ preventScroll: true });
+        }
         syncUrl(url => { url.hash = encodeURIComponent(id); });
       }
 
@@ -524,6 +860,11 @@
       });
       dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
       $('close').addEventListener('click', () => dlg.close());
+      window.addEventListener('hashchange', () => {
+        const id = decodeURIComponent(location.hash.slice(1));
+        if (id && data) openItem(id, null);
+        else if (!id && dlg.open) dlg.close();
+      });
 
       function render() {
         const s = S();
@@ -536,8 +877,13 @@
         $('close').title = s.close;
         const message = $('message');
         message.textContent = failed ? s.error : data ? '' : s.loading;
+        message.classList.toggle('sr', !failed && !data);
         message.hidden = Boolean(data);
-        if (!data) return;
+        if (!data) {
+          if (failed) feed.replaceChildren();
+          else renderSkeleton();
+          return;
+        }
         buildFilters();
         $('empty').firstChild.textContent = s.empty;
         $('empty').lastChild.textContent = s.reset;

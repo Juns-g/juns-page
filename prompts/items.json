@@ -33,29 +33,29 @@
           "src": "thumbs/bear-pop-frame-1.jpg",
           "w": 900,
           "h": 1200,
-          "label_zh": "天平山红枫 1",
-          "label_en": "Tianping maples 1"
+          "label_zh": "茅屋",
+          "label_en": "Thatch"
         },
         {
           "src": "thumbs/bear-pop-frame-2.jpg",
           "w": 900,
           "h": 1200,
-          "label_zh": "天平山红枫 2",
-          "label_en": "Tianping maples 2"
+          "label_zh": "仰拍",
+          "label_en": "Canopy"
         },
         {
           "src": "thumbs/bear-pop-frame-3.jpg",
           "w": 900,
           "h": 1200,
-          "label_zh": "天平山红枫 3",
-          "label_en": "Tianping maples 3"
+          "label_zh": "逆光",
+          "label_en": "Backlit"
         },
         {
           "src": "thumbs/bear-pop-frame-4.jpg",
           "w": 900,
           "h": 1200,
-          "label_zh": "天平山红枫 4",
-          "label_en": "Tianping maples 4"
+          "label_zh": "蓝天",
+          "label_en": "Blue sky"
         }
       ],
       "copy_label_zh": "复制提示词",
