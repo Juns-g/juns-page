@@ -56,6 +56,63 @@ COPY_LABEL = {
 # (kind-specific) items. gallery rows are (file, label_zh, label_en).
 RAW = [
     {
+        "id": "pop-out-frame-3d",
+        "kind": "prompt",
+        "input_mode": "photo",
+        "runtime_mode": "gpt-direct",
+        "input": "photo",
+        "runtime": "gpt",
+        "license": "link",
+        "license_tier": "external-link",
+        "discovery": "douyin",
+        "copy_label": "prompt",
+        "title_zh": "照片 → 3D 破框立体相框",
+        "title_en": "Photo → 3D pop-out frame",
+        "summary_zh": "照片装进米白墙上的细金相框，主体和前景枝叶伸出框外并投下阴影。",
+        "summary_en": "The photo goes into a thin gold frame on a cream wall; the subject and foreground spill past the edge and cast shadows.",
+        "aspect": "3:4",
+        "author": "BEAR（抖音）",
+        "source_url": "https://www.douyin.com/note/7710633128116964515",
+        "discovery_url": "https://www.douyin.com/note/7710633128116964515",
+        "gallery": [
+            [
+                "bear-pop-frame-1.jpg",
+                "天平山红枫 1",
+                "Tianping maples 1"
+            ],
+            [
+                "bear-pop-frame-2.jpg",
+                "天平山红枫 2",
+                "Tianping maples 2"
+            ],
+            [
+                "bear-pop-frame-3.jpg",
+                "天平山红枫 3",
+                "Tianping maples 3"
+            ],
+            [
+                "bear-pop-frame-4.jpg",
+                "天平山红枫 4",
+                "Tianping maples 4"
+            ]
+        ],
+        "palette": [
+            "#c8402a",
+            "#e9a23b",
+            "#f1e9dc"
+        ],
+        "copy_text": "将参考照片转化为一幅具有高级质感的 3D 破框立体效果编辑摄影作品，整体采用精致、极简的艺术指导风格。\n构图与背景：将原始照片置于一个竖向矩形相框中，相框位于温暖的米白色纸张背景上，纸面带有细腻、轻微的纹理。保持画面简洁优雅，留白均衡，呈现精致的杂志编辑美学。\n3D 破框效果：营造真实可信的三维视觉错觉，让画面主体及部分前景元素自然延伸至相框边界之外，仿佛从照片中进入观看者所在的现实空间。保持真实的比例、自然的轮廓，以及相框内画面与破框元素之间无缝流畅的衔接。确保空间纵深效果符合真实物理逻辑，避免显得生硬、虚假或过度夸张。\n保留原图：准确保留人物身份、面部特征、表情、姿势、服装、原始环境、色彩、光线特征及所有具有辨识度的细节。不得修改、重新诠释或替换参考照片中的任何关键元素。\n光线与真实感：采用柔和、自然的光线，让相框与破框而出的元素在纸张表面投下符合方向和结构的真实阴影。\n最终风格与画面格式：高级编辑摄影、极简奢华的艺术指导、温暖的中性色调、精致的构图、自然无缝的 3D 纵深错觉、照片级真实渲染和出色的细节表现。采用竖版 3:4 画幅比例。\n\n（来源抖音图文：https://www.douyin.com/note/7710633128116964515）",
+        "slots_zh": [],
+        "notes_zh": [
+            "作者在评论区公开，原话是“和图片一起丢给 GPT 或者豆包”；评论里有人反馈豆包版没 GPT 清晰。",
+            "前景有枝叶或人物、背景较空的照片最容易做出破框；纯风景可删去“保留原图”里关于人物的半句。"
+        ],
+        "notes_en": [
+            "Shared by the author in the comments: send it to GPT or Doubao together with the photo. One commenter found Doubao's output less sharp.",
+            "Works best when the photo has foreground leaves or a person against an open background; for pure landscapes, drop the clause about people."
+        ]
+    },
+    {
         "id": "mountain-nine-grid-poster",
         "kind": "prompt",
         "input_mode": "photo",
@@ -1751,6 +1808,6 @@ items = [build_item(r) for r in RAW]
 
 out_json = os.path.join(prompts_dir, "items.json")
 with open(out_json, "w", encoding="utf-8") as f:
-    json.dump({"updated_at": "2026-11-20", "items": items}, f, ensure_ascii=False, indent=2)
+    json.dump({"updated_at": "2026-11-25", "items": items}, f, ensure_ascii=False, indent=2)
 
 print(f"Wrote {len(items)} items to {out_json}")
