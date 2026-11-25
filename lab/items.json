@@ -46,6 +46,28 @@
       "hue": 265
     },
     {
+      "id": "merino-hiking-socks-guide",
+      "group": "writing",
+      "name": {
+        "zh": "美利奴徒步羊毛袜怎么挑：9 款实穿对比",
+        "en": "Choosing merino hiking socks: 9 pairs compared"
+      },
+      "summary": {
+        "zh": "整理抖音博主菜菜大王（徒步版）的 9 款美利奴徒步袜图文：挪客、DanceYarn、Smartwool 1573 与 2852、Zealwood、拓路者、montbell、POPFIRE 等，按预算、贴脚程度和用途直接选，附博主图示价与官网资料。",
+        "en": "Notes on a Douyin post comparing 9 merino hiking socks (Naturehike, DanceYarn, Smartwool 1573 and 2852, Zealwood, Pioneer Camp, montbell, POPFIRE and more), picked by budget, fit and use, with the creator's prices and official specs."
+      },
+      "topic": "shopping",
+      "date": "2026-11-26",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/merino-hiking-socks-guide-63ed38"
+        }
+      ],
+      "mark": "Socks",
+      "hue": 95
+    },
+    {
       "id": "hiking-pants-guide",
       "group": "writing",
       "name": {
@@ -61,7 +83,7 @@
       "links": [
         {
           "kind": "read",
-          "url": "https://go.juns.page/f/hiking-pants-guide-5ff7ec"
+          "url": "https://go.juns.page/f/hiking-pants-guide-v2-8ccc8f"
         }
       ],
       "mark": "Pants",
@@ -83,7 +105,7 @@
       "links": [
         {
           "kind": "read",
-          "url": "https://go.juns.page/f/montbell-shell-guide-f69c50"
+          "url": "https://go.juns.page/f/montbell-shell-guide-v2-f19143"
         }
       ],
       "mark": "Mont",
