@@ -46,6 +46,28 @@
       "hue": 265
     },
     {
+      "id": "hiking-pants-guide",
+      "group": "writing",
+      "name": {
+        "zh": "户外裤怎么选：28 款软壳裤与硬壳冲锋裤",
+        "en": "Choosing hiking pants: 28 softshell and hardshell pants"
+      },
+      "summary": {
+        "zh": "合并抖音博主老武 24 款横评、野生见手青软壳裤实穿与证有才选裤经验：京东京造、拓路者、伯希和、凯乐石、Helly Hansen 等 21 款软壳及 7 款硬壳，按季节、活动量和防水需求直接选，附博主视频参考价、型号核对与官方资料。",
+        "en": "Notes merging three Douyin videos (Lao Wu's 24-pair comparison, Yeshengjianshouqing and Zhengyoucai): 21 softshell and 7 hardshell hiking pants from Jingdong Jingzao, Pioneer Camp, Pelliot, Kailas, Helly Hansen and more, picked by season, activity and waterproofing, with creator prices and model checks."
+      },
+      "topic": "shopping",
+      "date": "2026-11-26",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/hiking-pants-guide-5ff7ec"
+        }
+      ],
+      "mark": "Pants",
+      "hue": 160
+    },
+    {
       "id": "montbell-shell-guide",
       "group": "writing",
       "name": {
