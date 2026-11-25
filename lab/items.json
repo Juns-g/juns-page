@@ -1,6 +1,50 @@
 {
-  "updated": "2026-11-24",
+  "updated": "2026-11-25",
   "items": [
+    {
+      "id": "mayday-2026-australia-recap",
+      "group": "writing",
+      "name": {
+        "zh": "五一澳洲 9 天实录：大洋路、圣灵群岛、悉尼",
+        "en": "Nine days in Australia over May Day: Great Ocean Road, Whitsundays, Sydney"
+      },
+      "summary": {
+        "zh": "已走完的行程复盘：逐日路线、观光飞机、帆船、跳伞等活动的本人花费与预订平台，费用拆分和自己拍的风景照。价格为当时账面。",
+        "en": "A recap of a finished trip: day-by-day route, what the scenic flight, sailing and skydive cost me and where they were booked, a cost breakdown and my own landscape photos. Prices are as paid at the time."
+      },
+      "topic": "travel",
+      "date": "2026-11-23",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/australia-mayday-2026-2ff3d8"
+        }
+      ],
+      "mark": "Whitsunday",
+      "hue": 185
+    },
+    {
+      "id": "golden-week-2026-au-nz-recap",
+      "group": "writing",
+      "name": {
+        "zh": "国庆澳新 12 天实录：墨尔本 + 新西兰南岛自驾",
+        "en": "Twelve days over Golden Week: Melbourne and a New Zealand South Island road trip"
+      },
+      "summary": {
+        "zh": "已走完的行程复盘：4 人租车自驾从基督城到皇后镇，跳伞、喷射快艇、Skyline 等活动的本人花费与平台，住宿与费用拆分，以及沿途风景和极光照。价格为当时账面。",
+        "en": "A recap of a finished trip: four people driving from Christchurch to Queenstown, what the skydive, jet boat and Skyline cost me and where they were booked, lodging and cost breakdown, plus landscape and aurora photos. Prices are as paid at the time."
+      },
+      "topic": "travel",
+      "date": "2026-11-23",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/au-nz-golden-week-2026-5e1c33"
+        }
+      ],
+      "mark": "Aotearoa",
+      "hue": 265
+    },
     {
       "id": "hiking-boots-guide",
       "group": "writing",
