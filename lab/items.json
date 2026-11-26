@@ -112,6 +112,50 @@
       "hue": 40
     },
     {
+      "id": "outdoor-flashlight-guide",
+      "group": "writing",
+      "name": {
+        "zh": "户外手电怎么选：随身、远射和营地灯 6 款",
+        "en": "Choosing an outdoor flashlight: 6 EDC, throw and camp lights"
+      },
+      "summary": {
+        "zh": "整理抖音博主流明实验室的户外照明推荐：照脚下、照远处、照营地分开选，6 款附官方流明、射程、电池和能核对的价格来源。",
+        "en": "A Douyin creator's outdoor lighting picks split by job: close-up, long throw and camp light, 6 lights with official lumens, throw, battery and traceable prices."
+      },
+      "topic": "shopping",
+      "date": "2026-11-27",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/outdoor-flashlight-guide-85e9ac"
+        }
+      ],
+      "mark": "Torch",
+      "hue": 55
+    },
+    {
+      "id": "softshell-hardshell-guide",
+      "group": "writing",
+      "name": {
+        "zh": "秋冬软壳和硬壳怎么选：9 件外壳对比",
+        "en": "Softshell or hardshell for autumn and winter: 9 jackets compared"
+      },
+      "summary": {
+        "zh": "整理抖音博主 Zacky 的秋冬外壳推荐：4 件软壳、5 件硬壳，按活动量、预算和城市穿搭直接选，博主说法与官方规格、价格分开列。",
+        "en": "A Douyin creator's autumn-winter shell picks: 4 softshells and 5 hardshells sorted by activity, budget and city wear, with creator claims kept apart from official specs and prices."
+      },
+      "topic": "shopping",
+      "date": "2026-11-27",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/softshell-hardshell-guide-e78ba5"
+        }
+      ],
+      "mark": "Shells",
+      "hue": 190
+    },
+    {
       "id": "merino-hiking-socks-guide",
       "group": "writing",
       "name": {
