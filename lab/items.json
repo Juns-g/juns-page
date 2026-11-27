@@ -1,6 +1,28 @@
 {
-  "updated": "2026-11-25",
+  "updated": "2026-11-27",
   "items": [
+    {
+      "id": "outdoor-clothing-care",
+      "group": "writing",
+      "name": {
+        "zh": "户外衣物洗护手册：冲锋衣、抓绒、羊毛、羽绒怎么洗",
+        "en": "Washing outdoor clothing: shells, fleece, merino and down"
+      },
+      "summary": {
+        "zh": "按家里的 TCL L130 洗衣机和现有衣物整理：7 类衣物各自的洗剂、程序、洗衣袋和晾法，洗剂按配料表分三档挑，防泼水用淋水测试判断要不要补喷。结合抖音博主刘十六的洗护视频和各品牌官网洗标。",
+        "en": "Notes for my own washer and wardrobe: detergent, program, bag and drying for 7 kinds of clothing, picking detergent by ingredients in three tiers, and a water test to decide when to re-proof. Built on a Douyin creator's care video and brand care labels."
+      },
+      "topic": "life",
+      "date": "2026-11-27",
+      "links": [
+        {
+          "kind": "read",
+          "url": "https://go.juns.page/f/outdoor-clothing-care-08fb30"
+        }
+      ],
+      "mark": "Wash",
+      "hue": 195
+    },
     {
       "id": "mayday-2026-australia-recap",
       "group": "writing",
